@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: TransportHC
+
+
+datasource:
+  url: "jdbc:mysql://localhost:3306/TransportHC"
+  username: root
+  password: 1201
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /transport
+
+jwt:
+  signerKey: ""

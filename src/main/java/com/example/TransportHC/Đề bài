@@ -1,0 +1,102 @@
+1. Quản lý kho
+ - **Giao Dịch**:
+     - **Nhập Kho**:
+       - Nhập chi tiết hàng hóa nhập vào (số lượng, loại, nguồn gốc).
+       - Ghi lại thời gian và người chịu trách nhiệm nhập kho.
+
+     - **Xuất Kho**:
+       - Nhập chi tiết hàng hóa xuất (số lượng, loại, đích đến).
+       - Ghi lại thời gian và người chịu trách nhiệm xuất kho.
+
+   - **Xem Tồn Kho**:
+     - Tổng quan theo thời gian thực về mức tồn kho hiện tại.
+     - Chức năng lọc và tìm kiếm.
+     - Hỗ trợ import, export từ excel
+
+
+2. Quản lý chi phí
+- **Thêm Dữ Liệu Chi Phí**:
+     - Các trường nhập cho số tiền chi phí, loại (nhiên liệu, bảo trì, sửa chữa, cúng xe …..) và mô tả.
+
+   - **Quy Trình Phê Duyệt**:
+     - Chi phí đã gửi cần được phê duyệt bởi quản lý hoặc giám sát.
+     - Thông báo cho các phê duyệt đang chờ.
+
+H1. Danh sách chi phí
+H2. Thêm chi phí.
+H3. Duyệt chi phí  (bấm vào action duyệt chi phí trên mỗi dòng)
+
+
+3. Quản lý lịch trình
+  - **Lựa Chọn Lịch Trình**:
+     - Chọn từ danh sách lịch trình đã định sẵn hoặc tạo mới, ví dụ Đồng Nai - Giang Điền, Phú Mỹ - Đồng Nai,
+
+   - **Tải Lên Tài Liệu Chứng Minh**:
+     - Đính kèm các tài liệu liên quan (ví dụ: biên nhận giao hàng, hình ảnh).
+
+   - **Quy Trình Phê Duyệt**:
+     - Nộp lịch trình để phê duyệt bởi quản lý hoặc giám sát.
+     - Thông báo cho các phê duyệt đang chờ.
+
+H1. Danh sách lịch trình
+H2. Thêm lịch trình
+H3. Xem chi tiết lịch trình
+
+
+4. Quản lý xe tải
+  - **Thêm/Sửa/Xóa Xe Tải**:
+  Admin có thể quản lý chi tiết xe tải như biển số, dung tích và phân công lái xe.
+
+  - **Theo Dõi Trạng Thái Xe Tải**:
+  Giám sát trạng thái của mỗi xe tải (có sẵn, đang sử dụng, đang bảo trì).
+
+H1. Danh sách xe tải
+H2. Thêm xe tải
+
+
+5. Quản lý lái xe
+H1. Danh sách lái xe
+H2. Thêm tài xế
+
+
+6. Cấu hình
+a. Danh sách hành trình (tuyến)
+b. Các loại chi phí
+H1. Các loại chi phí - loại chi phí này sẽ được tài xế chọn để thêm chi phí.
+
+
+7. Báo cáo
+ - **Báo Cáo Lương**:
+     - Tính toán: Lương Cơ Bản + Lương Hiệu Suất (Lương Lịch Trình + Chi Phí) - Tiền Ứng.
+     - Tạo các chế độ xem chi tiết và tổng hợp.
+
+   - **Báo Cáo Chi Phí Vận Chuyển Cho 1 Xe**:
+     - Xem chi tiết chi phí cho một xe tải cụ thể trong một khoảng thời gian đã chọn.
+
+   - **Báo Cáo Chi Phí Vận Chuyển Cho Tất Cả Xe**:
+     - Báo cáo tổng hợp hiển thị tổng chi phí cho tất cả các xe tải.
+
+   - **Lịch Trình Vận Chuyển Chi Tiết Của 1 Xe**:
+     - Tổng quan về tất cả các chuyến đi của một xe tải cụ thể, bao gồm chi phí và tài liệu.
+
+   - **Lịch Trình Vận Chuyển Chi Tiết Cho Tất Cả Xe**:
+     - Báo cáo tổng hợp tổng hợp lịch trình và chi phí liên quan cho tất cả các xe tải.
+
+
+H1. Báo cáo lương  - danh sách
+
+H2. Báo cáo lương  - Chi tiết
+Bấm vào [chỉnh sửa tháng này] => Sang hình H3
+Bấm vào [Cấu hình tài xế] => Sang hình H4
+
+H3. Chi tiết lương tài xế. Vd tháng 07/2024 (Không bao gồm lương hành trình)
+
+H4. Cấu hình lương cho tài xế
+
+H3. Báo cáo tồn kho
+
+H4. Báo cáo nhật trình
+
+H5. Báo cáo chi phí cho 1 tài xế
+
+H6. Báo cáo chi phí tổng hợp
