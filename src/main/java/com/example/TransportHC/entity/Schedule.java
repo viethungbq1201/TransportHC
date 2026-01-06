@@ -10,16 +10,17 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "schedules")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Schedule {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     UUID schedulesId;
 
     LocalDate startDate;

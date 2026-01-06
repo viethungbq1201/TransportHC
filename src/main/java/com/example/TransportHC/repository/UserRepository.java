@@ -3,7 +3,12 @@ package com.example.TransportHC.repository;
 import com.example.TransportHC.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, String> {
 
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findUserByUsername(String username);
+    boolean existsByUsername(String username);
 
 }

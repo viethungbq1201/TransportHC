@@ -11,16 +11,19 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id", nullable = false, updatable = false)
+    @EqualsAndHashCode.Include
     UUID userId;
 
     @Column(nullable = false, unique = true)
@@ -39,7 +42,7 @@ public class User {
     BigDecimal basicSalary;
     BigDecimal advanceMoney;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

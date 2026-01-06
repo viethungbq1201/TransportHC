@@ -1,5 +1,6 @@
 package com.example.TransportHC.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,15 +10,17 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
     @Column(unique = true)
@@ -26,16 +29,18 @@ public class Role {
     String name;
     String description;
 
-    @ManyToMany(mappedBy = "roles")
-    @Builder.Default
-    Set<User> users = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     @Builder.Default
-    Set<Permission> permissions = new HashSet<>();
+    private Set<Permission> permissions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @Builder.Default
+    @JsonIgnore
+    private Set<User> users = new HashSet<>();
 }

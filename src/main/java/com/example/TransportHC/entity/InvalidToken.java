@@ -1,10 +1,11 @@
 package com.example.TransportHC.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.UUID;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -14,11 +15,10 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CostType {
+public class InvalidToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID costTypeId;
+    String token;
+    Date expiryTime;
 
-    String name;
 }

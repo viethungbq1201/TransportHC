@@ -1,8 +1,10 @@
 package com.example.TransportHC.repository;
 
-import com.example.TransportHC.entity.CostType;
+import com.example.TransportHC.entity.Cost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CostRepository extends JpaRepository<CostType, String> {
+import java.util.UUID;
+
+public interface CostRepository extends JpaRepository<Cost, UUID> {
 
 }

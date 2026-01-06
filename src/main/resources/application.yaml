@@ -3,10 +3,10 @@ spring:
     name: TransportHC
 
 
-datasource:
-  url: "jdbc:mysql://localhost:3306/TransportHC"
-  username: root
-  password: 1201
+  datasource:
+    url: "jdbc:mysql://localhost:3306/TransportHC"
+    username: root
+    password: 1201
 
   jpa:
     hibernate:
@@ -19,4 +19,4 @@ server:
     context-path: /transport
 
 jwt:
-  signerKey: ""
+  signerKey: "21a111f344b1b8d9d8868dcd26db4a9a38d4768c00b1270c06974b0774cc8937"
