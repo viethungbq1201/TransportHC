@@ -38,11 +38,14 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "approved_by")
-    User approver;
+    User approvedBy;
 
     @ManyToOne
     Truck truck;
 
     @ManyToOne
     Route route;
+
+    @ManyToOne
+    Transaction transaction;
 }

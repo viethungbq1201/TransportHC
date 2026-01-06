@@ -50,4 +50,7 @@ public class User {
     )
     @Builder.Default
     Set<Role> roles = new HashSet<>();
+
+    Boolean isDriver;
+
 }
