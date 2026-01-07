@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     String password;
 
-    String fullname;
+    String fullName;
     String address;
     String phoneNumber;
 

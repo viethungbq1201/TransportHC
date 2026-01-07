@@ -20,21 +20,21 @@ public class SalaryReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID reportId;
+    UUID reportId;
 
     @ManyToOne
-    private User user;
+    User user;
 
-    private String month;
+    String month;
 
-    private BigDecimal basicSalary;
-    private BigDecimal reward;
-    private BigDecimal advanceMoney;
-    private BigDecimal cost;
-    private BigDecimal total;
+    BigDecimal basicSalary;
+    BigDecimal reward;
+    BigDecimal advanceMoney;
+    BigDecimal cost;
+    BigDecimal total;
 
     @ManyToOne
-    private User createBy;
+    User createBy;
 
-    private LocalDateTime createAt;
+    LocalDateTime createAt;
 }

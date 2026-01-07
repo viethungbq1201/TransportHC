@@ -21,6 +21,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(2002, "User not found", HttpStatus.NOT_FOUND),
     INVALID_USERNAME(2003, "Invalid username", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(2004, "Invalid password", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(2005, "Role not found", HttpStatus.BAD_REQUEST),
 
     // ====== TRUCK ======
     TRUCK_NOT_FOUND(3001, "Truck not found", HttpStatus.NOT_FOUND),

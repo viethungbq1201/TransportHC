@@ -43,7 +43,7 @@ public class CustomJwtDecoder implements JwtDecoder {
 
             nimbusJwtDecoder = NimbusJwtDecoder
                     .withSecretKey(key)
-                    .macAlgorithm(MacAlgorithm.HS256)
+                    .macAlgorithm(MacAlgorithm.HS512)
                     .build();
         }
 

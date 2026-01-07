@@ -132,7 +132,7 @@ public class ApplicationInitConfig {
                 User admin = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin1201"))
-                        .fullname("Admin Viet Hung")
+                        .fullName("Admin Viet Hung")
                         .roles(roles)
                         .build();
 
