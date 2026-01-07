@@ -1,28 +1,21 @@
-package com.example.TransportHC.entity;
+package com.example.TransportHC.dto.response;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Route {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID routeId;
-
+public class RouteResponse {
+    UUID id;
     String name;
     String start_point;
     String end_point;
     BigDecimal distance;
+
 }
