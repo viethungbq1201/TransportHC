@@ -28,7 +28,7 @@ public class UserService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    RoleRepository roleRepository;
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public UserResponse createUser (UserCreateRequest request) {
@@ -97,7 +97,6 @@ public class UserService {
         boolean isDriver = false;
 
         if (request.getRoles().contains("MANAGER")) {
-            roleCode = "MANAGER";
             roleCode = "MANAGER";
         } else if (request.getRoles().contains("ACCOUNTANT")) {
             roleCode = "ACCOUNTANT";
