@@ -32,6 +32,11 @@ public class UserService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public UserResponse createUser (UserCreateRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))

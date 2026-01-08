@@ -24,6 +24,10 @@ public class RouteService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public RouteResponse createRoute(RouteCreateRequest request) {
+
+        if (routeRepository.existsRouteByName(request.getName())) {
+            throw new AppException(ErrorCode.ROUTE_EXISTED);
+        }
         Route route = Route.builder()
                 .name(request.getName())
                 .start_point(request.getStart_point())

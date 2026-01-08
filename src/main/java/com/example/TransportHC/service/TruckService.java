@@ -23,6 +23,11 @@ public class TruckService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public TruckResponse createTruck (TruckCreateRequest request) {
+
+        if (truckRepository.existsTrucksByLicensePlate(request.getLicensePlate())) {
+            throw new AppException(ErrorCode.TRUCK_EXISTED);
+        }
+
         Truck truck = Truck.builder()
                 .licensePlate(request.getLicensePlate())
                 .capacity(request.getCapacity())

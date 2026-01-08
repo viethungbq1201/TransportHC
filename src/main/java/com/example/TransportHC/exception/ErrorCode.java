@@ -19,16 +19,17 @@ public enum ErrorCode {
     // ====== USER ======
     USER_EXISTED(2001, "User already exists", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(2002, "User not found", HttpStatus.NOT_FOUND),
-    INVALID_USERNAME(2003, "Invalid username", HttpStatus.BAD_REQUEST),
-    INVALID_PASSWORD(2004, "Invalid password", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_FOUND(2005, "Role not found", HttpStatus.BAD_REQUEST),
+    INVALID_USERNAME_PASSWORD(2003, "Invalid username or password", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(2004, "Role not found", HttpStatus.BAD_REQUEST),
 
     // ====== TRUCK ======
     TRUCK_NOT_FOUND(3001, "Truck not found", HttpStatus.NOT_FOUND),
-    TRUCK_NOT_AVAILABLE(3002, "Truck is not available", HttpStatus.BAD_REQUEST),
+    TRUCK_EXISTED(3002, "Truck already exists", HttpStatus.BAD_REQUEST),
+    TRUCK_NOT_AVAILABLE(3003, "Truck is not available", HttpStatus.BAD_REQUEST),
 
     // ====== ROUTE ======
     ROUTE_NOT_FOUND(3101, "Route not found", HttpStatus.NOT_FOUND),
+    ROUTE_EXISTED(3102, "Route already exists", HttpStatus.BAD_REQUEST),
 
     // ====== SCHEDULE ======
     SCHEDULE_NOT_FOUND(4001, "Schedule not found", HttpStatus.NOT_FOUND),
@@ -41,8 +42,9 @@ public enum ErrorCode {
 
     // ====== PRODUCT / INVENTORY ======
     PRODUCT_NOT_FOUND(6001, "Product not found", HttpStatus.NOT_FOUND),
-    INVENTORY_NOT_FOUND(6002, "Inventory not found", HttpStatus.NOT_FOUND),
-    INVENTORY_NOT_ENOUGH(6003, "Not enough inventory", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(6002, "Product already exists", HttpStatus.BAD_REQUEST),
+    INVENTORY_NOT_FOUND(6003, "Inventory not found", HttpStatus.NOT_FOUND),
+    INVENTORY_NOT_ENOUGH(6004, "Not enough inventory", HttpStatus.BAD_REQUEST),
 
     // ====== TRANSACTION ======
     TRANSACTION_NOT_FOUND(7001, "Transaction not found", HttpStatus.NOT_FOUND),

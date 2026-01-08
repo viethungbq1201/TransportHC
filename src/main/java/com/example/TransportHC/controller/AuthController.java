@@ -39,7 +39,7 @@ public class AuthController {
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+            throw new AppException(ErrorCode.INVALID_USERNAME_PASSWORD);
         }
 
         String token = authService.generateToken(user);
