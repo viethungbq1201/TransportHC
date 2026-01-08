@@ -2,9 +2,11 @@ package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.ProductCreateRequest;
 import com.example.TransportHC.dto.response.ProductResponse;
+import com.example.TransportHC.entity.Inventory;
 import com.example.TransportHC.entity.Product;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
+import com.example.TransportHC.repository.InventoryRepository;
 import com.example.TransportHC.repository.ProductRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +24,7 @@ import java.util.UUID;
 public class ProductService {
 
     ProductRepository productRepository;
+    InventoryRepository inventoryRepository;
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ProductResponse createProduct(ProductCreateRequest request) {
@@ -33,8 +37,16 @@ public class ProductService {
                 .category(request.getCategory())
                 .price(request.getPrice())
                 .build();
-
         productRepository.save(product);
+
+        Inventory inventory = Inventory.builder()
+                .product(product)
+                .quantity(0)
+                .upToDate(LocalDateTime.now())
+                .build();
+        inventoryRepository.save(inventory);
+
+        product.setInventory(inventory);
 
         return entityToResponse(product);
     }

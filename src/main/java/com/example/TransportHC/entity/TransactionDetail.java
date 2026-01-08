@@ -20,11 +20,14 @@ public class TransactionDetail {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Transaction transaction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Product product;
 
-    Integer quantity;
+    Integer quantityChange;
+    Integer quantityBefore;
+    Integer quantityAfter;
+
 }

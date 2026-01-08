@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,4 +28,9 @@ public class Product {
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     Inventory inventory;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    List<TransactionDetail> transactionDetails;
+
+
 }

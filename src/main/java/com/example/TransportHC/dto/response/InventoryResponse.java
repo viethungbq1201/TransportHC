@@ -1,21 +1,23 @@
 package com.example.TransportHC.dto.response;
 
-import com.example.TransportHC.entity.Inventory;
+
+import com.example.TransportHC.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponse {
-    UUID id;
-    String name;
-    String category;
-    BigDecimal price;
+public class InventoryResponse {
+    UUID inventoryId;
+
+    ProductResponse product;
+    Integer quantity;
+    LocalDateTime upToDate;
 }

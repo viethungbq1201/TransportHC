@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -30,9 +31,11 @@ public class Transaction {
     String location;
     String note;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     User createdBy;
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
     List<TransactionDetail> details;
+
+
 }

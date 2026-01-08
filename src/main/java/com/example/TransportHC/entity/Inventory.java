@@ -18,12 +18,14 @@ import java.util.UUID;
 public class Inventory {
 
     @Id
-    UUID productId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID inventoryId;
 
-    @OneToOne
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", unique = true, nullable = false)
     Product product;
 
     Integer quantity;
     LocalDateTime upToDate;
+
 }
