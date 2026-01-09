@@ -39,7 +39,7 @@ public class InventoryController {
     }
 
     @PutMapping("/updateInventory/{inventoryId}")
-    ApiResponse<InventoryResponse> updateInventory(@PathVariable("inventoryId") UUID id,@RequestBody InventoryUpdateRequest request) {
+    ApiResponse<InventoryResponse> updateInventory(@PathVariable("inventoryId") UUID id, @RequestBody InventoryUpdateRequest request) {
         return ApiResponse.<InventoryResponse>builder()
                 .result(inventoryService.updateInventory(id, request))
                 .build();

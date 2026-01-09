@@ -35,7 +35,7 @@ public class Transaction {
     User createdBy;
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
-    List<TransactionDetail> details;
+    List<TransactionDetail> transactionDetails;
 
 
 }
