@@ -34,13 +34,13 @@ public class TruckService {
                 .status(request.getStatus())
                 .build();
         truckRepository.save(truck);
-        return entityToDto(truck);
+        return entityToResponse(truck);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<TruckResponse> viewTruck () {
         return truckRepository.findAll().stream()
-                .map(this::entityToDto)
+                .map(this::entityToResponse)
                 .toList();
     }
 
@@ -53,7 +53,7 @@ public class TruckService {
         truck.setCapacity(request.getCapacity());
         truck.setStatus(request.getStatus());
         truckRepository.save(truck);
-        return entityToDto(truck);
+        return entityToResponse(truck);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
@@ -63,7 +63,7 @@ public class TruckService {
         truckRepository.delete(truck);
     }
 
-    TruckResponse entityToDto (Truck truck) {
+    TruckResponse entityToResponse (Truck truck) {
         return TruckResponse.builder()
                 .id(truck.getTruckId())
                 .licensePlate(truck.getLicensePlate())

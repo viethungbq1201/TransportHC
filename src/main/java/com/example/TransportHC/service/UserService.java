@@ -73,13 +73,13 @@ public class UserService {
 
         userRepository.save(user);
 
-        return entityToDto(user);
+        return entityToResponse(user);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<UserResponse> viewUsers() {
         return userRepository.findAll().stream()
-                .map(this::entityToDto)
+                .map(this::entityToResponse)
                 .toList();
 
     }
@@ -117,7 +117,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return entityToDto(user);
+        return entityToResponse(user);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
@@ -127,7 +127,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private UserResponse entityToDto(User user) {
+    private UserResponse entityToResponse(User user) {
         // Chuyển đổi Set<Role> sang Set<String> (role codes)
         Set<String> roleCodes = user.getRoles() != null
                 ? user.getRoles().stream()

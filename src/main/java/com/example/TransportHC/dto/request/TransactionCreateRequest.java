@@ -18,6 +18,4 @@ public class TransactionCreateRequest {
     LocalDateTime date;
     String location;
     String note;
-
-    UserResponse createdBy;
 }

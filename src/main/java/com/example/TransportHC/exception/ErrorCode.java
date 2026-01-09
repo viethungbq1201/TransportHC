@@ -44,11 +44,11 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(6001, "Product not found", HttpStatus.NOT_FOUND),
     PRODUCT_EXISTED(6002, "Product already exists", HttpStatus.BAD_REQUEST),
     INVENTORY_NOT_FOUND(6003, "Inventory not found", HttpStatus.NOT_FOUND),
-    INVENTORY_NOT_ENOUGH(6004, "Not enough inventory", HttpStatus.BAD_REQUEST),
+    INVENTORY_NOT_ENOUGH(6004, "Not enough product in inventory", HttpStatus.BAD_REQUEST),
 
     // ====== TRANSACTION ======
     TRANSACTION_NOT_FOUND(7001, "Transaction not found", HttpStatus.NOT_FOUND),
-    TRANSACTION_ALREADY_APPROVED(7002, "Transaction already approved", HttpStatus.BAD_REQUEST);
+    TRANSACTION_DETAIL_NOT_FOUND(7002, "Transaction detail not found", HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -48,13 +48,13 @@ public class TransactionService {
 
         transaction.setCreatedBy(user);
         transactionRepository.save(transaction);
-        return entityToDto(transaction);
+        return entityToResponse(transaction);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<TransactionResponse> viewTransaction() {
         return transactionRepository.findAll().stream()
-                .map(this::entityToDto)
+                .map(this::entityToResponse)
                 .toList();
     }
 
@@ -69,7 +69,7 @@ public class TransactionService {
         transaction.setLocation(request.getLocation());
 
         transactionRepository.save(transaction);
-        return entityToDto(transaction);
+        return entityToResponse(transaction);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
@@ -79,7 +79,7 @@ public class TransactionService {
         transactionRepository.delete(transaction);
     }
 
-    private TransactionResponse entityToDto(Transaction transaction) {
+    private TransactionResponse entityToResponse(Transaction transaction) {
         // Chuyển đổi Set<Role> sang Set<String> (role codes)
         Set<String> roleCodes = transaction.getCreatedBy().getRoles() != null
                 ? transaction.getCreatedBy().getRoles().stream()
