@@ -29,6 +29,7 @@ public class AuthController {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
+    // Test user
 
     @PostMapping("/login")
     AuthResponse login(@RequestBody AuthLoginRequest request) {
