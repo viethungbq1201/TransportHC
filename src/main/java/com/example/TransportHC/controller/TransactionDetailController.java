@@ -1,14 +1,10 @@
 package com.example.TransportHC.controller;
 
 
-import com.example.TransportHC.dto.request.TransactionCreateRequest;
 import com.example.TransportHC.dto.request.TransactionDetailCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.TransactionDetailResponse;
-import com.example.TransportHC.dto.response.TransactionResponse;
-import com.example.TransportHC.entity.TransactionDetail;
 import com.example.TransportHC.service.TransactionDetailService;
-import com.example.TransportHC.service.TransactionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,16 +22,23 @@ public class TransactionDetailController {
     TransactionDetailService transactionDetailService;
 
     @PostMapping("/createTransactionDetail")
-    ApiResponse<TransactionDetailResponse> createTransaction(@RequestBody TransactionDetailCreateRequest request) {
+    ApiResponse<TransactionDetailResponse> createTransactionDetail(@RequestBody TransactionDetailCreateRequest request) {
         return ApiResponse.<TransactionDetailResponse>builder()
                 .result(transactionDetailService.createTransactionResponse(request))
                 .build();
     }
 
     @GetMapping("/viewTransactionDetail")
-    ApiResponse<List<TransactionDetailResponse>> viewTransactions() {
+    ApiResponse<List<TransactionDetailResponse>> viewTransactionDetail() {
         return ApiResponse.<List<TransactionDetailResponse>>builder()
                 .result(transactionDetailService.viewTransactionDetailResponse())
+                .build();
+    }
+
+    @PutMapping("/updateTransactionDetail/{TDid}")
+    ApiResponse<TransactionDetailResponse> updateTransactionDetail(@PathVariable("TDid") UUID id, @RequestBody TransactionDetailCreateRequest request) {
+        return ApiResponse.<TransactionDetailResponse>builder()
+                .result(transactionDetailService.updateTransactionDetail(id, request))
                 .build();
     }
 

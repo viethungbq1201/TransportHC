@@ -1,15 +1,11 @@
 package com.example.TransportHC.service;
 
-import com.example.TransportHC.dto.request.TransactionCreateRequest;
 import com.example.TransportHC.dto.request.TransactionDetailCreateRequest;
 import com.example.TransportHC.dto.response.ProductResponse;
 import com.example.TransportHC.dto.response.TransactionDetailResponse;
 import com.example.TransportHC.dto.response.TransactionResponse;
 import com.example.TransportHC.dto.response.UserResponse;
-import com.example.TransportHC.entity.Product;
-import com.example.TransportHC.entity.Role;
-import com.example.TransportHC.entity.Transaction;
-import com.example.TransportHC.entity.TransactionDetail;
+import com.example.TransportHC.entity.*;
 import com.example.TransportHC.enums.TransactionType;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
@@ -53,49 +49,50 @@ public class TransactionDetailService {
                 .quantityChange(request.getQuantityChange())
                 .build();
 
-        transactionDetailRepository.save(transactionDetail);
         changeStockInventory(transactionDetail);
-        return entityToTransactionDetail(transactionDetail);
+        transactionDetailRepository.save(transactionDetail);
+        return entityToResponse(transactionDetail);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<TransactionDetailResponse> viewTransactionDetailResponse() {
         return transactionDetailRepository.findAll().stream()
-                .map(this::entityToTransactionDetail)
+                .map(this::entityToResponse)
                 .toList();
     }
-
-//    @PreAuthorize("hasAuthority('CREATE_COST')")
-//    TransactionDetailResponse transactionDetailResponse(UUID id, TransactionDetailCreateRequest request) {
-//        TransactionDetail transactionDetail = transactionDetailRepository.findById(id)
-//                .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_DETAIL_NOT_FOUND));
-//
-//        transactionDetail.set
-//
-//    }
-
-    /*
-Tạo:
-Khi tạo một bản ghi bao gồm thông tin cơ bản và thuộc tính change, before sẽ bằng quantity ở trong Inventory, giá trị after sẽ bằng before +- change, sau đó sẽ gán lại vào quantity để cập nhật số lượng tồn kho. Giá trị after cũng sẽ là giá trị tồn kho tại thời điểm đó
-VD: quantity = 50 = before, change = 50, after = newquantity = 100
-VD quantity = 100 = before, change = 100, after = newquantity = 200
-
-Xoá:
-// khả năng bỏ before, after
-Khi xoá 1 bản ghi thì thực hiện xuất ra số lượng đấy rồi xoá bản ghi đi
-
-Update: khi cập nhật thông tin khả năng sẽ xoá bản ghi cũ
-// so sánh số lượng chênh lệch và cập nhật thêm hoặc bớt
- đi và cập nhật thông tin mới
-     */
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public void deleteTransactionDetail(UUID id) {
         TransactionDetail transactionDetail = transactionDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_DETAIL_NOT_FOUND));
-        transactionDetailRepository.delete(transactionDetail);
 
+        revertStockInventory(transactionDetail);
+        transactionDetailRepository.delete(transactionDetail);
     }
+
+    @PreAuthorize("hasAuthority('CREATE_COST')")
+    public TransactionDetailResponse updateTransactionDetail(UUID id, TransactionDetailCreateRequest request) {
+        TransactionDetail transactionDetail = transactionDetailRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_DETAIL_NOT_FOUND));
+
+        Transaction transaction = transactionRepository.findById(request.getTransactionId())
+                .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
+
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        revertStockInventory(transactionDetail);
+        transactionDetail.setQuantityChange(request.getQuantityChange());
+        transactionDetail.setTransaction(transaction);
+        transactionDetail.setProduct(product);
+        changeStockInventory(transactionDetail);
+        transactionDetail.getProduct().getInventory().setUpToDate(LocalDateTime.now());
+
+        transactionDetailRepository.save(transactionDetail);
+
+        return entityToResponse(transactionDetail);
+    }
+
     private void changeStockInventory(TransactionDetail transactionDetail) {
         Integer change = transactionDetail.getQuantityChange() == null ? 0 : transactionDetail.getQuantityChange();
         Integer quantity = transactionDetail.getProduct().getInventory().getQuantity();
@@ -112,11 +109,21 @@ Update: khi cập nhật thông tin khả năng sẽ xoá bản ghi cũ
         }
         transactionDetail.getProduct().getInventory().setQuantity(transactionDetail.getQuantityAfter());
         transactionDetail.getProduct().getInventory().setUpToDate(LocalDateTime.now());
-        transactionDetailRepository.save(transactionDetail);
+    }
+
+    private void revertStockInventory(TransactionDetail td) {
+        int change = Math.abs(td.getQuantityChange());
+        Inventory inventory = td.getProduct().getInventory();
+
+        if (td.getTransaction().getType() == TransactionType.IN) {
+            inventory.setQuantity(inventory.getQuantity() - change);
+        } else {
+            inventory.setQuantity(inventory.getQuantity() + change);
+        }
     }
 
 
-    private TransactionDetailResponse entityToTransactionDetail(TransactionDetail transactionDetail) {
+    private TransactionDetailResponse entityToResponse(TransactionDetail transactionDetail) {
         // Chuyển đổi Set<Role> sang Set<String> (role codes)
         Set<String> roleCodes = transactionDetail.getTransaction().getCreatedBy().getRoles() != null
                 ? transactionDetail.getTransaction().getCreatedBy().getRoles().stream()
@@ -156,9 +163,6 @@ Update: khi cập nhật thông tin khả năng sẽ xoá bản ghi cũ
                 .transaction(transactionResponse)
                 .product(productResponse)
                 .quantityChange(transactionDetail.getQuantityChange())
-                .quantityAfter(transactionDetail.getQuantityAfter())
-                .quantityBefore(transactionDetail.getQuantityBefore())
                 .build();
     }
-
 }

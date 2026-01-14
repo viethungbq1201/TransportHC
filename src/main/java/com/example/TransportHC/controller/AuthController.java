@@ -3,9 +3,7 @@ package com.example.TransportHC.controller;
 import com.example.TransportHC.dto.request.AuthLoginRequest;
 import com.example.TransportHC.dto.request.LogoutRequest;
 import com.example.TransportHC.dto.request.RefreshRequest;
-import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.AuthResponse;
-import com.example.TransportHC.entity.User;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.UserRepository;
@@ -30,6 +28,7 @@ public class AuthController {
     AuthService authService;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/login")
     AuthResponse login(@RequestBody AuthLoginRequest request) {

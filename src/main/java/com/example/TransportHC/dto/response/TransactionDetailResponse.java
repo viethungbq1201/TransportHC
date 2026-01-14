@@ -17,6 +17,4 @@ public class TransactionDetailResponse {
     ProductResponse product;
 
     Integer quantityChange;
-    Integer quantityBefore;
-    Integer quantityAfter;
 }
