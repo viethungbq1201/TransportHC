@@ -29,9 +29,6 @@ public class AuthController {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-    // Test user
-    // Test user 12/01/2004
-
     @PostMapping("/login")
     AuthResponse login(@RequestBody AuthLoginRequest request) {
         var user = userRepository.findUserByUsername(request.getUsername())

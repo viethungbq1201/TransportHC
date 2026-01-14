@@ -39,6 +39,7 @@ public enum ErrorCode {
     // ====== COST ======
     COST_NOT_FOUND(5001, "Cost not found", HttpStatus.NOT_FOUND),
     COST_ALREADY_APPROVED(5002, "Cost already approved", HttpStatus.BAD_REQUEST),
+    COST_TYPE_NOT_FOUND(5003, "Cost type not found", HttpStatus.NOT_FOUND),
 
     // ====== PRODUCT / INVENTORY ======
     PRODUCT_NOT_FOUND(6001, "Product not found", HttpStatus.NOT_FOUND),
