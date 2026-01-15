@@ -20,12 +20,14 @@ public enum ErrorCode {
     USER_EXISTED(2001, "User already exists", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(2002, "User not found", HttpStatus.NOT_FOUND),
     INVALID_USERNAME_PASSWORD(2003, "Invalid username or password", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_FOUND(2004, "Role not found", HttpStatus.BAD_REQUEST),
+    USER_NOT_AVAILABLE(2004, "User not available", HttpStatus.NOT_FOUND),
+    USER_IS_NOT_DRIVER(2005, "User is not a driver",HttpStatus.NOT_FOUND),
+    ROLE_NOT_FOUND(2005, "Role not found", HttpStatus.BAD_REQUEST),
 
     // ====== TRUCK ======
     TRUCK_NOT_FOUND(3001, "Truck not found", HttpStatus.NOT_FOUND),
     TRUCK_EXISTED(3002, "Truck already exists", HttpStatus.BAD_REQUEST),
-    TRUCK_NOT_AVAILABLE(3003, "Truck is not available", HttpStatus.BAD_REQUEST),
+    TRUCK_NOT_AVAILABLE(3003, "Truck is not available", HttpStatus.NOT_FOUND),
 
     // ====== ROUTE ======
     ROUTE_NOT_FOUND(3101, "Route not found", HttpStatus.NOT_FOUND),
@@ -34,7 +36,8 @@ public enum ErrorCode {
     // ====== SCHEDULE ======
     SCHEDULE_NOT_FOUND(4001, "Schedule not found", HttpStatus.NOT_FOUND),
     SCHEDULE_ALREADY_APPROVED(4002, "Schedule already approved", HttpStatus.BAD_REQUEST),
-    INVALID_SCHEDULE_DATE(4003, "Invalid schedule date", HttpStatus.BAD_REQUEST),
+    SCHEDULE_IS_PENDING(4003, "Schedule is pending...", HttpStatus.BAD_REQUEST),
+    INVALID_SCHEDULE_DATE(4004, "Invalid schedule date", HttpStatus.BAD_REQUEST),
 
     // ====== COST ======
     COST_NOT_FOUND(5001, "Cost not found", HttpStatus.NOT_FOUND),

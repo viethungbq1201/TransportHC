@@ -27,7 +27,7 @@ public class Schedule {
     LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    ApproveStatus approveStatus;
+        ApproveStatus approveStatus;
 
     String documentaryProof;
     BigDecimal reward;
@@ -48,4 +48,5 @@ public class Schedule {
 
     @ManyToOne
     Transaction transaction;
+
 }

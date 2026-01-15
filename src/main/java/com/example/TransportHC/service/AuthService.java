@@ -60,7 +60,7 @@ public class AuthService {
                 .issuer("viethung")
                 .issueTime(new Date())
                 .expirationTime(
-                        Date.from(Instant.now().plus(8, ChronoUnit.HOURS))
+                        Date.from(Instant.now().plus(10, ChronoUnit.HOURS))
                 )
                 .claim("roles", roles)
                 .claim("permissions", permissions)
