@@ -43,9 +43,11 @@ public class TransactionController {
     }
 
     @DeleteMapping("/deleteTransaction/{transactionId}")
-    String deleteTransaction(@PathVariable("transactionId") UUID id) {
+    ApiResponse<String> deleteTransaction(@PathVariable("transactionId") UUID id) {
        transactionService.deleteTransaction(id);
-       return "Transaction has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Transaction have been deleted")
+                .build();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.TransportHC.controller;
 
 import com.example.TransportHC.dto.request.CostTypeCreateRequest;
+import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.entity.CostType;
 import com.example.TransportHC.service.CostTypeService;
 import lombok.AccessLevel;
@@ -20,23 +21,31 @@ public class CostTypeController {
     CostTypeService costTypeService;
 
     @PostMapping("/createCostType")
-    CostType createCostType(@RequestBody CostTypeCreateRequest request) {
-        return costTypeService.createCostType(request);
+    ApiResponse<CostType> createCostType(@RequestBody CostTypeCreateRequest request) {
+        return ApiResponse.<CostType>builder()
+                .result(costTypeService.createCostType(request))
+                .build();
     }
 
     @GetMapping("/viewCostType")
-    List<CostType> viewCostType() {
-        return costTypeService.viewCostType();
+    ApiResponse<List<CostType>> viewCostType() {
+        return ApiResponse.<List<CostType>>builder()
+                .result(costTypeService.viewCostType())
+                .build();
     }
 
     @PutMapping("/updateCostType/{costTypeId}")
-    CostType updateCostType(@PathVariable("costTypeId") UUID id, @RequestBody CostTypeCreateRequest request) {
-        return costTypeService.updateCostType(id, request);
+    ApiResponse<CostType> updateCostType(@PathVariable("costTypeId") UUID id, @RequestBody CostTypeCreateRequest request) {
+        return ApiResponse.<CostType>builder()
+                .result(costTypeService.updateCostType(id, request))
+                .build();
     }
 
     @DeleteMapping("/delelteCostType/{costTypeId}")
-    String deleteCostType(@PathVariable("costTypeId") UUID id) {
+    ApiResponse<String> deleteCostType(@PathVariable("costTypeId") UUID id) {
         costTypeService.deleteCostType(id);
-        return "Cost Type have been delete";
+        return ApiResponse.<String>builder()
+                .result("Cost Type have been delete")
+                .build();
     }
 }

@@ -59,8 +59,10 @@ public class CostController {
     }
 
     @DeleteMapping("/delelteCost/{costId}")
-    String deleteCost(@PathVariable("costId") UUID id) {
+    ApiResponse<String> deleteCost(@PathVariable("costId") UUID id) {
         costService.deleteCost(id);
-        return "Cost have been delete";
+        return ApiResponse.<String>builder()
+                .result("Cost have been deleted")
+                .build();
     }
 }

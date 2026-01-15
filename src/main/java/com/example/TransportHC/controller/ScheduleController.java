@@ -66,8 +66,10 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/deleteSchedule/{ScheduleId}")
-    String deleteSchedule (@PathVariable("ScheduleId") UUID id) {
+    ApiResponse<String> deleteSchedule (@PathVariable("ScheduleId") UUID id) {
         scheduleService.deleteSchedule(id);
-        return "Schedule has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Schedule have been deleted")
+                .build();
     }
 }

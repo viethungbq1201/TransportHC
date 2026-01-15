@@ -42,8 +42,10 @@ public class TruckController {
     }
 
     @DeleteMapping("/deleteTruck/{truckId}")
-    String deleteTruck (@PathVariable("truckId") UUID id) {
+    ApiResponse<String> deleteTruck (@PathVariable("truckId") UUID id) {
         truckService.deleteTruck(id);
-        return "Truck has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Truck have been deleted")
+                .build();
     }
 }

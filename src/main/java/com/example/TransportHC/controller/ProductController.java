@@ -42,9 +42,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
-    String deleteProduct (@PathVariable("productId") UUID id) {
+    ApiResponse<String> deleteProduct (@PathVariable("productId") UUID id) {
         productService.deleteProduct(id);
-        return "Product have been deleted";
+        return ApiResponse.<String>builder()
+                .result("Product have been deleted")
+                .build();
     }
 
 }

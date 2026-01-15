@@ -43,8 +43,10 @@ public class TransactionDetailController {
     }
 
     @DeleteMapping("/deleteTransactionDetail/{TDid}")
-    String deleteTransactionDetail(@PathVariable("TDid") UUID id) {
+    ApiResponse<String> deleteTransactionDetail(@PathVariable("TDid") UUID id) {
         transactionDetailService.deleteTransactionDetail(id);
-        return "Transaction Detail have been deleted";
+        return ApiResponse.<String>builder()
+                .result("Transaction Detail have been deleted")
+                .build();
     }
 }

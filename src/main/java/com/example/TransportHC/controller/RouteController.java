@@ -45,9 +45,11 @@ public class RouteController {
     }
 
     @DeleteMapping("/deleteRoute/{routeId}")
-    String deleteRoute (@PathVariable("routeId") UUID id) {
+    ApiResponse<String> deleteRoute (@PathVariable("routeId") UUID id) {
         routeService.deleteRoute(id);
-        return "Route has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Route have been deleted")
+                .build();
     }
 
 }

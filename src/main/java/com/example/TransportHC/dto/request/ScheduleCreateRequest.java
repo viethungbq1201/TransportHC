@@ -25,8 +25,6 @@ public class ScheduleCreateRequest {
     LocalDate startDate;
     LocalDate endDate;
 
-    String documentaryProof;
-
     BigDecimal reward;
 
     UUID driverId;

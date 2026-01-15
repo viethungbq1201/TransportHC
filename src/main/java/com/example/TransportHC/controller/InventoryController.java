@@ -46,9 +46,11 @@ public class InventoryController {
     }
 
     @DeleteMapping("/deleteInventory/{inventoryId}")
-    String deleteInventory(@PathVariable("inventoryId") UUID id) {
+    ApiResponse<String> deleteInventory(@PathVariable("inventoryId") UUID id) {
         inventoryService.deleteInventory(id);
-        return "Inventory has been deleted";
+        return ApiResponse.<String>builder()
+                .result("Inventory have been deleted")
+                .build();
     }
 
 }

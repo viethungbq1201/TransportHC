@@ -13,6 +13,5 @@ import java.util.UUID;
 @Builder
 public class InventoryUpdateRequest {
     Integer quantity;
-//    LocalDateTime upToDate;
 
 }
