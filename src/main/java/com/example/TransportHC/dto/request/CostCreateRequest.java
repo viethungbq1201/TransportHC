@@ -14,6 +14,7 @@ import java.util.UUID;
 public class CostCreateRequest {
     String description;
     BigDecimal price;
+    String documentaryProof;
 
     UUID costTypeId;
 

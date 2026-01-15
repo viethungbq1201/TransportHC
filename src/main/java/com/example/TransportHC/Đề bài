@@ -107,8 +107,6 @@ authentication: done
 authorize: x
 
 
-
 //--// chưa hoàn thành:
 lọc và tìm kiêm tồn kho, import và export từ excel
-thêm api cập nhật trạng thái cho truck, user
 báo cáo

@@ -48,6 +48,7 @@ public class CostService {
         Cost cost = Cost.builder()
                 .description(request.getDescription())
                 .price(request.getPrice())
+                .documentaryProof(request.getDocumentaryProof())
                 .date(LocalDate.now())
                 .approveStatus(ApproveStatus.PENDING)
                 .costType(costType)
@@ -79,6 +80,7 @@ public class CostService {
 
         cost.setDescription(request.getDescription());
         cost.setPrice(request.getPrice());
+        cost.setDocumentaryProof(request.getDocumentaryProof());
         cost.setCostType(costType);
         cost.setSchedule(schedule);
 
@@ -125,7 +127,6 @@ public class CostService {
 
         costRepository.delete(cost);
     }
-
 
     private UserResponse mapUserToResponse(User user) {
         if (user == null) {
@@ -197,6 +198,7 @@ public class CostService {
                 .costId(cost.getCostId())
                 .description(cost.getDescription())
                 .price(cost.getPrice())
+                .documentaryProof(cost.getDocumentaryProof())
                 .date(cost.getDate())
                 .approveStatus(cost.getApproveStatus())
                 .costType(cost.getCostType())

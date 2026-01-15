@@ -23,6 +23,7 @@ public class CostResponse {
     UUID costId;
     String description;
     BigDecimal price;
+    String documentaryProof;
     LocalDate date;
 
     @Enumerated(EnumType.STRING)

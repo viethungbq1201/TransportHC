@@ -25,8 +25,9 @@ public class Cost {
 
     String description;
     BigDecimal price;
+    String documentaryProof;
     LocalDate date;
-
+    
     @Enumerated(EnumType.STRING)
     ApproveStatus approveStatus;
 
