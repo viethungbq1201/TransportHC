@@ -1,6 +1,7 @@
 package com.example.TransportHC.controller;
 
 import com.example.TransportHC.dto.request.TruckCreateRequest;
+import com.example.TransportHC.dto.request.TruckUpdateStatusRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.TruckResponse;
 import com.example.TransportHC.service.TruckService;
@@ -38,6 +39,13 @@ public class TruckController {
     ApiResponse<TruckResponse> updateTruck (@PathVariable("truckId") UUID id, @RequestBody TruckCreateRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.updateTruck(id,request))
+                .build();
+    }
+
+    @PutMapping("/updateStatusTruck/{truckId}")
+    ApiResponse<TruckResponse> updateStatusTruck (@PathVariable("truckId") UUID id, @RequestBody TruckUpdateStatusRequest request) {
+        return ApiResponse.<TruckResponse>builder()
+                .result(truckService.updateStatusTruck(id,request))
                 .build();
     }
 

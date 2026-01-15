@@ -2,6 +2,7 @@ package com.example.TransportHC.controller;
 
 import com.example.TransportHC.dto.request.UserCreateRequest;
 import com.example.TransportHC.dto.request.UserUpdateRequest;
+import com.example.TransportHC.dto.request.UserUpdateStatusRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.UserResponse;
 import com.example.TransportHC.service.UserService;
@@ -41,6 +42,13 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(@PathVariable("userId") UUID id, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(id, request))
+                .build();
+    }
+
+    @PutMapping("updateStatusUser/{userId}")
+    ApiResponse<UserResponse> updateStatusUser(@PathVariable("userId") UUID id, @RequestBody UserUpdateStatusRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateStatusUser(id, request))
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.TruckCreateRequest;
+import com.example.TransportHC.dto.request.TruckUpdateStatusRequest;
 import com.example.TransportHC.dto.response.TruckResponse;
 import com.example.TransportHC.entity.Truck;
 import com.example.TransportHC.exception.AppException;
@@ -51,6 +52,16 @@ public class TruckService {
 
         truck.setLicensePlate(request.getLicensePlate());
         truck.setCapacity(request.getCapacity());
+        truck.setStatus(request.getStatus());
+        truckRepository.save(truck);
+        return entityToResponse(truck);
+    }
+
+    @PreAuthorize("hasAuthority('CREATE_COST')")
+    public TruckResponse updateStatusTruck (UUID id, TruckUpdateStatusRequest request) {
+        Truck truck = truckRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
+
         truck.setStatus(request.getStatus());
         truckRepository.save(truck);
         return entityToResponse(truck);

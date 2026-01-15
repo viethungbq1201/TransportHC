@@ -2,6 +2,7 @@ package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.UserCreateRequest;
 import com.example.TransportHC.dto.request.UserUpdateRequest;
+import com.example.TransportHC.dto.request.UserUpdateStatusRequest;
 import com.example.TransportHC.dto.response.UserResponse;
 import com.example.TransportHC.entity.Role;
 import com.example.TransportHC.entity.User;
@@ -114,6 +115,18 @@ public class UserService {
         roles.add(assignedRole);
         user.setRoles(roles);
         user.setIsDriver(isDriver);
+
+        userRepository.save(user);
+
+        return entityToResponse(user);
+    }
+
+    @PreAuthorize("hasAuthority('CREATE_COST')")
+    public UserResponse updateStatusUser (UUID id, UserUpdateStatusRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        user.setStatus(request.getStatus());
 
         userRepository.save(user);
 

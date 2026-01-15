@@ -82,21 +82,33 @@ H1. Các loại chi phí - loại chi phí này sẽ được tài xế chọn �
    - **Lịch Trình Vận Chuyển Chi Tiết Cho Tất Cả Xe**:
      - Báo cáo tổng hợp tổng hợp lịch trình và chi phí liên quan cho tất cả các xe tải.
 
-
 H1. Báo cáo lương  - danh sách
-
 H2. Báo cáo lương  - Chi tiết
 Bấm vào [chỉnh sửa tháng này] => Sang hình H3
 Bấm vào [Cấu hình tài xế] => Sang hình H4
-
 H3. Chi tiết lương tài xế. Vd tháng 07/2024 (Không bao gồm lương hành trình)
-
 H4. Cấu hình lương cho tài xế
-
 H3. Báo cáo tồn kho
-
 H4. Báo cáo nhật trình
-
 H5. Báo cáo chi phí cho 1 tài xế
-
 H6. Báo cáo chi phí tổng hợp
+
+
+//--// đã hoàn thành
+kho: x
+chi phí: cost
+lịch trình: schedule
+xe tải: truck
+lái xe: user
+tuyến: route
+cac loai chi phí: cost type
+báo cáo: x
+authentication: done
+authorize: x
+
+
+
+//--// chưa hoàn thành:
+lọc và tìm kiêm tồn kho, import và export từ excel
+thêm api cập nhật trạng thái cho truck, user
+báo cáo
