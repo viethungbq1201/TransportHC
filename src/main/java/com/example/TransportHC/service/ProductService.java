@@ -90,8 +90,8 @@ public class ProductService {
 
     ProductResponse entityToResponse(Product product) {
         CategoryResponse category = CategoryResponse.builder()
-                .categoryId(product.getProductId())
-                .name(product.getName())
+                .categoryId(product.getCategory().getCategoryId())
+                .name(product.getCategory().getName())
                 .build();
 
         return ProductResponse.builder()
