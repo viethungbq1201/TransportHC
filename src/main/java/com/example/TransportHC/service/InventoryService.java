@@ -2,6 +2,7 @@ package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.InventoryCreateRequest;
 import com.example.TransportHC.dto.request.InventoryUpdateRequest;
+import com.example.TransportHC.dto.response.CategoryResponse;
 import com.example.TransportHC.dto.response.InventoryResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
 import com.example.TransportHC.entity.Inventory;
@@ -68,10 +69,15 @@ public class InventoryService {
     }
 
     private InventoryResponse entityToResponse(Inventory inventory) {
+        CategoryResponse category = CategoryResponse.builder()
+                .categoryId(inventory.getProduct().getCategory().getCategoryId())
+                .name(inventory.getProduct().getCategory().getName())
+                .build();
+
         ProductResponse productResponse = ProductResponse.builder()
                 .id(inventory.getProduct().getProductId())
                 .name(inventory.getProduct().getName())
-                .category(inventory.getProduct().getCategory())
+                .category(category)
                 .price(inventory.getProduct().getPrice())
                 .build();
 

@@ -47,8 +47,9 @@ public enum ErrorCode {
     // ====== PRODUCT / INVENTORY ======
     PRODUCT_NOT_FOUND(6001, "Product not found", HttpStatus.NOT_FOUND),
     PRODUCT_EXISTED(6002, "Product already exists", HttpStatus.BAD_REQUEST),
-    INVENTORY_NOT_FOUND(6003, "Inventory not found", HttpStatus.NOT_FOUND),
-    INVENTORY_NOT_ENOUGH(6004, "Not enough product in inventory", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_FOUND(6003, "Product not found", HttpStatus.NOT_FOUND),
+    INVENTORY_NOT_FOUND(6004, "Inventory not found", HttpStatus.NOT_FOUND),
+    INVENTORY_NOT_ENOUGH(6005, "Not enough product in inventory", HttpStatus.BAD_REQUEST),
 
     // ====== TRANSACTION ======
     TRANSACTION_NOT_FOUND(7001, "Transaction not found", HttpStatus.NOT_FOUND),

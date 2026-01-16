@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,23 +16,14 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Product {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID productId;
-
+    UUID categoryId;
     String name;
-    BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    Category category;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    Inventory inventory;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    List<TransactionDetail> transactionDetails;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    List<Product> products;
 
 }

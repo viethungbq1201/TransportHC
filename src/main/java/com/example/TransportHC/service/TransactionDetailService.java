@@ -1,10 +1,7 @@
 package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.TransactionDetailCreateRequest;
-import com.example.TransportHC.dto.response.ProductResponse;
-import com.example.TransportHC.dto.response.TransactionDetailResponse;
-import com.example.TransportHC.dto.response.TransactionResponse;
-import com.example.TransportHC.dto.response.UserResponse;
+import com.example.TransportHC.dto.response.*;
 import com.example.TransportHC.entity.*;
 import com.example.TransportHC.enums.TransactionType;
 import com.example.TransportHC.exception.AppException;
@@ -151,10 +148,15 @@ public class TransactionDetailService {
                 .createdBy(userResponse)
                 .build();
 
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .categoryId(transactionDetail.getProduct().getCategory().getCategoryId())
+                .name(transactionDetail.getProduct().getCategory().getName())
+                .build();
+
         ProductResponse productResponse = ProductResponse.builder()
                 .id(transactionDetail.getProduct().getProductId())
                 .name(transactionDetail.getProduct().getName())
-                .category(transactionDetail.getProduct().getCategory())
+                .category(categoryResponse)
                 .price(transactionDetail.getProduct().getPrice())
                 .build();
 

@@ -1,11 +1,14 @@
 package com.example.TransportHC.service;
 
 import com.example.TransportHC.dto.request.ProductCreateRequest;
+import com.example.TransportHC.dto.response.CategoryResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
+import com.example.TransportHC.entity.Category;
 import com.example.TransportHC.entity.Inventory;
 import com.example.TransportHC.entity.Product;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
+import com.example.TransportHC.repository.CategoryRepository;
 import com.example.TransportHC.repository.InventoryRepository;
 import com.example.TransportHC.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -25,6 +28,7 @@ public class ProductService {
 
     ProductRepository productRepository;
     InventoryRepository inventoryRepository;
+    CategoryRepository categoryRepository;
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ProductResponse createProduct(ProductCreateRequest request) {
@@ -32,9 +36,13 @@ public class ProductService {
         if (productRepository.existsProductByName(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
         Product product = Product.builder()
                 .name(request.getName())
-                .category(request.getCategory())
+                .category(category)
                 .price(request.getPrice())
                 .build();
         productRepository.save(product);
@@ -62,8 +70,11 @@ public class ProductService {
     public ProductResponse updateProduct(UUID id, ProductCreateRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
         product.setName(request.getName());
-        product.setCategory(request.getCategory());
+        product.setCategory(category);
         product.setPrice(request.getPrice());
         productRepository.save(product);
         return entityToResponse(product);
@@ -78,10 +89,15 @@ public class ProductService {
     }
 
     ProductResponse entityToResponse(Product product) {
+        CategoryResponse category = CategoryResponse.builder()
+                .categoryId(product.getProductId())
+                .name(product.getName())
+                .build();
+
         return ProductResponse.builder()
                 .id(product.getProductId())
                 .name(product.getName())
-                .category(product.getCategory())
+                .category(category)
                 .price(product.getPrice())
                 .build();
     }
