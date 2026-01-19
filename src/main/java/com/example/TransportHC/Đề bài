@@ -95,7 +95,7 @@ H6. Báo cáo chi phí tổng hợp
 
 
 //--// đã hoàn thành
-kho: x
+kho: inventory
 chi phí: cost
 lịch trình: schedule
 xe tải: truck
@@ -109,3 +109,4 @@ authorize: x
 
 //--// chưa hoàn thành:
 báo cáo
+check user github
