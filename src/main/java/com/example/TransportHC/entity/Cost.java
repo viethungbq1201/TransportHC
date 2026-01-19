@@ -23,6 +23,9 @@ public class Cost {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID costId;
 
+    @ManyToOne
+    User userCost;
+
     String description;
     BigDecimal price;
     String documentaryProof;

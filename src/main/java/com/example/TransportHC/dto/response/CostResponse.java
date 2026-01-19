@@ -1,8 +1,6 @@
 package com.example.TransportHC.dto.response;
 
 import com.example.TransportHC.entity.CostType;
-import com.example.TransportHC.entity.Schedule;
-import com.example.TransportHC.entity.User;
 import com.example.TransportHC.enums.ApproveStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +19,8 @@ import java.util.UUID;
 @Builder
 public class CostResponse {
     UUID costId;
+    UserResponse userCost;
+
     String description;
     BigDecimal price;
     String documentaryProof;

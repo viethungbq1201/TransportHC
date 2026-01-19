@@ -10,7 +10,6 @@ import com.example.TransportHC.repository.CostRepository;
 import com.example.TransportHC.repository.CostTypeRepository;
 import com.example.TransportHC.repository.ScheduleRepository;
 import com.example.TransportHC.repository.UserRepository;
-import com.nimbusds.jose.proc.SecurityContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,11 +40,16 @@ public class CostService {
         Schedule schedule = scheduleRepository.findById(request.getScheduleId())
                 .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
+        User userCost = userRepository.findById(schedule.getDriver().getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+
         if (schedule.getApproveStatus() == ApproveStatus.PENDING) {
             throw new AppException(ErrorCode.SCHEDULE_IS_PENDING);
         }
 
         Cost cost = Cost.builder()
+                .userCost(userCost)
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .documentaryProof(request.getDocumentaryProof())
@@ -152,6 +156,7 @@ public class CostService {
     }
 
     private CostResponse entityToResponse (Cost cost){
+        UserResponse costResponse = mapUserToResponse(cost.getUserCost());
         UserResponse approveResponse = mapUserToResponse(cost.getSchedule().getApprovedBy());
         UserResponse driverResponse = mapUserToResponse(cost.getSchedule().getDriver());
         UserResponse approveCostResponse = mapUserToResponse(cost.getApprovedBy());
@@ -196,6 +201,7 @@ public class CostService {
 
         return CostResponse.builder()
                 .costId(cost.getCostId())
+                .userCost(costResponse)
                 .description(cost.getDescription())
                 .price(cost.getPrice())
                 .documentaryProof(cost.getDocumentaryProof())
