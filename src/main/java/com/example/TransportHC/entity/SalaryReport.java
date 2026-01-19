@@ -1,11 +1,13 @@
 package com.example.TransportHC.entity;
 
+import com.example.TransportHC.enums.SalaryReportStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +27,7 @@ public class SalaryReport {
     @ManyToOne
     User user;
 
-    String month;
+    YearMonth month;
 
     BigDecimal basicSalary;
     BigDecimal reward;
@@ -37,4 +39,5 @@ public class SalaryReport {
     User createBy;
 
     LocalDateTime createAt;
+    SalaryReportStatus status;
 }

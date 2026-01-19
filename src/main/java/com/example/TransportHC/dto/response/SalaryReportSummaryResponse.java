@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.UUID;
 
@@ -14,18 +13,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SalaryReportResponse {
-    UUID salaryReportId;
+public class SalaryReportSummaryResponse {
+    UUID reportId;
     UserResponse user;
-    BigDecimal basic_salary;
-    BigDecimal advance_salary;
-    BigDecimal cost;
-    BigDecimal reward;
-    BigDecimal total_salary;
-    LocalDateTime createdAt;
+    BigDecimal baseSalary;
+    BigDecimal rewardSalary;
+    BigDecimal costSalary;
+    BigDecimal total;
     YearMonth month;
-    UserResponse createBy;
     SalaryReportStatus status;
-
 
 }

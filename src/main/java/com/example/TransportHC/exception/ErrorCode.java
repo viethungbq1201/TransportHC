@@ -53,7 +53,14 @@ public enum ErrorCode {
 
     // ====== TRANSACTION ======
     TRANSACTION_NOT_FOUND(7001, "Transaction not found", HttpStatus.NOT_FOUND),
-    TRANSACTION_DETAIL_NOT_FOUND(7002, "Transaction detail not found", HttpStatus.NOT_FOUND);
+    TRANSACTION_DETAIL_NOT_FOUND(7002, "Transaction detail not found", HttpStatus.NOT_FOUND),
+
+    // ===== REPORT =====
+    REPORT_NOT_FOUND(8001, "Report not found", HttpStatus.NOT_FOUND),
+    REPORT_EXISTED(8002, "Report already exists", HttpStatus.BAD_REQUEST),
+    REPORT_ALREADY_DONE(8003, "Report already done", HttpStatus.BAD_REQUEST),
+
+    ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -1,13 +1,32 @@
 package com.example.TransportHC.service;
 
+import com.example.TransportHC.dto.request.SalaryReportRequest;
+import com.example.TransportHC.dto.response.SalaryReportResponse;
+import com.example.TransportHC.dto.response.SalaryReportSummaryResponse;
+import com.example.TransportHC.dto.response.UserResponse;
+import com.example.TransportHC.entity.Role;
+import com.example.TransportHC.entity.SalaryReport;
+import com.example.TransportHC.entity.User;
+import com.example.TransportHC.enums.SalaryReportStatus;
+import com.example.TransportHC.exception.AppException;
+import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.SalaryReportRepository;
 import com.example.TransportHC.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,24 +36,220 @@ public class SalaryReportService {
     SalaryReportRepository salaryReportRepository;
     UserRepository userRepository;
 
-//    public SalaryReportResponse create1SalaryReport(UUID userId)  {
-//        User driver = userRepository.findById(userId)
-//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-//
-//        SalaryReport salaryReport = SalaryReport.builder()
-//                .basicSalary(driver.getBasicSalary())
-//                .
-//                .cost()
-//                .createBy()
-//                .build()
-//    }
-//
-//
-//
-//    private SalaryReportResponse entityToResponse(User user) {
-//        return SalaryReportResponse.builder()
-//                .basic_salary(user.getBasicSalary())
-//                .cost()
-//                .build();
-//    }
+
+    public SalaryReportResponse create1SalaryReport(UUID userId, SalaryReportRequest request) {
+
+        YearMonth currentMonth = YearMonth.now();
+
+        if (salaryReportRepository
+                .existsByUser_UserIdAndMonth(userId, currentMonth)) {
+            throw new AppException(ErrorCode.REPORT_EXISTED);
+        }
+
+        User driver = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+        User createBy = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        BigDecimal total = request.getBasicSalary()
+                .add(request.getReward())
+                .add(request.getCost())
+                .subtract(request.getAdvanceMoney());
+
+        SalaryReport salaryReport = SalaryReport.builder()
+                .user(driver)
+                .basicSalary(request.getBasicSalary())
+                .reward(request.getReward())
+                .cost(request.getCost())
+                .advanceMoney(request.getAdvanceMoney())
+                .total(total)
+                .month(currentMonth)
+                .createBy(createBy)
+                .createAt(LocalDateTime.now())
+                .status(SalaryReportStatus.PENDING)
+                .build();
+
+        salaryReportRepository.save(salaryReport);
+
+        return entityToResponse(salaryReport);
+    }
+
+
+    public List<SalaryReportResponse> createAllSalaryReport()  {
+
+        YearMonth currentMonth = YearMonth.now();
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+        User createBy = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        List<User> users = userRepository.findAllNonAdminUsers();
+
+        List<SalaryReport> reports = users.stream()
+                .filter(user ->
+                        !salaryReportRepository
+                                .existsByUser_UserIdAndMonth(user.getUserId(), currentMonth)
+                )
+                .map(user -> buildSalaryReport(user, createBy, currentMonth))
+                .toList();
+
+        salaryReportRepository.saveAll(reports);
+        return reports.stream()
+                .map(this::entityToResponse)
+                .toList();
+
+    }
+
+    public SalaryReportResponse viewSalaryReportDetail(UUID reportId) {
+
+        SalaryReport report = salaryReportRepository.findById(reportId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+
+        return entityToResponse(report);
+    }
+
+    public List<SalaryReportSummaryResponse> viewSalaryReportByMonth(YearMonth month) {
+
+        return salaryReportRepository.findByMonth(month).stream()
+                .map(this::entityToSummaryResponse)
+                .toList();
+    }
+
+    public SalaryReportResponse updateSalaryReport (UUID reportId, SalaryReportRequest request) {
+
+        SalaryReport report = salaryReportRepository.findById(reportId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+
+        if (report.getStatus() ==  SalaryReportStatus.DONE) {
+            throw new AppException(ErrorCode.REPORT_ALREADY_DONE);
+        }
+
+        BigDecimal total = request.getBasicSalary()
+                .add(request.getReward())
+                .add(request.getCost())
+                .subtract(request.getAdvanceMoney());
+
+        report.setBasicSalary(request.getBasicSalary());
+        report.setReward(request.getReward());
+        report.setCost(request.getCost());
+        report.setAdvanceMoney(request.getAdvanceMoney());
+        report.setTotal(total);
+
+        salaryReportRepository.save(report);
+
+        return entityToResponse(report);
+    }
+
+
+    public void deleteSalaryReport(UUID salaryReportId) {
+        SalaryReport salaryReport = salaryReportRepository.findById(salaryReportId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+
+        salaryReportRepository.delete(salaryReport);
+    }
+
+    public SalaryReportResponse checkSalaryReport(UUID salaryReportId) {
+        SalaryReport salaryReport = salaryReportRepository.findById(salaryReportId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+
+        salaryReport.setStatus(SalaryReportStatus.DONE);
+        salaryReportRepository.save(salaryReport);
+        return entityToResponse(salaryReport);
+    }
+
+    private SalaryReport buildSalaryReport(User user, User createBy, YearMonth month) {
+
+        LocalDate startDate = month.atDay(1);
+        LocalDate endDate = month.atEndOfMonth();
+
+        BigDecimal reward = salaryReportRepository
+                .sumReward(user.getUserId(), startDate, endDate);
+
+        BigDecimal cost = salaryReportRepository
+                .sumCost(user.getUserId(), startDate, endDate);
+
+        BigDecimal total = user.getBasicSalary()
+                .add(reward)
+                .add(cost)
+                .subtract(user.getAdvanceMoney());
+
+        SalaryReport report = SalaryReport.builder()
+                .user(user)
+                .basicSalary(user.getBasicSalary())
+                .advanceMoney(user.getAdvanceMoney())
+                .reward(reward)
+                .cost(cost)
+                .total(total)
+                .month(month)
+                .createBy(createBy)
+                .createAt(LocalDateTime.now())
+                .status(SalaryReportStatus.PENDING)
+                .build();
+
+        user.setAdvanceMoney(BigDecimal.ZERO);
+        userRepository.save(user);
+
+        return report;
+    }
+
+
+    private UserResponse mapUserToResponse(User user) {
+        if (user == null) {
+            return null;
+        }
+        Set<String> roles = user.getRoles() != null
+                ? user.getRoles().stream()
+                .map(Role::getCode)
+                .collect(Collectors.toSet())
+                : new HashSet<>();
+
+        return UserResponse.builder()
+                .id(user.getUserId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .address(user.getAddress())
+                .phoneNumber(String.valueOf(user.getPhoneNumber()))
+                .status(user.getStatus())
+                .basicSalary(user.getBasicSalary())
+                .advanceMoney(user.getAdvanceMoney())
+                .roles(roles)
+                .build();
+    }
+
+    private SalaryReportResponse entityToResponse(SalaryReport salaryReport) {
+        UserResponse driver = mapUserToResponse(salaryReport.getUser());
+        UserResponse createBy = mapUserToResponse(salaryReport.getCreateBy());
+
+        return SalaryReportResponse.builder()
+                .salaryReportId(salaryReport.getReportId())
+                .user(driver)
+                .basic_salary(salaryReport.getBasicSalary())
+                .advance_salary(salaryReport.getAdvanceMoney())
+                .reward(salaryReport.getReward())
+                .cost(salaryReport.getCost())
+                .total_salary(salaryReport.getTotal())
+                .month(salaryReport.getMonth())
+                .createBy(createBy)
+                .createdAt(salaryReport.getCreateAt())
+                .status(salaryReport.getStatus())
+                .build();
+    }
+
+    private SalaryReportSummaryResponse entityToSummaryResponse(SalaryReport report) {
+
+        return SalaryReportSummaryResponse.builder()
+                .reportId(report.getReportId())
+                .user(mapUserToResponse(report.getUser()))
+                .baseSalary(report.getBasicSalary())
+                .rewardSalary(report.getReward())
+                .costSalary(report.getCost())
+                .total(report.getTotal())
+                .month(report.getMonth())
+                .status(report.getStatus())
+                .build();
+    }
+
 }
