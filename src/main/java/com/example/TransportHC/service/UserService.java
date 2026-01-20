@@ -18,11 +18,13 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
@@ -77,6 +79,7 @@ public class UserService {
         return entityToResponse(user);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<UserResponse> viewUsers() {
         return userRepository.findAll().stream()

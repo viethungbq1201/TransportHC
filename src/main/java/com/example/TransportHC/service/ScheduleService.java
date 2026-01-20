@@ -11,14 +11,13 @@ import com.example.TransportHC.enums.UserStatus;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.*;
-import com.nimbusds.jose.proc.SecurityContext;
-import com.nimbusds.jose.proc.SimpleSecurityContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -28,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScheduleService {
@@ -75,6 +75,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<ScheduleResponse> viewSchedule() {
         return scheduleRepository.findAll().stream()

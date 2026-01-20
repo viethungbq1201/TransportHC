@@ -9,11 +9,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CostTypeService {
@@ -28,6 +30,7 @@ public class CostTypeService {
         return costType;
     }
 
+    @Transactional(readOnly = true)
     public List<CostType> viewCostType() {
         return costTypeRepository.findAll().stream().toList();
     }

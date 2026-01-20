@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TransactionDetailService {
@@ -51,6 +53,7 @@ public class TransactionDetailService {
         return entityToResponse(transactionDetail);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<TransactionDetailResponse> viewTransactionDetailResponse() {
         return transactionDetailRepository.findAll().stream()
