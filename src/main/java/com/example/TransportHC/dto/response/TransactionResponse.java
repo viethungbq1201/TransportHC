@@ -1,11 +1,13 @@
 package com.example.TransportHC.dto.response;
 
-import com.example.TransportHC.enums.TransactionType;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.example.TransportHC.enums.ApproveStatus;
+import com.example.TransportHC.enums.TransactionType;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +21,7 @@ public class TransactionResponse {
     LocalDateTime date;
     String location;
     String note;
+    ApproveStatus approveStatus;
 
     UserResponse createdBy;
 }

@@ -1,27 +1,28 @@
 package com.example.TransportHC.service;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.TransportHC.dto.request.UserCreateRequest;
 import com.example.TransportHC.dto.request.UserUpdateRequest;
 import com.example.TransportHC.dto.request.UserUpdateStatusRequest;
 import com.example.TransportHC.dto.response.UserResponse;
 import com.example.TransportHC.entity.Role;
 import com.example.TransportHC.entity.User;
-
 import com.example.TransportHC.enums.UserStatus;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.RoleRepository;
 import com.example.TransportHC.repository.UserRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,7 +35,7 @@ public class UserService {
     RoleRepository roleRepository;
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
-    public UserResponse createUser (UserCreateRequest request) {
+    public UserResponse createUser(UserCreateRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -68,8 +69,8 @@ public class UserService {
             roleCode = "DRIVER";
             isDriver = true;
         }
-        Role assignedRole = roleRepository.findByCode(roleCode)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+        Role assignedRole =
+                roleRepository.findByCode(roleCode).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
         roles.add(assignedRole);
         user.setRoles(roles);
         user.setIsDriver(isDriver);
@@ -82,16 +83,12 @@ public class UserService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<UserResponse> viewUsers() {
-        return userRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
-
+        return userRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
-    public UserResponse updateUser (UUID id, UserUpdateRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse updateUser(UUID id, UserUpdateRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setUsername(request.getUsername());
         user.setFullName(request.getFullName());
@@ -113,8 +110,8 @@ public class UserService {
             roleCode = "DRIVER";
             isDriver = true;
         }
-        Role assignedRole = roleRepository.findByCode(roleCode)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+        Role assignedRole =
+                roleRepository.findByCode(roleCode).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
         roles.add(assignedRole);
         user.setRoles(roles);
         user.setIsDriver(isDriver);
@@ -125,9 +122,8 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
-    public UserResponse updateStatusUser (UUID id, UserUpdateStatusRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse updateStatusUser(UUID id, UserUpdateStatusRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setStatus(request.getStatus());
 
@@ -137,18 +133,16 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
-    public void deleteUser (UUID id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    public void deleteUser(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 
     private UserResponse entityToResponse(User user) {
         // Chuyển đổi Set<Role> sang Set<String> (role codes)
         Set<String> roleCodes = user.getRoles() != null
-                ? user.getRoles().stream()
-                .map(Role::getCode)
-                .collect(Collectors.toSet()): new HashSet<>();
+                ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet())
+                : new HashSet<>();
 
         return UserResponse.builder()
                 .id(user.getUserId())
@@ -162,5 +156,4 @@ public class UserService {
                 .roles(roleCodes)
                 .build();
     }
-
 }

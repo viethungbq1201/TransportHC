@@ -1,19 +1,21 @@
 package com.example.TransportHC.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.TransportHC.dto.request.CategoryCreateRequest;
 import com.example.TransportHC.dto.response.CategoryResponse;
 import com.example.TransportHC.entity.Category;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.CategoryRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -24,9 +26,7 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public CategoryResponse createCategory(CategoryCreateRequest request) {
-        Category category = Category.builder()
-                .name(request.getName())
-                .build();
+        Category category = Category.builder().name(request.getName()).build();
 
         categoryRepository.save(category);
         return entityToResponse(category);
@@ -34,14 +34,12 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryResponse> viewCategory() {
-        return categoryRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return categoryRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     public CategoryResponse updateCategory(UUID id, CategoryCreateRequest request) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category =
+                categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
         category.setName(request.getName());
         categoryRepository.save(category);
@@ -49,8 +47,8 @@ public class CategoryService {
     }
 
     public void deleteCategory(UUID id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category =
+                categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
         categoryRepository.delete(category);
     }

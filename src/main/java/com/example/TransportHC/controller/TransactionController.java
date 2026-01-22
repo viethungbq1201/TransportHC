@@ -1,17 +1,18 @@
 package com.example.TransportHC.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.TransportHC.dto.request.TransactionCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.TransactionResponse;
 import com.example.TransportHC.service.TransactionService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,7 +37,8 @@ public class TransactionController {
     }
 
     @PutMapping("/updateTransaction/{transactionId}")
-    ApiResponse<TransactionResponse> updateTransaction(@PathVariable("transactionId") UUID id, @RequestBody TransactionCreateRequest request) {
+    ApiResponse<TransactionResponse> updateTransaction(
+            @PathVariable("transactionId") UUID id, @RequestBody TransactionCreateRequest request) {
         return ApiResponse.<TransactionResponse>builder()
                 .result(transactionService.updateTransaction(id, request))
                 .build();
@@ -44,10 +46,23 @@ public class TransactionController {
 
     @DeleteMapping("/deleteTransaction/{transactionId}")
     ApiResponse<String> deleteTransaction(@PathVariable("transactionId") UUID id) {
-       transactionService.deleteTransaction(id);
+        transactionService.deleteTransaction(id);
         return ApiResponse.<String>builder()
                 .result("Transaction have been deleted")
                 .build();
     }
 
+    @PutMapping("/approveTransaction/{transactionId}")
+    ApiResponse<TransactionResponse> approveTransaction(@PathVariable("transactionId") UUID id) {
+        return ApiResponse.<TransactionResponse>builder()
+                .result(transactionService.approveTransaction(id))
+                .build();
+    }
+
+    @PutMapping("/rejectTransaction/{transactionId}")
+    ApiResponse<TransactionResponse> rejectTransaction(@PathVariable("transactionId") UUID id) {
+        return ApiResponse.<TransactionResponse>builder()
+                .result(transactionService.rejectTransaction(id))
+                .build();
+    }
 }

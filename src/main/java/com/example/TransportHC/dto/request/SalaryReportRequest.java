@@ -1,9 +1,9 @@
 package com.example.TransportHC.dto.request;
 
+import java.math.BigDecimal;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +15,4 @@ public class SalaryReportRequest {
     BigDecimal reward;
     BigDecimal cost;
     BigDecimal advanceMoney;
-
 }

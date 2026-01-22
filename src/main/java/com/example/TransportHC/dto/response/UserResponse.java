@@ -1,13 +1,13 @@
 package com.example.TransportHC.dto.response;
 
-import com.example.TransportHC.enums.UserStatus;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
-
 import java.util.Set;
 import java.util.UUID;
+
+import com.example.TransportHC.enums.UserStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -24,5 +24,4 @@ public class UserResponse {
     BigDecimal basicSalary;
     BigDecimal advanceMoney;
     Set<String> roles;
-
 }

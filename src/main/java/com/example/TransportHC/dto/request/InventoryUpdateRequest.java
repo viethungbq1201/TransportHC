@@ -3,9 +3,6 @@ package com.example.TransportHC.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +10,4 @@ import java.util.UUID;
 @Builder
 public class InventoryUpdateRequest {
     Integer quantity;
-
 }

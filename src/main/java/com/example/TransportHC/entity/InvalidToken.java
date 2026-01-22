@@ -1,11 +1,12 @@
 package com.example.TransportHC.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Entity
 @Getter
@@ -19,6 +20,6 @@ public class InvalidToken {
 
     @Id
     String token;
-    Date expiryTime;
 
+    Date expiryTime;
 }

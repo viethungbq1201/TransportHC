@@ -1,6 +1,7 @@
 package com.example.TransportHC.exception;
 
-import com.example.TransportHC.dto.response.ApiResponse;
+import java.util.Objects;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Objects;
+import com.example.TransportHC.dto.response.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -19,58 +20,53 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse<?>> handleException(Exception ex) {
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
 
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(AppException.class)
     ResponseEntity<ApiResponse<?>> handleAppException(AppException ex) {
         ErrorCode errorCode = ex.getErrorCode();
 
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     ResponseEntity<ApiResponse<?>> handleAccessDenied() {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(value = JwtException.class)
     ResponseEntity<ApiResponse<?>> handleJwtException(JwtException ex) {
         ErrorCode errorCode = ErrorCode.TOKEN_INVALID;
 
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(AuthenticationServiceException.class)
     ResponseEntity<ApiResponse<?>> handleAuthException() {
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -85,22 +81,20 @@ public class GlobalExceptionHandler {
             errorCode = ErrorCode.INVALID_INPUT_DATA;
         }
 
-        return ResponseEntity.badRequest().body(
-                ApiResponse.builder()
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<ApiResponse<?>> handleJsonException() {
         ErrorCode errorCode = ErrorCode.INVALID_INPUT_DATA;
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                ApiResponse.builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
-                        .build()
-        );
+                        .build());
     }
 }

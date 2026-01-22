@@ -1,5 +1,11 @@
 package com.example.TransportHC.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.TransportHC.dto.request.RouteCreateRequest;
 import com.example.TransportHC.dto.response.RouteResponse;
@@ -7,15 +13,10 @@ import com.example.TransportHC.entity.Route;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.RouteRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -43,15 +44,12 @@ public class RouteService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<RouteResponse> viewRoutes() {
-        return routeRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return routeRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public RouteResponse updateRoute(UUID id, RouteCreateRequest request) {
-        Route route = routeRepository.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.ROUTE_NOT_FOUND));
+        Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
 
         route.setName(request.getName());
         route.setStart_point(request.getStart_point());
@@ -63,12 +61,11 @@ public class RouteService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public void deleteRoute(UUID id) {
-        Route route = routeRepository.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.ROUTE_NOT_FOUND));
+        Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
         routeRepository.delete(route);
     }
 
-    private RouteResponse entityToResponse (Route route){
+    private RouteResponse entityToResponse(Route route) {
         return RouteResponse.builder()
                 .id(route.getRouteId())
                 .name(route.getName())
@@ -77,5 +74,4 @@ public class RouteService {
                 .distance(route.getDistance())
                 .build();
     }
-
 }

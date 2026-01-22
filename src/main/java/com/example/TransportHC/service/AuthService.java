@@ -1,5 +1,13 @@
 package com.example.TransportHC.service;
 
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.example.TransportHC.dto.request.LogoutRequest;
 import com.example.TransportHC.dto.request.RefreshRequest;
 import com.example.TransportHC.dto.response.AuthResponse;
@@ -16,17 +24,11 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -44,10 +46,8 @@ public class AuthService {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
-        List<String> roles = user.getRoles().stream()
-                .map(Role::getCode)
-                .distinct()
-                .toList();
+        List<String> roles =
+                user.getRoles().stream().map(Role::getCode).distinct().toList();
 
         List<String> permissions = user.getRoles().stream()
                 .flatMap(role -> role.getPermissions().stream())
@@ -59,9 +59,7 @@ public class AuthService {
                 .subject(user.getUsername())
                 .issuer("viethung")
                 .issueTime(new Date())
-                .expirationTime(
-                        Date.from(Instant.now().plus(10, ChronoUnit.HOURS))
-                )
+                .expirationTime(Date.from(Instant.now().plus(10, ChronoUnit.HOURS)))
                 .claim("roles", roles)
                 .claim("permissions", permissions)
                 .jwtID(UUID.randomUUID().toString())
@@ -82,13 +80,10 @@ public class AuthService {
         String uuid = token.getJWTClaimsSet().getJWTID();
         Date expiredTime = token.getJWTClaimsSet().getExpirationTime();
 
-        InvalidToken invalidToken = InvalidToken.builder()
-                .token(uuid)
-                .expiryTime(expiredTime)
-                .build();
+        InvalidToken invalidToken =
+                InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
 
         invalidTokenRepository.save(invalidToken);
-
     }
 
     public SignedJWT verifyToken(String token) throws JOSEException, ParseException {
@@ -100,15 +95,12 @@ public class AuthService {
 
         var verified = signedJWT.verify(verifier);
 
-        if (!(verified && expiryTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        if (invalidTokenRepository
-                .existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+        if (invalidTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.TOKEN_INVALID);
 
         return signedJWT;
-
     }
 
     public AuthResponse refreshToken(RefreshRequest request) throws JOSEException, ParseException {
@@ -118,24 +110,19 @@ public class AuthService {
         String uuid = signedJWT.getJWTClaimsSet().getJWTID();
         Date expiredTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidToken invalidToken = InvalidToken.builder()
-                .token(uuid)
-                .expiryTime(expiredTime)
-                .build();
+        InvalidToken invalidToken =
+                InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
 
         invalidTokenRepository.save(invalidToken);
 
         String username = signedJWT.getJWTClaimsSet().getSubject();
 
-        User user = userRepository.findUserByUsername(username)
-                .orElseThrow(()  -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository
+                .findUserByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         var token = generateToken(user);
 
-        return AuthResponse.builder()
-                .token(token)
-                .build();
-
+        return AuthResponse.builder().token(token).build();
     }
-
 }

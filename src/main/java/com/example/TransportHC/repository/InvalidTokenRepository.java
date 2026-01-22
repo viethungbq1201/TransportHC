@@ -1,9 +1,7 @@
 package com.example.TransportHC.repository;
 
-import com.example.TransportHC.entity.InvalidToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import com.example.TransportHC.entity.InvalidToken;
 
-public interface InvalidTokenRepository extends JpaRepository<InvalidToken, String> {
-}
+public interface InvalidTokenRepository extends JpaRepository<InvalidToken, String> {}

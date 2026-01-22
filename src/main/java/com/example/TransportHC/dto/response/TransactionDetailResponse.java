@@ -1,9 +1,9 @@
 package com.example.TransportHC.dto.response;
 
+import java.util.UUID;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

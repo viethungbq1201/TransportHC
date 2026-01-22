@@ -1,14 +1,16 @@
 package com.example.TransportHC.dto.response;
 
-import com.example.TransportHC.enums.ApproveStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
+import com.example.TransportHC.enums.ScheduleStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class ScheduleResponse {
     LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    ApproveStatus approveStatus;
+    ScheduleStatus approveStatus;
 
     String documentaryProof;
 

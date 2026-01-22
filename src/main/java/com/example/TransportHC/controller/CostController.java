@@ -1,18 +1,18 @@
 package com.example.TransportHC.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.TransportHC.dto.request.CostCreateRequest;
-import com.example.TransportHC.dto.request.CostTypeCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.CostResponse;
-import com.example.TransportHC.entity.CostType;
 import com.example.TransportHC.service.CostService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,7 +27,6 @@ public class CostController {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.createCost(request))
                 .build();
-
     }
 
     @GetMapping("/viewCost")
@@ -61,8 +60,6 @@ public class CostController {
     @DeleteMapping("/delelteCost/{costId}")
     ApiResponse<String> deleteCost(@PathVariable("costId") UUID id) {
         costService.deleteCost(id);
-        return ApiResponse.<String>builder()
-                .result("Cost have been deleted")
-                .build();
+        return ApiResponse.<String>builder().result("Cost have been deleted").build();
     }
 }

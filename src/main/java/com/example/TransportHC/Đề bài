@@ -102,11 +102,20 @@ xe tải: truck
 lái xe: user
 tuyến: route
 cac loai chi phí: cost type
-báo cáo: x
+các loại sản phẩm
+báo cáo: report
 authentication: done
+test: done
+validation input data: x
 authorize: x
+migration: x
+xử lý logic liên quan đến nhập xuất kho: done
+duyệt hoặc không duyệt
+nếu duyệt mới trừ
+-> thêm trường cho schedule, từ pending -> approve/transfer... -> done
+                                   ^                           <- cancel
 
-
+                                reject
+query param
+query dsl spring boot
 //--// chưa hoàn thành:
-báo cáo
-check user github

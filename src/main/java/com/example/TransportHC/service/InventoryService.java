@@ -1,5 +1,21 @@
 package com.example.TransportHC.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.TransportHC.dto.request.InventoryCreateRequest;
 import com.example.TransportHC.dto.request.InventoryFilterRequest;
 import com.example.TransportHC.dto.request.InventoryUpdateRequest;
@@ -14,24 +30,10 @@ import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.CategoryRepository;
 import com.example.TransportHC.repository.InventoryRepository;
 import com.example.TransportHC.repository.ProductRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -44,7 +46,8 @@ public class InventoryService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public InventoryResponse createInventory(InventoryCreateRequest request) {
-        Product product = productRepository.findById(request.getProductId())
+        Product product = productRepository
+                .findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         Inventory inventory = Inventory.builder()
@@ -69,15 +72,15 @@ public class InventoryService {
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public InventoryResponse findInventoryById(UUID id) {
 
-        Inventory inventory = inventoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory =
+                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         return entityToResponse(inventory);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public InventoryResponse updateInventory(UUID id, InventoryUpdateRequest request) {
-        Inventory inventory = inventoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory =
+                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventory.setQuantity(request.getQuantity());
         inventory.setUpToDate(LocalDateTime.now());
         inventoryRepository.save(inventory);
@@ -86,15 +89,14 @@ public class InventoryService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public void deleteInventory(UUID id) {
-        Inventory inventory = inventoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory =
+                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventoryRepository.delete(inventory);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<InventoryResponse> filterInventory(InventoryFilterRequest request) {
-        return inventoryRepository.findAll(InventorySpecification.filter(request))
-                .stream()
+        return inventoryRepository.findAll(InventorySpecification.filter(request)).stream()
                 .map(this::entityToResponse)
                 .toList();
     }
@@ -151,9 +153,7 @@ public class InventoryService {
                 // 1️⃣ Find Category
                 Category category = categoryRepository
                         .findByNameIgnoreCase(categoryName)
-                        .orElseThrow(() ->
-                                new AppException(ErrorCode.CATEGORY_NOT_FOUND)
-                        );
+                        .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
                 // 2️⃣ Find or create Product
                 Product product = productRepository
@@ -182,8 +182,6 @@ public class InventoryService {
         }
     }
 
-
-
     private InventoryResponse entityToResponse(Inventory inventory) {
         CategoryResponse category = CategoryResponse.builder()
                 .categoryId(inventory.getProduct().getCategory().getCategoryId())
@@ -201,6 +199,7 @@ public class InventoryService {
                 .inventoryId(inventory.getInventoryId())
                 .product(productResponse)
                 .quantity(inventory.getQuantity())
+                .inTransit(inventory.getInTransit())
                 .upToDate(inventory.getUpToDate())
                 .build();
     }

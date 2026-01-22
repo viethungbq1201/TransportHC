@@ -1,10 +1,10 @@
 package com.example.TransportHC.dto.request;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +19,4 @@ public class CostCreateRequest {
     UUID costTypeId;
 
     UUID scheduleId;
-
 }

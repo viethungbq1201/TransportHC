@@ -1,9 +1,10 @@
 package com.example.TransportHC.repository;
 
-import com.example.TransportHC.entity.Route;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import com.example.TransportHC.entity.Route;
 
 public interface RouteRepository extends JpaRepository<Route, UUID> {
     boolean existsRouteByName(String name);

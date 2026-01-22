@@ -1,22 +1,23 @@
 package com.example.TransportHC.configuration;
 
-import com.example.TransportHC.entity.Permission;
-import com.example.TransportHC.entity.Role;
-import com.example.TransportHC.entity.User;
-import com.example.TransportHC.exception.AppException;
-import com.example.TransportHC.repository.PermissionRepository;
-import com.example.TransportHC.repository.RoleRepository;
-import com.example.TransportHC.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import java.util.*;
+
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import com.example.TransportHC.entity.Permission;
+import com.example.TransportHC.entity.Role;
+import com.example.TransportHC.entity.User;
+import com.example.TransportHC.repository.PermissionRepository;
+import com.example.TransportHC.repository.RoleRepository;
+import com.example.TransportHC.repository.UserRepository;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,18 +29,14 @@ public class ApplicationInitConfig {
     @Bean
     @Transactional
     ApplicationRunner initData(
-            PermissionRepository permissionRepository,
-            RoleRepository roleRepository,
-            UserRepository userRepository
-    ) {
+            PermissionRepository permissionRepository, RoleRepository roleRepository, UserRepository userRepository) {
         return args -> {
 
             // Danh sách các permission cần tạo
             Map<String, String> permissionMap = Map.of(
                     "CREATE_COST", "Create cost",
                     "APPROVE_COST", "Approve cost",
-                    "APPROVE_SCHEDULE", "Approve schedule"
-            );
+                    "APPROVE_SCHEDULE", "Approve schedule");
 
             // Tạo/tìm permissions (chỉ tạo mới nếu chưa tồn tại)
             List<Permission> allPermissions = new ArrayList<>();
@@ -47,14 +44,11 @@ public class ApplicationInitConfig {
                 String code = entry.getKey();
                 String name = entry.getValue();
 
-                Permission permission = permissionRepository.findByCode(code)
-                        .orElseGet(() -> {
-                            Permission newPermission = Permission.builder()
-                                    .code(code)
-                                    .name(name)
-                                    .build();
-                            return permissionRepository.save(newPermission);
-                        });
+                Permission permission = permissionRepository.findByCode(code).orElseGet(() -> {
+                    Permission newPermission =
+                            Permission.builder().code(code).name(name).build();
+                    return permissionRepository.save(newPermission);
+                });
 
                 allPermissions.add(permission);
             }
@@ -81,7 +75,8 @@ public class ApplicationInitConfig {
             adminPermissions.add(approveCost);
             adminPermissions.add(approveSchedule);
 
-            Role adminRole = roleRepository.findByCode("ADMIN")
+            Role adminRole = roleRepository
+                    .findByCode("ADMIN")
                     .map(existingRole -> {
                         // Kiểm tra xem permissions đã đủ chưa, nếu chưa thì cập nhật
                         if (!existingRole.getPermissions().containsAll(adminPermissions)) {
@@ -100,12 +95,12 @@ public class ApplicationInitConfig {
                         return roleRepository.save(role);
                     });
 
-
             // Tạo role DRIVER với permission CREATE_COST
             Set<Permission> driverPermissions = new HashSet<>();
             driverPermissions.add(createCost);
 
-            Role driverRole = roleRepository.findByCode("DRIVER")
+            Role driverRole = roleRepository
+                    .findByCode("DRIVER")
                     .map(existingRole -> {
                         if (!existingRole.getPermissions().containsAll(driverPermissions)) {
                             existingRole.getPermissions().clear();
@@ -122,7 +117,6 @@ public class ApplicationInitConfig {
                                 .build();
                         return roleRepository.save(role);
                     });
-
 
             // Tạo user admin nếu chưa tồn tại
             if (!userRepository.existsByUsername("admin")) {

@@ -1,6 +1,7 @@
 package com.example.TransportHC.dto.request;
 
 import com.example.TransportHC.enums.TruckStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,5 +15,4 @@ public class TruckCreateRequest {
     Integer capacity;
 
     TruckStatus status;
-
 }

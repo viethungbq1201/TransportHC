@@ -1,14 +1,12 @@
 package com.example.TransportHC.dto.response;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-import com.example.TransportHC.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +17,6 @@ public class InventoryResponse {
 
     ProductResponse product;
     Integer quantity;
+    Integer inTransit;
     LocalDateTime upToDate;
 }

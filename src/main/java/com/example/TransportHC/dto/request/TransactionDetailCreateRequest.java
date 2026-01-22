@@ -1,11 +1,9 @@
 package com.example.TransportHC.dto.request;
 
-import com.example.TransportHC.dto.response.ProductResponse;
-import com.example.TransportHC.dto.response.TransactionResponse;
+import java.util.UUID;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +17,4 @@ public class TransactionDetailCreateRequest {
     Integer quantityChange;
     Integer quantityBefore;
     Integer quantityAfter;
-
 }

@@ -1,11 +1,12 @@
 package com.example.TransportHC.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter

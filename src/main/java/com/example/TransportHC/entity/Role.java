@@ -1,13 +1,15 @@
 package com.example.TransportHC.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -29,13 +31,11 @@ public class Role {
     String name;
     String description;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
     @Builder.Default
     private Set<Permission> permissions = new HashSet<>();
 

@@ -1,16 +1,18 @@
 package com.example.TransportHC.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.TransportHC.dto.request.CostTypeCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.entity.CostType;
 import com.example.TransportHC.service.CostTypeService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,7 +37,8 @@ public class CostTypeController {
     }
 
     @PutMapping("/updateCostType/{costTypeId}")
-    ApiResponse<CostType> updateCostType(@PathVariable("costTypeId") UUID id, @RequestBody CostTypeCreateRequest request) {
+    ApiResponse<CostType> updateCostType(
+            @PathVariable("costTypeId") UUID id, @RequestBody CostTypeCreateRequest request) {
         return ApiResponse.<CostType>builder()
                 .result(costTypeService.updateCostType(id, request))
                 .build();

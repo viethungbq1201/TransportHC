@@ -1,13 +1,15 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.ApproveStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.ApproveStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -30,7 +32,7 @@ public class Cost {
     BigDecimal price;
     String documentaryProof;
     LocalDate date;
-    
+
     @Enumerated(EnumType.STRING)
     ApproveStatus approveStatus;
 

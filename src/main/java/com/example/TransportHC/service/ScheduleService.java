@@ -1,30 +1,31 @@
 package com.example.TransportHC.service;
 
-import com.example.TransportHC.dto.request.ScheduleCreateRequest;
-import com.example.TransportHC.dto.request.ScheduleEndRequest;
-import com.example.TransportHC.dto.request.ScheduleUpdateRequest;
-import com.example.TransportHC.dto.response.*;
-import com.example.TransportHC.entity.*;
-import com.example.TransportHC.enums.ApproveStatus;
-import com.example.TransportHC.enums.TruckStatus;
-import com.example.TransportHC.enums.UserStatus;
-import com.example.TransportHC.exception.AppException;
-import com.example.TransportHC.exception.ErrorCode;
-import com.example.TransportHC.repository.*;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.TransportHC.dto.request.ScheduleCreateRequest;
+import com.example.TransportHC.dto.request.ScheduleEndRequest;
+import com.example.TransportHC.dto.request.ScheduleUpdateRequest;
+import com.example.TransportHC.dto.response.*;
+import com.example.TransportHC.entity.*;
+import com.example.TransportHC.enums.*;
+import com.example.TransportHC.exception.AppException;
+import com.example.TransportHC.exception.ErrorCode;
+import com.example.TransportHC.repository.*;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Service
 @Transactional
@@ -40,16 +41,20 @@ public class ScheduleService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-        User driver = userRepository.findById(request.getDriverId())
+        User driver = userRepository
+                .findById(request.getDriverId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        Truck truck = truckRepository.findById(request.getTruckId())
+        Truck truck = truckRepository
+                .findById(request.getTruckId())
                 .orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
-        Route route = routeRepository.findById(request.getRouteId())
+        Route route = routeRepository
+                .findById(request.getRouteId())
                 .orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
 
-        Transaction transaction = transactionRepository.findById(request.getTransactionId())
+        Transaction transaction = transactionRepository
+                .findById(request.getTransactionId())
                 .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 
         if (driver.getStatus() != UserStatus.AVAILABLE) {
@@ -58,12 +63,19 @@ public class ScheduleService {
         if (truck.getStatus() != TruckStatus.AVAILABLE) {
             throw new AppException(ErrorCode.TRUCK_NOT_AVAILABLE);
         }
+        if (transaction.getApproveStatus() != ApproveStatus.APPROVED) {
+            throw new AppException(ErrorCode.TRANSACTION_IS_PENDING);
+        }
+        if (transaction.getSchedule() != null
+                && transaction.getSchedule().getApproveStatus() == ScheduleStatus.IN_TRANSIT) {
+            throw new AppException(ErrorCode.TRANSACTION_ALREADY_USED);
+        }
 
         Schedule schedule = Schedule.builder()
                 .startDate(request.getStartDate())
                 .endDate(null)
                 .documentaryProof("")
-                .approveStatus(ApproveStatus.PENDING)
+                .approveStatus(ScheduleStatus.PENDING)
                 .reward(request.getReward())
                 .driver(driver)
                 .truck(truck)
@@ -78,30 +90,40 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<ScheduleResponse> viewSchedule() {
-        return scheduleRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return scheduleRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ScheduleResponse updateSchedule(UUID id, ScheduleUpdateRequest request) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedule.getApproveStatus() == ApproveStatus.APPROVED) {
+        if (schedule.getApproveStatus() == ScheduleStatus.IN_TRANSIT) {
             throw new AppException(ErrorCode.SCHEDULE_ALREADY_APPROVED);
         }
 
-        User driver = userRepository.findById(request.getDriverId())
+        if (schedule.getApproveStatus() == ScheduleStatus.DONE) {
+            throw new AppException(ErrorCode.SCHEDULE_ALREADY_DONE);
+        }
+
+        if (schedule.getTransaction().getApproveStatus() != ApproveStatus.APPROVED) {
+            throw new AppException(ErrorCode.TRANSACTION_IS_PENDING);
+        }
+
+        User driver = userRepository
+                .findById(request.getDriverId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        Truck truck = truckRepository.findById(request.getTruckId())
+        Truck truck = truckRepository
+                .findById(request.getTruckId())
                 .orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
-        Route route = routeRepository.findById(request.getRouteId())
+        Route route = routeRepository
+                .findById(request.getRouteId())
                 .orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
 
-        Transaction transaction = transactionRepository.findById(request.getTransactionId())
+        Transaction transaction = transactionRepository
+                .findById(request.getTransactionId())
                 .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 
         if (driver.getStatus() != UserStatus.AVAILABLE) {
@@ -113,8 +135,7 @@ public class ScheduleService {
         if (truck.getStatus() != TruckStatus.AVAILABLE) {
             throw new AppException(ErrorCode.TRUCK_NOT_AVAILABLE);
         }
-        if (request.getEndDate() != null &&
-                request.getEndDate().isBefore(request.getStartDate())) {
+        if (request.getEndDate() != null && request.getEndDate().isBefore(request.getStartDate())) {
             throw new AppException(ErrorCode.INVALID_SCHEDULE_DATE);
         }
 
@@ -132,65 +153,91 @@ public class ScheduleService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ScheduleResponse approveSchedule(UUID id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedule.getApproveStatus() != ApproveStatus.PENDING) {
+        if (schedule.getApproveStatus() != ScheduleStatus.PENDING) {
             throw new AppException(ErrorCode.SCHEDULE_ALREADY_APPROVED);
         }
 
-        var context =  SecurityContextHolder.getContext();
+        var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        User approve = userRepository.findUserByUsername(username)
+        User approve = userRepository
+                .findUserByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         schedule.setApprovedBy(approve);
-        schedule.setApproveStatus(ApproveStatus.APPROVED);
+        schedule.setApproveStatus(ScheduleStatus.IN_TRANSIT);
+        transitInventory(schedule.getTransaction());
         scheduleRepository.save(schedule);
-        checkStatus(schedule);
+        schedule.getDriver().setStatus(UserStatus.BUSY);
+        schedule.getTruck().setStatus(TruckStatus.IN_USE);
         return entityToResponse(schedule);
-
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ScheduleResponse rejectSchedule(UUID id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedule.getApproveStatus() != ApproveStatus.PENDING) {
+        if (schedule.getApproveStatus() != ScheduleStatus.PENDING) {
             throw new AppException(ErrorCode.SCHEDULE_ALREADY_APPROVED);
         }
 
-        schedule.setApproveStatus(ApproveStatus.REJECTED);
+        schedule.setApproveStatus(ScheduleStatus.REJECTED);
         scheduleRepository.save(schedule);
         return entityToResponse(schedule);
-
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ScheduleResponse endSchedule(UUID id, ScheduleEndRequest request) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedule.getApproveStatus() == ApproveStatus.PENDING) {
-            throw new AppException(ErrorCode.SCHEDULE_IS_PENDING);
+        if (schedule.getApproveStatus() != ScheduleStatus.IN_TRANSIT) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_IN_TRANSIT);
         }
+
+        if (schedule.getTransaction().getApproveStatus() == ApproveStatus.DONE) {
+            throw new AppException(ErrorCode.TRANSACTION_ALREADY_DONE);
+        }
+
+        schedule.getDriver().setStatus(UserStatus.AVAILABLE);
+        schedule.getTruck().setStatus(TruckStatus.AVAILABLE);
 
         schedule.setEndDate(LocalDate.now());
         schedule.setDocumentaryProof(request.getDocumentaryProof());
+        schedule.setApproveStatus(ScheduleStatus.DONE);
+        applyInventory(schedule.getTransaction());
         scheduleRepository.save(schedule);
 
         return entityToResponse(schedule);
+    }
 
+    public ScheduleResponse cancelSchedule(UUID id) {
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+        if (schedule.getApproveStatus() != ScheduleStatus.IN_TRANSIT) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_IN_TRANSIT);
+        }
+
+        schedule.setApproveStatus(ScheduleStatus.CANCELLED);
+        releaseInventory(schedule.getTransaction());
+        schedule.getDriver().setStatus(UserStatus.AVAILABLE);
+        schedule.getTruck().setStatus(TruckStatus.AVAILABLE);
+        scheduleRepository.save(schedule);
+        return entityToResponse(schedule);
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public void deleteSchedule(UUID id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                        .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule =
+                scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        if (schedule.getApproveStatus() == ApproveStatus.APPROVED) {
+        if (schedule.getApproveStatus() == ScheduleStatus.IN_TRANSIT) {
+            releaseInventory(schedule.getTransaction());
             schedule.getDriver().setStatus(UserStatus.AVAILABLE);
             schedule.getTruck().setStatus(TruckStatus.AVAILABLE);
         }
@@ -198,12 +245,49 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-    private void checkStatus(Schedule schedule) {
-        if (schedule.getApproveStatus() == ApproveStatus.APPROVED) {
-            schedule.getDriver().setStatus(UserStatus.BUSY);
-            schedule.getTruck().setStatus(TruckStatus.IN_USE);
+    private void transitInventory(Transaction transaction) {
+        if (transaction.getType() != TransactionType.OUT) {
+            return;
         }
-        scheduleRepository.save(schedule);
+
+        for (TransactionDetail td : transaction.getTransactionDetails()) {
+            Inventory inv = td.getProduct().getInventory();
+
+            int available = inv.getQuantity() - inv.getInTransit();
+            if (available < td.getQuantityChange()) {
+                throw new AppException(ErrorCode.INVENTORY_NOT_ENOUGH);
+            }
+
+            inv.setInTransit(inv.getInTransit() + td.getQuantityChange());
+            inv.setUpToDate(LocalDateTime.now());
+        }
+    }
+
+    private void applyInventory(Transaction transaction) {
+        for (TransactionDetail td : transaction.getTransactionDetails()) {
+            Inventory inv = td.getProduct().getInventory();
+            int change = td.getQuantityChange();
+
+            if (transaction.getType() == TransactionType.OUT) {
+                inv.setInTransit(inv.getInTransit() - change);
+                inv.setQuantity(inv.getQuantity() - change);
+            } else {
+                inv.setQuantity(inv.getQuantity() + change);
+            }
+
+            inv.setUpToDate(LocalDateTime.now());
+        }
+
+        transaction.setApproveStatus(ApproveStatus.DONE);
+    }
+
+    private void releaseInventory(Transaction transaction) {
+        for (TransactionDetail td : transaction.getTransactionDetails()) {
+            if (transaction.getType() == TransactionType.OUT) {
+                Inventory inv = td.getProduct().getInventory();
+                inv.setInTransit(inv.getInTransit() - td.getQuantityChange());
+            }
+        }
     }
 
     private UserResponse mapUserToResponse(User user) {
@@ -211,9 +295,7 @@ public class ScheduleService {
             return null;
         }
         Set<String> roles = user.getRoles() != null
-                ? user.getRoles().stream()
-                .map(Role::getCode)
-                .collect(Collectors.toSet())
+                ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet())
                 : new HashSet<>();
 
         return UserResponse.builder()

@@ -1,9 +1,10 @@
 package com.example.TransportHC.repository;
 
-import com.example.TransportHC.entity.Truck;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import com.example.TransportHC.entity.Truck;
 
 public interface TruckRepository extends JpaRepository<Truck, UUID> {
     boolean existsTrucksByLicensePlate(String licensePlate);

@@ -1,5 +1,13 @@
 package com.example.TransportHC.controller;
 
+import java.text.ParseException;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.TransportHC.dto.request.AuthLoginRequest;
 import com.example.TransportHC.dto.request.LogoutRequest;
 import com.example.TransportHC.dto.request.RefreshRequest;
@@ -9,16 +17,10 @@ import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.UserRepository;
 import com.example.TransportHC.service.AuthService;
 import com.nimbusds.jose.JOSEException;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.text.ParseException;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,7 +33,8 @@ public class AuthController {
 
     @PostMapping("/login")
     AuthResponse login(@RequestBody AuthLoginRequest request) {
-        var user = userRepository.findUserByUsername(request.getUsername())
+        var user = userRepository
+                .findUserByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
@@ -42,9 +45,7 @@ public class AuthController {
 
         String token = authService.generateToken(user);
 
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+        return AuthResponse.builder().token(token).build();
     }
 
     @PostMapping("/logout")
@@ -55,9 +56,5 @@ public class AuthController {
     @PostMapping("/refresh")
     AuthResponse introspect(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
         return authService.refreshToken(request);
-
     }
-
-
-
 }

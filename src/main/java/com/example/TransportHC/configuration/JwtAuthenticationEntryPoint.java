@@ -1,25 +1,25 @@
 package com.example.TransportHC.configuration;
 
-import com.example.TransportHC.dto.response.ApiResponse;
-import com.example.TransportHC.exception.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import java.io.IOException;
+import com.example.TransportHC.dto.response.ApiResponse;
+import com.example.TransportHC.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException authException
-    ) throws IOException {
+            HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+            throws IOException {
 
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 

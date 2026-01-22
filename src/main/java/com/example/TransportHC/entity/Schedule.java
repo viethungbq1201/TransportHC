@@ -1,13 +1,15 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.ApproveStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.ScheduleStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -27,7 +29,7 @@ public class Schedule {
     LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-        ApproveStatus approveStatus;
+    ScheduleStatus approveStatus;
 
     String documentaryProof;
     BigDecimal reward;
@@ -46,7 +48,7 @@ public class Schedule {
     @ManyToOne
     Route route;
 
-    @ManyToOne
-    Transaction transaction;
-
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Transaction transaction;
 }

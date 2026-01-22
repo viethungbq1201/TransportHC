@@ -1,14 +1,16 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.TransactionType;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.ApproveStatus;
+import com.example.TransportHC.enums.TransactionType;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     TransactionType type;
 
+    @Enumerated(EnumType.STRING)
+    ApproveStatus approveStatus;
+
     LocalDateTime date;
     String location;
     String note;
@@ -37,5 +42,6 @@ public class Transaction {
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
     List<TransactionDetail> transactionDetails;
 
-
+    @OneToOne(mappedBy = "transaction")
+    private Schedule schedule;
 }

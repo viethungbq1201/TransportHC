@@ -1,11 +1,12 @@
 package com.example.TransportHC.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -26,6 +27,6 @@ public class Inventory {
     Product product;
 
     Integer quantity;
+    Integer inTransit = 0;
     LocalDateTime upToDate;
-
 }

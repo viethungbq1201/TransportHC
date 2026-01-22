@@ -1,28 +1,31 @@
 package com.example.TransportHC.service;
 
-import com.example.TransportHC.dto.request.CostCreateRequest;
-import com.example.TransportHC.dto.response.*;
-import com.example.TransportHC.entity.*;
-import com.example.TransportHC.enums.ApproveStatus;
-import com.example.TransportHC.exception.AppException;
-import com.example.TransportHC.exception.ErrorCode;
-import com.example.TransportHC.repository.CostRepository;
-import com.example.TransportHC.repository.CostTypeRepository;
-import com.example.TransportHC.repository.ScheduleRepository;
-import com.example.TransportHC.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.TransportHC.dto.request.CostCreateRequest;
+import com.example.TransportHC.dto.response.*;
+import com.example.TransportHC.entity.*;
+import com.example.TransportHC.enums.ApproveStatus;
+import com.example.TransportHC.enums.ScheduleStatus;
+import com.example.TransportHC.exception.AppException;
+import com.example.TransportHC.exception.ErrorCode;
+import com.example.TransportHC.repository.CostRepository;
+import com.example.TransportHC.repository.CostTypeRepository;
+import com.example.TransportHC.repository.ScheduleRepository;
+import com.example.TransportHC.repository.UserRepository;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Service
 @Transactional
@@ -36,18 +39,20 @@ public class CostService {
 
     public CostResponse createCost(CostCreateRequest request) {
 
-        CostType costType = costTypeRepository.findById(request.getCostTypeId())
+        CostType costType = costTypeRepository
+                .findById(request.getCostTypeId())
                 .orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));
 
-        Schedule schedule = scheduleRepository.findById(request.getScheduleId())
+        Schedule schedule = scheduleRepository
+                .findById(request.getScheduleId())
                 .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        User userCost = userRepository.findById(schedule.getDriver().getUserId())
+        User userCost = userRepository
+                .findById(schedule.getDriver().getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-
-        if (schedule.getApproveStatus() == ApproveStatus.PENDING) {
-            throw new AppException(ErrorCode.SCHEDULE_IS_PENDING);
+        if (schedule.getApproveStatus() != ScheduleStatus.IN_TRANSIT) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_IN_TRANSIT);
         }
 
         Cost cost = Cost.builder()
@@ -64,26 +69,23 @@ public class CostService {
         costRepository.save(cost);
 
         return entityToResponse(cost);
-
     }
 
     @Transactional(readOnly = true)
     public List<CostResponse> viewCost() {
-        return costRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return costRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     public CostResponse updateCost(UUID id, CostCreateRequest request) {
-        Cost cost = costRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
+        Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
-        CostType costType = costTypeRepository.findById(request.getCostTypeId())
+        CostType costType = costTypeRepository
+                .findById(request.getCostTypeId())
                 .orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));
 
-        Schedule schedule = scheduleRepository.findById(request.getScheduleId())
+        Schedule schedule = scheduleRepository
+                .findById(request.getScheduleId())
                 .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
-
 
         cost.setDescription(request.getDescription());
         cost.setPrice(request.getPrice());
@@ -96,8 +98,7 @@ public class CostService {
     }
 
     public CostResponse approveStatus(UUID id) {
-        Cost cost = costRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
+        Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         if (cost.getApproveStatus() != ApproveStatus.PENDING) {
             throw new AppException(ErrorCode.SCHEDULE_ALREADY_APPROVED);
@@ -107,7 +108,8 @@ public class CostService {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        User user = userRepository.findUserByUsername(username)
+        User user = userRepository
+                .findUserByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         cost.setApprovedBy(user);
@@ -116,8 +118,7 @@ public class CostService {
     }
 
     public CostResponse rejectStatus(UUID id) {
-        Cost cost = costRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
+        Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         if (cost.getApproveStatus() != ApproveStatus.PENDING) {
             throw new AppException(ErrorCode.SCHEDULE_ALREADY_APPROVED);
@@ -129,8 +130,7 @@ public class CostService {
     }
 
     public void deleteCost(UUID id) {
-        Cost cost = costRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
+        Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         costRepository.delete(cost);
     }
@@ -140,9 +140,7 @@ public class CostService {
             return null;
         }
         Set<String> roles = user.getRoles() != null
-                ? user.getRoles().stream()
-                .map(Role::getCode)
-                .collect(Collectors.toSet())
+                ? user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet())
                 : new HashSet<>();
 
         return UserResponse.builder()
@@ -158,7 +156,7 @@ public class CostService {
                 .build();
     }
 
-    private CostResponse entityToResponse (Cost cost){
+    private CostResponse entityToResponse(Cost cost) {
         UserResponse costResponse = mapUserToResponse(cost.getUserCost());
         UserResponse approveResponse = mapUserToResponse(cost.getSchedule().getApprovedBy());
         UserResponse driverResponse = mapUserToResponse(cost.getSchedule().getDriver());

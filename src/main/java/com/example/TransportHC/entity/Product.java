@@ -1,12 +1,13 @@
 package com.example.TransportHC.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -34,5 +35,4 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     List<TransactionDetail> transactionDetails;
-
 }

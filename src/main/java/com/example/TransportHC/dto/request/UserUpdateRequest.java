@@ -1,13 +1,14 @@
 package com.example.TransportHC.dto.request;
 
-import com.example.TransportHC.enums.UserStatus;
+import java.math.BigDecimal;
+import java.util.Set;
+
 import jakarta.validation.constraints.Size;
+
+import com.example.TransportHC.enums.UserStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +26,4 @@ public class UserUpdateRequest {
     BigDecimal basicSalary;
     BigDecimal advanceMoney;
     Set<String> roles;
-
 }

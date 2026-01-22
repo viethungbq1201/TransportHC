@@ -1,18 +1,20 @@
 package com.example.TransportHC.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.TransportHC.dto.request.SalaryReportCreateRequest;
 import com.example.TransportHC.dto.request.SalaryReportRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.SalaryReportResponse;
 import com.example.TransportHC.dto.response.SalaryReportSummaryResponse;
 import com.example.TransportHC.service.SalaryReportService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,7 +25,8 @@ public class SalaryReportController {
     SalaryReportService salaryReportService;
 
     @PostMapping("/create1/{salaryReportId}")
-    ApiResponse<SalaryReportResponse> create1SalaryReport(@PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
+    ApiResponse<SalaryReportResponse> create1SalaryReport(
+            @PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.create1SalaryReport(id, request))
                 .build();
@@ -34,7 +37,6 @@ public class SalaryReportController {
         return ApiResponse.<List<SalaryReportResponse>>builder()
                 .result(salaryReportService.createAllSalaryReport())
                 .build();
-
     }
 
     @PostMapping("/viewSalaryReport")
@@ -42,19 +44,18 @@ public class SalaryReportController {
         return ApiResponse.<List<SalaryReportSummaryResponse>>builder()
                 .result(salaryReportService.viewSalaryReportByMonth(request.getYearMonth()))
                 .build();
-
     }
 
     @GetMapping("/viewSalaryReportDetail/{salaryReportId}")
-    ApiResponse<SalaryReportResponse>viewSalaryReportDetail(@PathVariable("salaryReportId") UUID id) {
+    ApiResponse<SalaryReportResponse> viewSalaryReportDetail(@PathVariable("salaryReportId") UUID id) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.viewSalaryReportDetail(id))
                 .build();
-
     }
 
     @PutMapping("/updateSalaryReport/{salaryReportId}")
-    ApiResponse<SalaryReportResponse> updateSalaryReport(@PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
+    ApiResponse<SalaryReportResponse> updateSalaryReport(
+            @PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.updateSalaryReport(id, request))
                 .build();
@@ -63,9 +64,7 @@ public class SalaryReportController {
     @DeleteMapping("/deleteSalaryReport/{salaryReportId}")
     ApiResponse<String> deleteSalaryReport(@PathVariable("salaryReportId") UUID id) {
         salaryReportService.deleteSalaryReport(id);
-        return ApiResponse.<String>builder()
-                .result("Salary Report deleted")
-                .build();
+        return ApiResponse.<String>builder().result("Salary Report deleted").build();
     }
 
     @GetMapping("/doneSalaryReport/{salaryReportId}")
@@ -74,5 +73,4 @@ public class SalaryReportController {
                 .result(salaryReportService.checkSalaryReport(id))
                 .build();
     }
-
 }

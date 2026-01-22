@@ -1,9 +1,9 @@
 package com.example.TransportHC.dto.request;
 
+import java.math.BigDecimal;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +15,4 @@ public class RouteCreateRequest {
     String start_point;
     String end_point;
     BigDecimal distance;
-
 }

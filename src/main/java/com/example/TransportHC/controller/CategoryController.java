@@ -1,17 +1,18 @@
 package com.example.TransportHC.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.TransportHC.dto.request.CategoryCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.CategoryResponse;
-import com.example.TransportHC.entity.Category;
 import com.example.TransportHC.service.CategoryService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,7 +36,8 @@ public class CategoryController {
     }
 
     @PutMapping("/updateCategory/{categoryId}")
-    ApiResponse<CategoryResponse> updateCategory(@PathVariable("categoryId") UUID id, @RequestBody CategoryCreateRequest request) {
+    ApiResponse<CategoryResponse> updateCategory(
+            @PathVariable("categoryId") UUID id, @RequestBody CategoryCreateRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.updateCategory(id, request))
                 .build();

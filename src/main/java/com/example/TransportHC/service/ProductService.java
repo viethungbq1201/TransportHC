@@ -1,5 +1,13 @@
 package com.example.TransportHC.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.TransportHC.dto.request.ProductCreateRequest;
 import com.example.TransportHC.dto.response.CategoryResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
@@ -11,16 +19,10 @@ import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.CategoryRepository;
 import com.example.TransportHC.repository.InventoryRepository;
 import com.example.TransportHC.repository.ProductRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -39,7 +41,8 @@ public class ProductService {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
 
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
         Product product = Product.builder()
@@ -64,16 +67,15 @@ public class ProductService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public List<ProductResponse> viewProduct() {
-        return productRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return productRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public ProductResponse updateProduct(UUID id, ProductCreateRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Product product =
+                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
         product.setName(request.getName());
@@ -85,8 +87,8 @@ public class ProductService {
 
     @PreAuthorize("hasAuthority('CREATE_COST')")
     public void deleteProduct(UUID id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product =
+                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         productRepository.delete(product);
     }
@@ -104,5 +106,4 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
-
 }

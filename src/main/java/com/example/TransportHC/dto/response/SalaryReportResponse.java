@@ -1,13 +1,14 @@
 package com.example.TransportHC.dto.response;
 
-import com.example.TransportHC.enums.SalaryReportStatus;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.UUID;
+
+import com.example.TransportHC.enums.SalaryReportStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +27,4 @@ public class SalaryReportResponse {
     YearMonth month;
     UserResponse createBy;
     SalaryReportStatus status;
-
-
 }

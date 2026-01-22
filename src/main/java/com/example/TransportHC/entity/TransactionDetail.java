@@ -1,10 +1,11 @@
 package com.example.TransportHC.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -29,5 +30,4 @@ public class TransactionDetail {
     Integer quantityChange;
     Integer quantityBefore;
     Integer quantityAfter;
-
 }

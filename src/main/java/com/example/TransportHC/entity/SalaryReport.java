@@ -1,14 +1,16 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.SalaryReportStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.SalaryReportStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter

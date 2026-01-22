@@ -1,14 +1,16 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.UserStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.UserStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -46,11 +48,9 @@ public class User {
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Builder.Default
     Set<Role> roles = new HashSet<>();
 
     Boolean isDriver;
-
 }

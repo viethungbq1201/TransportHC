@@ -1,12 +1,11 @@
 package com.example.TransportHC.dto.request;
 
-import com.example.TransportHC.dto.response.UserResponse;
-import com.example.TransportHC.entity.User;
+import java.time.LocalDateTime;
+
 import com.example.TransportHC.enums.TransactionType;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

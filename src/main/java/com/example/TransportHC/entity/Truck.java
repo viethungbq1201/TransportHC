@@ -1,11 +1,13 @@
 package com.example.TransportHC.entity;
 
-import com.example.TransportHC.enums.TruckStatus;
+import java.util.UUID;
+
 import jakarta.persistence.*;
+
+import com.example.TransportHC.enums.TruckStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
 
 @Entity
 @Getter

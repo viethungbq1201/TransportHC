@@ -1,10 +1,10 @@
 package com.example.TransportHC.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +17,4 @@ public class RouteResponse {
     String start_point;
     String end_point;
     BigDecimal distance;
-
 }
