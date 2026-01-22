@@ -39,7 +39,7 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     User createdBy;
 
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<TransactionDetail> transactionDetails;
 
     @OneToOne(mappedBy = "transaction")

@@ -26,7 +26,7 @@ public class SalaryReport {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID reportId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     User user;
 
     YearMonth month;

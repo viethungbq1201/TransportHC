@@ -42,10 +42,10 @@ public class Schedule {
     @JoinColumn(name = "approved_by")
     User approvedBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Truck truck;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Route route;
 
     @OneToOne
