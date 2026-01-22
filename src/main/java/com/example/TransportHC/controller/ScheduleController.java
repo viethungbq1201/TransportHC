@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.ScheduleCreateRequest;
@@ -25,7 +27,7 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @PostMapping("/createSchedule")
-    ApiResponse<ScheduleResponse> createSchedule(@RequestBody ScheduleCreateRequest request) {
+    ApiResponse<ScheduleResponse> createSchedule(@RequestBody @Valid ScheduleCreateRequest request) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.createSchedule(request))
                 .build();
@@ -40,7 +42,7 @@ public class ScheduleController {
 
     @PutMapping("/updateSchedule/{ScheduleId}")
     ApiResponse<ScheduleResponse> updateSchedule(
-            @PathVariable("ScheduleId") UUID id, @RequestBody ScheduleUpdateRequest request) {
+            @PathVariable("ScheduleId") UUID id, @RequestBody @Valid ScheduleUpdateRequest request) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.updateSchedule(id, request))
                 .build();
@@ -62,7 +64,7 @@ public class ScheduleController {
 
     @PutMapping("/endSchedule/{ScheduleId}")
     ApiResponse<ScheduleResponse> endSchedule(
-            @PathVariable("ScheduleId") UUID id, @RequestBody ScheduleEndRequest request) {
+            @PathVariable("ScheduleId") UUID id, @RequestBody @Valid ScheduleEndRequest request) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.endSchedule(id, request))
                 .build();

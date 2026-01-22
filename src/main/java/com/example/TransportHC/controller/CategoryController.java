@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.CategoryCreateRequest;
@@ -22,7 +24,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping("/createCategory")
-    ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryCreateRequest request) {
+    ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.createCategory(request))
                 .build();
@@ -37,7 +39,7 @@ public class CategoryController {
 
     @PutMapping("/updateCategory/{categoryId}")
     ApiResponse<CategoryResponse> updateCategory(
-            @PathVariable("categoryId") UUID id, @RequestBody CategoryCreateRequest request) {
+            @PathVariable("categoryId") UUID id, @RequestBody @Valid CategoryCreateRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.updateCategory(id, request))
                 .build();

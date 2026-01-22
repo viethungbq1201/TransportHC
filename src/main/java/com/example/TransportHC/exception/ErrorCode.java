@@ -10,7 +10,12 @@ public enum ErrorCode {
 
     // ====== COMMON ======
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVALID_INPUT_DATA(9001, "Invalid input data", HttpStatus.BAD_REQUEST),
+    NULL_ID_EXCEPTION(9001, "Null id error", HttpStatus.BAD_REQUEST),
+    NULL_DATA_EXCEPTION(9002, "Null data error", HttpStatus.BAD_REQUEST),
+    INVALID_INPUT_DATA(9002, "Invalid input data", HttpStatus.BAD_REQUEST),
+    INVALID_INPUT_DATE(9003, "Invalid input date", HttpStatus.BAD_REQUEST),
+    POSITIVE_DATA(9004, "Data must be greater than 0", HttpStatus.BAD_REQUEST),
+    INVALID_LENGTH_DATA(9005, "Invalid length data", HttpStatus.BAD_REQUEST),
 
     // ====== AUTH / SECURITY ======
     UNAUTHENTICATED(1000, "Unauthenticated", HttpStatus.UNAUTHORIZED),

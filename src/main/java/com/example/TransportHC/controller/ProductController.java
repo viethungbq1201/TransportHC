@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.ProductCreateRequest;
@@ -23,7 +25,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/createProduct")
-    ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreateRequest request) {
+    ApiResponse<ProductResponse> createProduct(@RequestBody @Valid ProductCreateRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(request))
                 .build();
@@ -38,7 +40,7 @@ public class ProductController {
 
     @PutMapping("/updateProduct/{productId}")
     ApiResponse<ProductResponse> updateProduct(
-            @PathVariable("productId") UUID id, @RequestBody ProductCreateRequest request) {
+            @PathVariable("productId") UUID id, @RequestBody @Valid ProductCreateRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.updateProduct(id, request))
                 .build();

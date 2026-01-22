@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.TruckCreateRequest;
@@ -24,7 +26,7 @@ public class TruckController {
     TruckService truckService;
 
     @PostMapping("/createTruck")
-    ApiResponse<TruckResponse> createTruck(@RequestBody TruckCreateRequest request) {
+    ApiResponse<TruckResponse> createTruck(@RequestBody @Valid TruckCreateRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.createTruck(request))
                 .build();
@@ -38,7 +40,8 @@ public class TruckController {
     }
 
     @PutMapping("/updateTruck/{truckId}")
-    ApiResponse<TruckResponse> updateTruck(@PathVariable("truckId") UUID id, @RequestBody TruckCreateRequest request) {
+    ApiResponse<TruckResponse> updateTruck(
+            @PathVariable("truckId") UUID id, @RequestBody @Valid TruckCreateRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.updateTruck(id, request))
                 .build();
@@ -46,7 +49,7 @@ public class TruckController {
 
     @PutMapping("/updateStatusTruck/{truckId}")
     ApiResponse<TruckResponse> updateStatusTruck(
-            @PathVariable("truckId") UUID id, @RequestBody TruckUpdateStatusRequest request) {
+            @PathVariable("truckId") UUID id, @RequestBody @Valid TruckUpdateStatusRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.updateStatusTruck(id, request))
                 .build();

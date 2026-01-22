@@ -1,5 +1,7 @@
 package com.example.TransportHC.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 import com.example.TransportHC.enums.TruckStatus;
 
 import lombok.*;
@@ -11,5 +13,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TruckUpdateStatusRequest {
+    @NotBlank(message = "INVALID_INPUT_DATA")
     TruckStatus status;
 }

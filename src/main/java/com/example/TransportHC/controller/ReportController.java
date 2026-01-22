@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.ReportFromToRequest;
@@ -24,14 +26,14 @@ public class ReportController {
 
     @PostMapping("/reportCostForTruck/{reportId}")
     ApiResponse<TruckCostReportResponse> reportCostForTruck(
-            @PathVariable("reportId") UUID id, @RequestBody ReportFromToRequest request) {
+            @PathVariable("reportId") UUID id, @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<TruckCostReportResponse>builder()
                 .result(reportService.reportCostForTruck(id, request))
                 .build();
     }
 
     @PostMapping("/reportCostAllTrucks")
-    ApiResponse<List<TruckCostSummaryResponse>> reportCostAllTrucks(@RequestBody ReportFromToRequest request) {
+    ApiResponse<List<TruckCostSummaryResponse>> reportCostAllTrucks(@RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckCostSummaryResponse>>builder()
                 .result(reportService.reportCostAllTrucks(request))
                 .build();
@@ -39,21 +41,22 @@ public class ReportController {
 
     @PostMapping("/reportSchedulesForTruck/{reportId}")
     ApiResponse<List<TruckScheduleDetailResponse>> reportSchedulesForTruck(
-            @PathVariable("reportId") UUID id, @RequestBody ReportFromToRequest request) {
+            @PathVariable("reportId") UUID id, @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckScheduleDetailResponse>>builder()
                 .result(reportService.reportSchedulesForTruck(id, request))
                 .build();
     }
 
     @PostMapping("/reportSchedulesAllTrucks")
-    ApiResponse<List<TruckScheduleSummaryResponse>> reportSchedulesAllTrucks(@RequestBody ReportFromToRequest request) {
+    ApiResponse<List<TruckScheduleSummaryResponse>> reportSchedulesAllTrucks(
+            @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckScheduleSummaryResponse>>builder()
                 .result(reportService.reportSchedulesAllTrucks(request))
                 .build();
     }
 
     @PostMapping("/reportTripCountByTruck")
-    ApiResponse<List<TruckTripCountResponse>> reportTripCountByTruck(@RequestBody ReportFromToRequest request) {
+    ApiResponse<List<TruckTripCountResponse>> reportTripCountByTruck(@RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckTripCountResponse>>builder()
                 .result(reportService.reportTripCountByTruck(request))
                 .build();
@@ -61,14 +64,14 @@ public class ReportController {
 
     @PostMapping("/reportCostForDriver/{reportId}")
     ApiResponse<DriverCostReportResponse> reportCostForDriver(
-            @PathVariable("reportId") UUID id, @RequestBody ReportFromToRequest request) {
+            @PathVariable("reportId") UUID id, @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<DriverCostReportResponse>builder()
                 .result(reportService.reportCostForDriver(id, request))
                 .build();
     }
 
     @PostMapping("/reportSystemCost")
-    ApiResponse<CostSummaryResponse> reportSystemCost(@RequestBody ReportFromToRequest request) {
+    ApiResponse<CostSummaryResponse> reportSystemCost(@RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<CostSummaryResponse>builder()
                 .result(reportService.reportSystemCost(request))
                 .build();

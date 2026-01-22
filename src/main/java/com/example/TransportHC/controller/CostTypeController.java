@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.CostTypeCreateRequest;
@@ -23,7 +25,7 @@ public class CostTypeController {
     CostTypeService costTypeService;
 
     @PostMapping("/createCostType")
-    ApiResponse<CostType> createCostType(@RequestBody CostTypeCreateRequest request) {
+    ApiResponse<CostType> createCostType(@RequestBody @Valid CostTypeCreateRequest request) {
         return ApiResponse.<CostType>builder()
                 .result(costTypeService.createCostType(request))
                 .build();
@@ -38,7 +40,7 @@ public class CostTypeController {
 
     @PutMapping("/updateCostType/{costTypeId}")
     ApiResponse<CostType> updateCostType(
-            @PathVariable("costTypeId") UUID id, @RequestBody CostTypeCreateRequest request) {
+            @PathVariable("costTypeId") UUID id, @RequestBody @Valid CostTypeCreateRequest request) {
         return ApiResponse.<CostType>builder()
                 .result(costTypeService.updateCostType(id, request))
                 .build();

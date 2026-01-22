@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.TransactionDetailCreateRequest;
@@ -24,7 +26,7 @@ public class TransactionDetailController {
 
     @PostMapping("/createTransactionDetail")
     ApiResponse<TransactionDetailResponse> createTransactionDetail(
-            @RequestBody TransactionDetailCreateRequest request) {
+            @RequestBody @Valid TransactionDetailCreateRequest request) {
         return ApiResponse.<TransactionDetailResponse>builder()
                 .result(transactionDetailService.createTransactionResponse(request))
                 .build();
@@ -39,7 +41,7 @@ public class TransactionDetailController {
 
     @PutMapping("/updateTransactionDetail/{TDid}")
     ApiResponse<TransactionDetailResponse> updateTransactionDetail(
-            @PathVariable("TDid") UUID id, @RequestBody TransactionDetailCreateRequest request) {
+            @PathVariable("TDid") UUID id, @RequestBody @Valid TransactionDetailCreateRequest request) {
         return ApiResponse.<TransactionDetailResponse>builder()
                 .result(transactionDetailService.updateTransactionDetail(id, request))
                 .build();

@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.RouteCreateRequest;
@@ -23,7 +25,7 @@ public class RouteController {
     RouteService routeService;
 
     @PostMapping("/createRoute")
-    ApiResponse<RouteResponse> createRoute(@RequestBody RouteCreateRequest request) {
+    ApiResponse<RouteResponse> createRoute(@RequestBody @Valid RouteCreateRequest request) {
         return ApiResponse.<RouteResponse>builder()
                 .result(routeService.createRoute(request))
                 .build();
@@ -37,7 +39,8 @@ public class RouteController {
     }
 
     @PutMapping("/updateRoute/{routeId}")
-    ApiResponse<RouteResponse> updateRoute(@PathVariable("routeId") UUID id, @RequestBody RouteCreateRequest request) {
+    ApiResponse<RouteResponse> updateRoute(
+            @PathVariable("routeId") UUID id, @RequestBody @Valid RouteCreateRequest request) {
         return ApiResponse.<RouteResponse>builder()
                 .result(routeService.updateRoute(id, request))
                 .build();

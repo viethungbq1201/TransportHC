@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.CostCreateRequest;
@@ -23,7 +25,7 @@ public class CostController {
     CostService costService;
 
     @PostMapping("/createCost")
-    ApiResponse<CostResponse> createCost(@RequestBody CostCreateRequest request) {
+    ApiResponse<CostResponse> createCost(@RequestBody @Valid CostCreateRequest request) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.createCost(request))
                 .build();
@@ -37,7 +39,8 @@ public class CostController {
     }
 
     @PutMapping("/updateCost/{costId}")
-    ApiResponse<CostResponse> updateCost(@PathVariable("costId") UUID id, @RequestBody CostCreateRequest request) {
+    ApiResponse<CostResponse> updateCost(
+            @PathVariable("costId") UUID id, @RequestBody @Valid CostCreateRequest request) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.updateCost(id, request))
                 .build();

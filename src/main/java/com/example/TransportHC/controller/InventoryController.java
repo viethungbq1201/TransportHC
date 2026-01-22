@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class InventoryController {
     InventoryService inventoryService;
 
     @PostMapping("/createInventory")
-    ApiResponse<InventoryResponse> createInventory(@RequestBody InventoryCreateRequest request) {
+    ApiResponse<InventoryResponse> createInventory(@RequestBody @Valid InventoryCreateRequest request) {
         return ApiResponse.<InventoryResponse>builder()
                 .result(inventoryService.createInventory(request))
                 .build();
@@ -51,7 +53,7 @@ public class InventoryController {
 
     @PutMapping("/updateInventory/{inventoryId}")
     ApiResponse<InventoryResponse> updateInventory(
-            @PathVariable("inventoryId") UUID id, @RequestBody InventoryUpdateRequest request) {
+            @PathVariable("inventoryId") UUID id, @RequestBody @Valid InventoryUpdateRequest request) {
         return ApiResponse.<InventoryResponse>builder()
                 .result(inventoryService.updateInventory(id, request))
                 .build();
@@ -66,7 +68,7 @@ public class InventoryController {
     }
 
     @PostMapping("/filterInventory")
-    ApiResponse<List<InventoryResponse>> filterInventory(@RequestBody InventoryFilterRequest request) {
+    ApiResponse<List<InventoryResponse>> filterInventory(@RequestBody @Valid InventoryFilterRequest request) {
         return ApiResponse.<List<InventoryResponse>>builder()
                 .result(inventoryService.filterInventory(request))
                 .build();

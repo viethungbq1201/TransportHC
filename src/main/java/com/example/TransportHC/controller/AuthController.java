@@ -2,6 +2,8 @@ package com.example.TransportHC.controller;
 
 import java.text.ParseException;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +34,7 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    AuthResponse login(@RequestBody AuthLoginRequest request) {
+    AuthResponse login(@RequestBody @Valid AuthLoginRequest request) {
         var user = userRepository
                 .findUserByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -49,12 +51,12 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    void logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+    void logout(@RequestBody @Valid LogoutRequest request) throws ParseException, JOSEException {
         authService.logout(request);
     }
 
     @PostMapping("/refresh")
-    AuthResponse introspect(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+    AuthResponse introspect(@RequestBody @Valid RefreshRequest request) throws ParseException, JOSEException {
         return authService.refreshToken(request);
     }
 }

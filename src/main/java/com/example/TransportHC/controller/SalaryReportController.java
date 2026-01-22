@@ -3,6 +3,8 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.SalaryReportCreateRequest;
@@ -26,7 +28,7 @@ public class SalaryReportController {
 
     @PostMapping("/create1/{salaryReportId}")
     ApiResponse<SalaryReportResponse> create1SalaryReport(
-            @PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
+            @PathVariable("salaryReportId") UUID id, @RequestBody @Valid SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.create1SalaryReport(id, request))
                 .build();
@@ -40,7 +42,8 @@ public class SalaryReportController {
     }
 
     @PostMapping("/viewSalaryReport")
-    ApiResponse<List<SalaryReportSummaryResponse>> viewSalaryReport(@RequestBody SalaryReportCreateRequest request) {
+    ApiResponse<List<SalaryReportSummaryResponse>> viewSalaryReport(
+            @RequestBody @Valid SalaryReportCreateRequest request) {
         return ApiResponse.<List<SalaryReportSummaryResponse>>builder()
                 .result(salaryReportService.viewSalaryReportByMonth(request.getYearMonth()))
                 .build();
@@ -55,7 +58,7 @@ public class SalaryReportController {
 
     @PutMapping("/updateSalaryReport/{salaryReportId}")
     ApiResponse<SalaryReportResponse> updateSalaryReport(
-            @PathVariable("salaryReportId") UUID id, @RequestBody SalaryReportRequest request) {
+            @PathVariable("salaryReportId") UUID id, @RequestBody @Valid SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.updateSalaryReport(id, request))
                 .build();

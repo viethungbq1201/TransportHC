@@ -49,7 +49,7 @@ public class UserController {
 
     @PutMapping("updateStatusUser/{userId}")
     ApiResponse<UserResponse> updateStatusUser(
-            @PathVariable("userId") UUID id, @RequestBody UserUpdateStatusRequest request) {
+            @PathVariable("userId") UUID id, @RequestBody @Valid UserUpdateStatusRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateStatusUser(id, request))
                 .build();
