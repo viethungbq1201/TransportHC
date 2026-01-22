@@ -36,7 +36,7 @@ public class TransactionService {
     TransactionRepository transactionRepository;
     UserRepository userRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_TRANSACTION')")
     public TransactionResponse createTransaction(TransactionCreateRequest request) {
         Transaction transaction = Transaction.builder()
                 .type(request.getTransactionType())
@@ -59,14 +59,14 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_TRANSACTION')")
     public List<TransactionResponse> viewTransaction() {
         return transactionRepository.findAll().stream()
                 .map(this::entityToResponse)
                 .toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_TRANSACTION')")
     public TransactionResponse updateTransaction(UUID id, TransactionCreateRequest request) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
@@ -84,7 +84,7 @@ public class TransactionService {
         return entityToResponse(transaction);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_TRANSACTION')")
     public void deleteTransaction(UUID id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
@@ -100,7 +100,7 @@ public class TransactionService {
         transactionRepository.delete(transaction);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('APPROVE_TRANSACTION')")
     public TransactionResponse approveTransaction(UUID id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
@@ -115,7 +115,7 @@ public class TransactionService {
         return entityToResponse(transaction);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('REJECT_TRANSACTION')")
     public TransactionResponse rejectTransaction(UUID id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));

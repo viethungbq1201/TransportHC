@@ -39,7 +39,7 @@ public class ScheduleService {
     RouteRepository routeRepository;
     TransactionRepository transactionRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_SCHEDULE')")
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
         User driver = userRepository
                 .findById(request.getDriverId())
@@ -88,12 +88,14 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_SCHEDULE')")
     public List<ScheduleResponse> viewSchedule() {
-        return scheduleRepository.findAll().stream().map(this::entityToResponse).toList();
+        return scheduleRepository.findAll().stream()
+                .map(this::entityToResponse)
+                .toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_SCHEDULE')")
     public ScheduleResponse updateSchedule(UUID id, ScheduleUpdateRequest request) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -151,7 +153,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('APPROVE_SCHEDULE')")
     public ScheduleResponse approveSchedule(UUID id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -176,7 +178,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('REJECT_SCHEDULE')")
     public ScheduleResponse rejectSchedule(UUID id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -190,7 +192,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('END_SCHEDULE')")
     public ScheduleResponse endSchedule(UUID id, ScheduleEndRequest request) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -215,6 +217,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
+    @PreAuthorize("hasAuthority('CANCEL_SCHEDULE')")
     public ScheduleResponse cancelSchedule(UUID id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
@@ -231,7 +234,7 @@ public class ScheduleService {
         return entityToResponse(schedule);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_SCHEDULE')")
     public void deleteSchedule(UUID id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));

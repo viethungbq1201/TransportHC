@@ -3,6 +3,7 @@ package com.example.TransportHC.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class CategoryService {
 
     CategoryRepository categoryRepository;
 
+    @PreAuthorize("hasAuthority('CREATE_CATEGORY')")
     public CategoryResponse createCategory(CategoryCreateRequest request) {
         Category category = Category.builder().name(request.getName()).build();
 
@@ -33,10 +35,12 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('VIEW_CATEGORY')")
     public List<CategoryResponse> viewCategory() {
         return categoryRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_CATEGORY')")
     public CategoryResponse updateCategory(UUID id, CategoryCreateRequest request) {
         Category category =
                 categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -46,6 +50,7 @@ public class CategoryService {
         return entityToResponse(category);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_CATEGORY')")
     public void deleteCategory(UUID id) {
         Category category =
                 categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));

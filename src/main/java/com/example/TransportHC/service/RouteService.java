@@ -25,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 public class RouteService {
     RouteRepository routeRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_ROUTE')")
     public RouteResponse createRoute(RouteCreateRequest request) {
 
         if (routeRepository.existsRouteByName(request.getName())) {
@@ -42,12 +42,12 @@ public class RouteService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_ROUTE')")
     public List<RouteResponse> viewRoutes() {
         return routeRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_ROUTE')")
     public RouteResponse updateRoute(UUID id, RouteCreateRequest request) {
         Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
 
@@ -59,7 +59,7 @@ public class RouteService {
         return entityToResponse(route);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_ROUTE')")
     public void deleteRoute(UUID id) {
         Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
         routeRepository.delete(route);

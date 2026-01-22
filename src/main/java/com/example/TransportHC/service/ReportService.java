@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.TransportHC.dto.request.ReportFromToRequest;
@@ -31,6 +32,7 @@ public class ReportService {
     TruckRepository truckRepository;
     UserRepository userRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public TruckCostReportResponse reportCostForTruck(UUID truckId, ReportFromToRequest request) {
         Truck truck = truckRepository.findById(truckId).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
@@ -57,6 +59,7 @@ public class ReportService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<TruckCostSummaryResponse> reportCostAllTrucks(ReportFromToRequest request) {
         return costRepository.sumCostAllTrucks(request.getFrom(), request.getTo()).stream()
                 .map(r -> {
@@ -69,6 +72,7 @@ public class ReportService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<TruckScheduleDetailResponse> reportSchedulesForTruck(UUID truckId, ReportFromToRequest request) {
         return scheduleRepository.findSchedulesByTruck(truckId, request.getFrom(), request.getTo()).stream()
                 .map(s -> new TruckScheduleDetailResponse(
@@ -82,6 +86,7 @@ public class ReportService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<TruckScheduleSummaryResponse> reportSchedulesAllTrucks(ReportFromToRequest request) {
         return scheduleRepository.summarySchedulesAllTrucks(request.getFrom(), request.getTo()).stream()
                 .map(r -> new TruckScheduleSummaryResponse(
@@ -93,6 +98,7 @@ public class ReportService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<TruckTripCountResponse> reportTripCountByTruck(ReportFromToRequest request) {
         return scheduleRepository.countTripsByTruck(request.getFrom(), request.getTo()).stream()
                 .map(r -> new TruckTripCountResponse(
@@ -102,6 +108,7 @@ public class ReportService {
                 .toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public DriverCostReportResponse reportCostForDriver(UUID driverId, ReportFromToRequest request) {
         User driver = userRepository.findById(driverId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -116,6 +123,7 @@ public class ReportService {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public CostSummaryResponse reportSystemCost(ReportFromToRequest request) {
         return CostSummaryResponse.builder()
                 .fromDate(request.getFrom())

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class CostService {
     ScheduleRepository scheduleRepository;
     UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('CREATE_COST')")
     public CostResponse createCost(CostCreateRequest request) {
 
         CostType costType = costTypeRepository
@@ -72,6 +74,7 @@ public class CostService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('VIEW_COST')")
     public List<CostResponse> viewCost() {
         return costRepository.findAll().stream().map(this::entityToResponse).toList();
     }
@@ -97,6 +100,7 @@ public class CostService {
         return entityToResponse(cost);
     }
 
+    @PreAuthorize("hasAuthority('APPROVE_COST')")
     public CostResponse approveStatus(UUID id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
@@ -117,6 +121,7 @@ public class CostService {
         return entityToResponse(cost);
     }
 
+    @PreAuthorize("hasAuthority('REJECT_COST')")
     public CostResponse rejectStatus(UUID id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
@@ -129,6 +134,7 @@ public class CostService {
         return entityToResponse(cost);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_COST')")
     public void deleteCost(UUID id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 

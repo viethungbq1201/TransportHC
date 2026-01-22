@@ -26,7 +26,7 @@ import lombok.experimental.FieldDefaults;
 public class TruckService {
     TruckRepository truckRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_TRUCK')")
     public TruckResponse createTruck(TruckCreateRequest request) {
 
         if (truckRepository.existsTrucksByLicensePlate(request.getLicensePlate())) {
@@ -43,12 +43,12 @@ public class TruckService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_TRUCK')")
     public List<TruckResponse> viewTruck() {
         return truckRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_TRUCK')")
     public TruckResponse updateTruck(UUID id, TruckCreateRequest request) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
@@ -59,7 +59,7 @@ public class TruckService {
         return entityToResponse(truck);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UDDATE_STATUS_TRUCK')")
     public TruckResponse updateStatusTruck(UUID id, TruckUpdateStatusRequest request) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
@@ -68,7 +68,7 @@ public class TruckService {
         return entityToResponse(truck);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_TRUCK')")
     public void deleteTruck(UUID id) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
         truckRepository.delete(truck);

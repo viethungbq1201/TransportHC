@@ -44,7 +44,7 @@ public class InventoryService {
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_INVENTORY')")
     public InventoryResponse createInventory(InventoryCreateRequest request) {
         Product product = productRepository
                 .findById(request.getProductId())
@@ -62,14 +62,14 @@ public class InventoryService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_INVENTORY')")
     public List<InventoryResponse> viewInventory() {
         return inventoryRepository.findAll().stream()
                 .map(this::entityToResponse)
                 .toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('FIND_INVENTORY')")
     public InventoryResponse findInventoryById(UUID id) {
 
         Inventory inventory =
@@ -77,7 +77,7 @@ public class InventoryService {
         return entityToResponse(inventory);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_TINVENTORY')")
     public InventoryResponse updateInventory(UUID id, InventoryUpdateRequest request) {
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
@@ -87,21 +87,21 @@ public class InventoryService {
         return entityToResponse(inventory);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_INVENTORY')")
     public void deleteInventory(UUID id) {
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventoryRepository.delete(inventory);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('FILTER_INVENTORY')")
     public List<InventoryResponse> filterInventory(InventoryFilterRequest request) {
         return inventoryRepository.findAll(InventorySpecification.filter(request)).stream()
                 .map(this::entityToResponse)
                 .toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('EXPORT_INVENTORY')")
     public byte[] exportInventoryToExcel() {
         try (Workbook workbook = new XSSFWorkbook()) {
 
@@ -135,6 +135,7 @@ public class InventoryService {
         }
     }
 
+    @PreAuthorize("hasAuthority('IMPORT_INVENTORY')")
     public void importInventoryFromExcel(MultipartFile file) {
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {

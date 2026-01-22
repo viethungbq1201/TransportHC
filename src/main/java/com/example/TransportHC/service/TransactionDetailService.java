@@ -37,7 +37,7 @@ public class TransactionDetailService {
     TransactionDetailRepository transactionDetailRepository;
     ProductRepository productRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_TRANSACTION_DETAIL')")
     public TransactionDetailResponse createTransactionResponse(TransactionDetailCreateRequest request) {
         Transaction transaction = transactionRepository
                 .findById(request.getTransactionId())
@@ -63,14 +63,14 @@ public class TransactionDetailService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_TRANSACTION_DETAIL')")
     public List<TransactionDetailResponse> viewTransactionDetailResponse() {
         return transactionDetailRepository.findAll().stream()
                 .map(this::entityToResponse)
                 .toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_TRANSACTION_DETAIL')")
     public TransactionDetailResponse updateTransactionDetail(UUID id, TransactionDetailCreateRequest request) {
         TransactionDetail transactionDetail = transactionDetailRepository
                 .findById(id)
@@ -99,7 +99,7 @@ public class TransactionDetailService {
         return entityToResponse(transactionDetail);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_TRANSACTION_DETAIL')")
     public void deleteTransactionDetail(UUID id) {
         TransactionDetail transactionDetail = transactionDetailRepository
                 .findById(id)

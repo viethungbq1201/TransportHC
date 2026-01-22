@@ -34,7 +34,7 @@ public class ProductService {
     InventoryRepository inventoryRepository;
     CategoryRepository categoryRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_PROCDUCT')")
     public ProductResponse createProduct(ProductCreateRequest request) {
 
         if (productRepository.existsProductByName(request.getName())) {
@@ -65,12 +65,12 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_PROCDUCT')")
     public List<ProductResponse> viewProduct() {
         return productRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_PROCDUCT')")
     public ProductResponse updateProduct(UUID id, ProductCreateRequest request) {
         Product product =
                 productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -85,7 +85,7 @@ public class ProductService {
         return entityToResponse(product);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_PROCDUCT')")
     public void deleteProduct(UUID id) {
         Product product =
                 productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));

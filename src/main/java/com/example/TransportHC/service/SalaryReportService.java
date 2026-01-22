@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ public class SalaryReportService {
     SalaryReportRepository salaryReportRepository;
     UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('CREATE_1_SALARY_REPORT')")
     public SalaryReportResponse create1SalaryReport(UUID userId, SalaryReportRequest request) {
 
         YearMonth currentMonth = YearMonth.now();
@@ -79,6 +81,7 @@ public class SalaryReportService {
         return entityToResponse(salaryReport);
     }
 
+    @PreAuthorize("hasAuthority('CREATE_ALL_SALARY_REPORT')")
     public List<SalaryReportResponse> createAllSalaryReport() {
 
         YearMonth currentMonth = YearMonth.now();
@@ -100,6 +103,7 @@ public class SalaryReportService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('VIEW_SALARY_REPORT_DETAIL')")
     public SalaryReportResponse viewSalaryReportDetail(UUID reportId) {
 
         SalaryReport report = salaryReportRepository
@@ -109,6 +113,7 @@ public class SalaryReportService {
         return entityToResponse(report);
     }
 
+    @PreAuthorize("hasAuthority('VIEW_SALARY_REPORT')")
     @Transactional(readOnly = true)
     public List<SalaryReportSummaryResponse> viewSalaryReportByMonth(YearMonth month) {
 
@@ -117,6 +122,7 @@ public class SalaryReportService {
                 .toList();
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_SALARY_REPORT')")
     public SalaryReportResponse updateSalaryReport(UUID reportId, SalaryReportRequest request) {
 
         SalaryReport report = salaryReportRepository
@@ -143,6 +149,7 @@ public class SalaryReportService {
         return entityToResponse(report);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_SALARY_REPORT')")
     public void deleteSalaryReport(UUID salaryReportId) {
         SalaryReport salaryReport = salaryReportRepository
                 .findById(salaryReportId)
@@ -151,6 +158,7 @@ public class SalaryReportService {
         salaryReportRepository.delete(salaryReport);
     }
 
+    @PreAuthorize("hasAuthority('APPROVE_SALARY_REPORT')")
     public SalaryReportResponse checkSalaryReport(UUID salaryReportId) {
         SalaryReport salaryReport = salaryReportRepository
                 .findById(salaryReportId)

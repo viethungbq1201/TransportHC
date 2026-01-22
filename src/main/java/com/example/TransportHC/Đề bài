@@ -106,8 +106,8 @@ các loại sản phẩm
 báo cáo: report
 authentication: done
 test: done
-validation input data: x
-authorize: x
+validation input data: done
+authorize: done
 migration: x
 xử lý logic liên quan đến nhập xuất kho: done
 duyệt hoặc không duyệt

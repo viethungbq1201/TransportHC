@@ -34,7 +34,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('CREATE_USER')")
     public UserResponse createUser(UserCreateRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -81,12 +81,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('VIEW_USER')")
     public List<UserResponse> viewUsers() {
         return userRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_USER')")
     public UserResponse updateUser(UUID id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -121,7 +121,7 @@ public class UserService {
         return entityToResponse(user);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('UPDATE_STATUS_USER')")
     public UserResponse updateStatusUser(UUID id, UserUpdateStatusRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -132,7 +132,7 @@ public class UserService {
         return entityToResponse(user);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_COST')")
+    @PreAuthorize("hasAuthority('DELETE_USER')")
     public void deleteUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
