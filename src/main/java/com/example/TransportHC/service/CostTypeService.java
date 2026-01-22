@@ -25,7 +25,7 @@ public class CostTypeService {
 
     CostTypeRepository costTypeRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_COTE_TYPE')")
+    @PreAuthorize("hasAuthority('CREATE_COST_TYPE')")
     public CostType createCostType(CostTypeCreateRequest request) {
         CostType costType = CostType.builder().name(request.getName()).build();
         costTypeRepository.save(costType);
@@ -33,12 +33,12 @@ public class CostTypeService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('VIEW_COTE_TYPE')")
+    @PreAuthorize("hasAuthority('VIEW_COST_TYPE')")
     public List<CostType> viewCostType() {
         return costTypeRepository.findAll().stream().toList();
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_COTE_TYPE')")
+    @PreAuthorize("hasAuthority('UPDATE_COST_TYPE')")
     public CostType updateCostType(UUID id, CostTypeCreateRequest request) {
         CostType costType =
                 costTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));
@@ -48,7 +48,7 @@ public class CostTypeService {
         return costType;
     }
 
-    @PreAuthorize("hasAuthority('DELETE_COTE_TYPE')")
+    @PreAuthorize("hasAuthority('DELETE_COST_TYPE')")
     public void deleteCostType(UUID id) {
         CostType costType =
                 costTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));

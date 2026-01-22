@@ -77,7 +77,7 @@ public class InventoryService {
         return entityToResponse(inventory);
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_TINVENTORY')")
+    @PreAuthorize("hasAuthority('UPDATE_INVENTORY')")
     public InventoryResponse updateInventory(UUID id, InventoryUpdateRequest request) {
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));

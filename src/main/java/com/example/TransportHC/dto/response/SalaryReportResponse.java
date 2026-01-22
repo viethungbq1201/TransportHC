@@ -1,8 +1,8 @@
 package com.example.TransportHC.dto.response;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.UUID;
 
 import com.example.TransportHC.enums.SalaryReportStatus;
@@ -24,7 +24,7 @@ public class SalaryReportResponse {
     BigDecimal reward;
     BigDecimal total_salary;
     LocalDateTime createdAt;
-    YearMonth month;
+    LocalDate month;
     UserResponse createBy;
     SalaryReportStatus status;
 }

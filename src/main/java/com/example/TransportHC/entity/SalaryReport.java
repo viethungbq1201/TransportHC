@@ -1,8 +1,8 @@
 package com.example.TransportHC.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -29,7 +29,7 @@ public class SalaryReport {
     @ManyToOne(fetch = FetchType.LAZY)
     User user;
 
-    YearMonth month;
+    LocalDate month;
 
     BigDecimal basicSalary;
     BigDecimal reward;

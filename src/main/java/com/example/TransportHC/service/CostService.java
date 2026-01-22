@@ -79,6 +79,7 @@ public class CostService {
         return costRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_COST')")
     public CostResponse updateCost(UUID id, CostCreateRequest request) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 

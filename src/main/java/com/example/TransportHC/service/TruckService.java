@@ -59,7 +59,7 @@ public class TruckService {
         return entityToResponse(truck);
     }
 
-    @PreAuthorize("hasAuthority('UDDATE_STATUS_TRUCK')")
+    @PreAuthorize("hasAuthority('UPDATE_STATUS_TRUCK')")
     public TruckResponse updateStatusTruck(UUID id, TruckUpdateStatusRequest request) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 

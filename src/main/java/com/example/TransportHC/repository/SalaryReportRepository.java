@@ -2,7 +2,6 @@ package com.example.TransportHC.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +12,7 @@ import com.example.TransportHC.entity.SalaryReport;
 
 public interface SalaryReportRepository extends JpaRepository<SalaryReport, UUID> {
 
-    boolean existsByUser_UserIdAndMonth(UUID userId, YearMonth month);
+    boolean existsByUser_UserIdAndMonth(UUID userId, LocalDate month);
 
     @Query(
             value =
@@ -39,5 +38,5 @@ public interface SalaryReportRepository extends JpaRepository<SalaryReport, UUID
             nativeQuery = true)
     BigDecimal sumCost(UUID userId, LocalDate startDate, LocalDate endDate);
 
-    List<SalaryReport> findByMonth(YearMonth month);
+    List<SalaryReport> findByMonth(LocalDate month);
 }

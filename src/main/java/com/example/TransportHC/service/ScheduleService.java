@@ -90,9 +90,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('VIEW_SCHEDULE')")
     public List<ScheduleResponse> viewSchedule() {
-        return scheduleRepository.findAll().stream()
-                .map(this::entityToResponse)
-                .toList();
+        return scheduleRepository.findAll().stream().map(this::entityToResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('UPDATE_SCHEDULE')")

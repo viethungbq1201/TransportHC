@@ -3,7 +3,6 @@ package com.example.TransportHC.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +43,7 @@ public class SalaryReportService {
     @PreAuthorize("hasAuthority('CREATE_1_SALARY_REPORT')")
     public SalaryReportResponse create1SalaryReport(UUID userId, SalaryReportRequest request) {
 
-        YearMonth currentMonth = YearMonth.now();
+        LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
 
         if (salaryReportRepository.existsByUser_UserIdAndMonth(userId, currentMonth)) {
             throw new AppException(ErrorCode.REPORT_EXISTED);
@@ -84,7 +83,6 @@ public class SalaryReportService {
     @PreAuthorize("hasAuthority('CREATE_ALL_SALARY_REPORT')")
     public List<SalaryReportResponse> createAllSalaryReport() {
 
-        YearMonth currentMonth = YearMonth.now();
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
         User createBy = userRepository
@@ -92,6 +90,8 @@ public class SalaryReportService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         List<User> users = userRepository.findAllNonAdminUsers();
+
+        LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
 
         List<SalaryReport> reports = users.stream()
                 .filter(user -> !salaryReportRepository.existsByUser_UserIdAndMonth(user.getUserId(), currentMonth))
@@ -115,9 +115,9 @@ public class SalaryReportService {
 
     @PreAuthorize("hasAuthority('VIEW_SALARY_REPORT')")
     @Transactional(readOnly = true)
-    public List<SalaryReportSummaryResponse> viewSalaryReportByMonth(YearMonth month) {
-
-        return salaryReportRepository.findByMonth(month).stream()
+    public List<SalaryReportSummaryResponse> viewSalaryReportByMonth(LocalDate month) {
+        LocalDate normalizedMonth = month.withDayOfMonth(1);
+        return salaryReportRepository.findByMonth(normalizedMonth).stream()
                 .map(this::entityToSummaryResponse)
                 .toList();
     }
@@ -177,18 +177,17 @@ public class SalaryReportService {
         return entityToResponse(salaryReport);
     }
 
-    private SalaryReport buildSalaryReport(User user, User createBy, YearMonth month) {
+    private SalaryReport buildSalaryReport(User user, User createBy, LocalDate month) {
 
-        LocalDate startDate = month.atDay(1);
-        LocalDate endDate = month.atEndOfMonth();
+        LocalDate endDate = month.withDayOfMonth(month.lengthOfMonth());
 
-        BigDecimal reward = salaryReportRepository.sumReward(user.getUserId(), startDate, endDate);
+        BigDecimal reward = salaryReportRepository.sumReward(user.getUserId(), month, endDate);
 
-        BigDecimal cost = salaryReportRepository.sumCost(user.getUserId(), startDate, endDate);
+        BigDecimal cost = salaryReportRepository.sumCost(user.getUserId(), month, endDate);
 
         BigDecimal total = user.getBasicSalary().add(reward).add(cost).subtract(user.getAdvanceMoney());
 
-        SalaryReport report = SalaryReport.builder()
+        return SalaryReport.builder()
                 .user(user)
                 .basicSalary(user.getBasicSalary())
                 .advanceMoney(user.getAdvanceMoney())
@@ -200,9 +199,6 @@ public class SalaryReportService {
                 .createAt(LocalDateTime.now())
                 .status(SalaryReportStatus.PENDING)
                 .build();
-        userRepository.save(user);
-
-        return report;
     }
 
     private UserResponse mapUserToResponse(User user) {
