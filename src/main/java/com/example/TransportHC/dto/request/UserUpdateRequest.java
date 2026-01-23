@@ -32,7 +32,7 @@ public class UserUpdateRequest {
     @NotBlank(message = "INVALID_INPUT_DATA")
     String phoneNumber;
 
-    @NotBlank(message = "INVALID_INPUT_DATA")
+    @NotNull(message = "INVALID_INPUT_DATA")
     UserStatus status;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")

@@ -1,6 +1,6 @@
 package com.example.TransportHC.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class RefreshRequest {
-    @NotBlank(message = "TOKEN_INVALID")
+    @NotNull(message = "TOKEN_INVALID")
     String token;
 }

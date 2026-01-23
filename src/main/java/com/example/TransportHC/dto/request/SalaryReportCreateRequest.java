@@ -2,7 +2,7 @@ package com.example.TransportHC.dto.request;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +13,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class SalaryReportCreateRequest {
-    @NotBlank(message = "INVALID_INPUT_DATA")
+    @NotNull(message = "INVALID_INPUT_DATA")
     LocalDate yearMonth;
 }

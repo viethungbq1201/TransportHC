@@ -22,6 +22,6 @@ public class TruckCreateRequest {
     @Positive(message = "POSITIVE_DATA")
     Integer capacity;
 
-    @NotBlank(message = "INVALID_INPUT_DATA")
+    @NotNull(message = "INVALID_INPUT_DATA")
     TruckStatus status;
 }

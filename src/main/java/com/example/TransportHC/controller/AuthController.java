@@ -16,7 +16,7 @@ import com.example.TransportHC.dto.request.RefreshRequest;
 import com.example.TransportHC.dto.response.AuthResponse;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 import com.example.TransportHC.service.AuthService;
 import com.nimbusds.jose.JOSEException;
 

@@ -34,6 +34,7 @@ public class Cost {
     LocalDate date;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "approve_status", length = 255, columnDefinition = "varchar(255)")
     ApproveStatus approveStatus;
 
     @ManyToOne

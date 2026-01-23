@@ -39,6 +39,7 @@ public class User {
     String phoneNumber;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 255, columnDefinition = "varchar(255)")
     UserStatus status;
 
     BigDecimal basicSalary;

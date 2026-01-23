@@ -41,5 +41,8 @@ public class SalaryReport {
     User createBy;
 
     LocalDateTime createAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 50, columnDefinition = "varchar(50)")
     SalaryReportStatus status;
 }

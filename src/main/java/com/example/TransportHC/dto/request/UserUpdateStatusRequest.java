@@ -1,6 +1,6 @@
 package com.example.TransportHC.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import com.example.TransportHC.enums.UserStatus;
 
@@ -13,6 +13,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateStatusRequest {
-    @NotBlank(message = "INVALID_INPUT_DATA")
+    @NotNull(message = "INVALID_INPUT_DATA")
     UserStatus status;
 }

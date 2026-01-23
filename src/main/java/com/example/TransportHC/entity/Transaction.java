@@ -27,9 +27,11 @@ public class Transaction {
     UUID transactionId;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", length = 255, columnDefinition = "varchar(255)")
     TransactionType type;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "approve_status", length = 255, columnDefinition = "varchar(255)")
     ApproveStatus approveStatus;
 
     LocalDateTime date;

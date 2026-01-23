@@ -55,6 +55,7 @@ public class ProductService {
         Inventory inventory = Inventory.builder()
                 .product(product)
                 .quantity(0)
+                .inTransit(0)
                 .upToDate(LocalDateTime.now())
                 .build();
         inventoryRepository.save(inventory);

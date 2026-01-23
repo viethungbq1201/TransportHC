@@ -18,7 +18,7 @@ import com.example.TransportHC.enums.UserStatus;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.RoleRepository;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

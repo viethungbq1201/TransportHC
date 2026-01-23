@@ -24,8 +24,8 @@ import com.example.TransportHC.entity.User;
 import com.example.TransportHC.enums.SalaryReportStatus;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
-import com.example.TransportHC.repository.SalaryReportRepository;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.salaryreport.SalaryReportRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

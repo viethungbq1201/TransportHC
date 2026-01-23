@@ -27,5 +27,6 @@ public class Truck {
     Integer capacity;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 255, columnDefinition = "varchar(255)")
     TruckStatus status;
 }

@@ -100,7 +100,7 @@ CREATE TABLE salary_report
     total             DECIMAL NULL,
     create_by_user_id BINARY(16) NULL,
     create_at         datetime NULL,
-    status            SMALLINT NULL,
+    status            VARCHAR(255) NULL,
     CONSTRAINT pk_salaryreport PRIMARY KEY (report_id)
 );
 

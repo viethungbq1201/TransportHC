@@ -29,6 +29,7 @@ public class Schedule {
     LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "approve_status", length = 255, columnDefinition = "varchar(255)")
     ScheduleStatus approveStatus;
 
     String documentaryProof;

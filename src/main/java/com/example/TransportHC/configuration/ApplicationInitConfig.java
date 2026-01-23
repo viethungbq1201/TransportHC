@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.TransportHC.entity.Role;
 import com.example.TransportHC.entity.User;
 import com.example.TransportHC.repository.RoleRepository;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

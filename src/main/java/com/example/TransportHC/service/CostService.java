@@ -19,10 +19,10 @@ import com.example.TransportHC.enums.ApproveStatus;
 import com.example.TransportHC.enums.ScheduleStatus;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
-import com.example.TransportHC.repository.CostRepository;
 import com.example.TransportHC.repository.CostTypeRepository;
-import com.example.TransportHC.repository.ScheduleRepository;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.cost.CostRepository;
+import com.example.TransportHC.repository.schedule.ScheduleRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

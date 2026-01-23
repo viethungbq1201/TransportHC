@@ -18,7 +18,7 @@ import com.example.TransportHC.entity.User;
 import com.example.TransportHC.exception.AppException;
 import com.example.TransportHC.exception.ErrorCode;
 import com.example.TransportHC.repository.InvalidTokenRepository;
-import com.example.TransportHC.repository.UserRepository;
+import com.example.TransportHC.repository.user.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
