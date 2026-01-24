@@ -35,7 +35,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return queryFactory
                 .selectDistinct(user)
                 .from(user)
-                .join(user.roles, role)
+                .join(user.roles, role).fetchJoin()
                 .where(role.code.ne("ADMIN"))
                 .fetch();
     }

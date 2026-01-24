@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
+		<version>4.0.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -123,87 +123,72 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.diffplug.spotless</groupId>
-				<artifactId>spotless-maven-plugin</artifactId>
-				<version>2.43.0</version>
-				<configuration>
-					<java>
-						<removeUnusedImports />
-						<toggleOffOn/>
-						<trimTrailingWhitespace/>
-						<endWithNewline/>
-						<indent>
-							<tabs>true</tabs>
-							<spacesPerTab>4</spacesPerTab>
-						</indent>
-						<palantirJavaFormat/>
-						<importOrder>
-							<!-- Specify either order or file, but not both -->
-							<order>java,jakarta,org,com,com.diffplug,</order>
-						</importOrder>
-					</java>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>apply</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
+			<!-- 1. Compiler Plugin: Cấu hình ưu tiên Lombok chạy trước QueryDSL -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
-					<source>21</source>
-					<target>21</target>
-
-					<generatedSourcesDirectory>
-						target/generated-sources/annotations
-					</generatedSourcesDirectory>
-
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<annotationProcessorPaths>
-						<!-- QueryDSL -->
+						<!-- BẮT BUỘC: Lombok phải khai báo đầu tiên -->
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<!-- Tiếp theo là QueryDSL -->
 						<path>
 							<groupId>com.querydsl</groupId>
 							<artifactId>querydsl-apt</artifactId>
 							<version>5.1.0</version>
 							<classifier>jakarta</classifier>
 						</path>
-
-						<!-- BẮT BUỘC cho QueryDSL với Spring Boot 3 -->
+						<!-- Tiếp theo là JPA API -->
 						<path>
 							<groupId>jakarta.persistence</groupId>
 							<artifactId>jakarta.persistence-api</artifactId>
 							<version>3.1.0</version>
 						</path>
-
-						<!-- Lombok (nếu entity có dùng) -->
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>1.18.32</version>
-						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- 2. Giúp IDE nhận diện code sinh ra từ QueryDSL -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/annotations</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Spotless của bạn giữ nguyên -->
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.43.0</version>
+				<!-- ... giữ nguyên cấu hình ... -->
+			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

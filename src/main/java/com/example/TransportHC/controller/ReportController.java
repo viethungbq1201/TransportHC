@@ -3,8 +3,10 @@ package com.example.TransportHC.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.TransportHC.dto.response.PageResponse;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.ReportFromToRequest;
@@ -39,20 +41,36 @@ public class ReportController {
                 .build();
     }
 
-    @PostMapping("/reportSchedulesForTruck/{reportId}")
-    ApiResponse<List<TruckScheduleDetailResponse>> reportSchedulesForTruck(
+    @PostMapping("/reportRewardForTruck/{reportId}")
+    ApiResponse<List<TruckScheduleDetailResponse>> reportRewardForTruck(
             @PathVariable("reportId") UUID id, @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckScheduleDetailResponse>>builder()
-                .result(reportService.reportSchedulesForTruck(id, request))
+                .result(reportService.reportRewardForTruck(id, request))
                 .build();
     }
 
-    @PostMapping("/reportSchedulesAllTrucks")
-    ApiResponse<List<TruckScheduleSummaryResponse>> reportSchedulesAllTrucks(
+    @PostMapping("/reportRewardAllTrucks")
+    ApiResponse<List<TruckScheduleSummaryResponse>> reportRewardAllTrucks(
             @RequestBody @Valid ReportFromToRequest request) {
         return ApiResponse.<List<TruckScheduleSummaryResponse>>builder()
-                .result(reportService.reportSchedulesAllTrucks(request))
+                .result(reportService.reportRewardAllTrucks(request))
                 .build();
+    }
+
+    @PostMapping("/reportSchedulesForOneTruck/{truckId}")
+    public TruckScheduleGroupResponse reportSchedulesForOneTruck(
+            @PathVariable UUID truckId,
+            @RequestBody ReportFromToRequest request) {
+
+        return reportService.reportSchedulesForOneTruck(truckId, request);
+    }
+
+    @PostMapping("/reportSchedulesForAllTrucks")
+    public PageResponse<TruckScheduleGroupResponse> reportSchedulesForAllTrucks(
+            @RequestBody ReportFromToRequest request,
+            Pageable pageable) {
+
+        return reportService.reportSchedulesForAllTrucks(request, pageable);
     }
 
     @PostMapping("/reportTripCountByTruck")

@@ -1,5 +1,6 @@
 package com.example.TransportHC.repository.salaryreport;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,5 @@ public interface SalaryReportRepository extends JpaRepository<SalaryReport, UUID
 
     boolean existsByUser_UserIdAndMonth(UUID userId, java.time.LocalDate month);
 
-    java.util.List<SalaryReport> findByMonth(java.time.LocalDate month);
+    List<SalaryReport> findByMonth(java.time.LocalDate month);
 }

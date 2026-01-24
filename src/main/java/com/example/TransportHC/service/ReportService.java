@@ -2,8 +2,13 @@ package com.example.TransportHC.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.example.TransportHC.dto.response.PageResponse;
+import com.example.TransportHC.entity.Schedule;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -61,20 +66,27 @@ public class ReportService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<TruckCostSummaryResponse> reportCostAllTrucks(ReportFromToRequest request) {
-        return costRepository.sumCostAllTrucks(request.getFrom(), request.getTo()).stream()
-                .map(r -> {
-                    UUID truckId = (UUID) r[0];
-                    BigDecimal total = (BigDecimal) r[1];
-                    Truck truck = truckRepository.getReferenceById(truckId);
-
-                    return new TruckCostSummaryResponse(truckId, truck.getLicensePlate(), total);
-                })
+        return costRepository.sumCostAllTrucks(request.getFrom(), request.getTo())
+                .stream()
+                .map(r -> new TruckCostSummaryResponse(
+                        (UUID) r[0],
+                        (String) r[1],
+                        (BigDecimal) r[2]
+                ))
                 .toList();
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<TruckScheduleDetailResponse> reportSchedulesForTruck(UUID truckId, ReportFromToRequest request) {
-        return scheduleRepository.findSchedulesByTruck(truckId, request.getFrom(), request.getTo()).stream()
+    public List<TruckScheduleDetailResponse> reportRewardForTruck(UUID truckId, ReportFromToRequest request) {
+        List<Schedule> schedules = scheduleRepository.findSchedulesByTruckAndDate(truckId, request.getFrom(), request.getTo());
+
+        Map<UUID, BigDecimal> costMap =
+                costRepository.sumCostBySchedule(
+                        schedules.stream().map(Schedule::getSchedulesId).toList()
+                );
+
+        return schedules.stream()
                 .map(s -> new TruckScheduleDetailResponse(
                         s.getSchedulesId(),
                         s.getRoute().getName(),
@@ -82,20 +94,117 @@ public class ReportService {
                         s.getStartDate(),
                         s.getEndDate(),
                         s.getReward(),
-                        costRepository.sumCostBySchedule(s.getSchedulesId())))
+                        costMap.getOrDefault(
+                                s.getSchedulesId(),
+                                BigDecimal.ZERO
+                        )
+                ))
+                .toList();
+
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<TruckScheduleSummaryResponse> reportRewardAllTrucks(ReportFromToRequest request) {
+        return scheduleRepository.summarySchedulesAllTrucks(request.getFrom(), request.getTo()).stream()
+                .map(r -> new TruckScheduleSummaryResponse(
+                        (UUID) r[0],
+                        (String) r[1],
+                        (Long) r[2],
+                        (BigDecimal) r[3],
+                        (BigDecimal) r[4]
+                ))
                 .toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<TruckScheduleSummaryResponse> reportSchedulesAllTrucks(ReportFromToRequest request) {
-        return scheduleRepository.summarySchedulesAllTrucks(request.getFrom(), request.getTo()).stream()
-                .map(r -> new TruckScheduleSummaryResponse(
-                        (UUID) r[0],
-                        truckRepository.getReferenceById((UUID) r[0]).getLicensePlate(),
-                        (Long) r[1],
-                        (BigDecimal) r[2],
-                        (BigDecimal) r[3]))
-                .toList();
+    public TruckScheduleGroupResponse reportSchedulesForOneTruck(
+            UUID truckId,
+            ReportFromToRequest request) {
+
+        List<ScheduleWithCostDto> rows =
+                scheduleRepository.findSchedulesWithCost(
+                        truckId,
+                        request.getFrom(),
+                        request.getTo()
+                );
+
+        if (rows.isEmpty()) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+        }
+
+        List<TruckScheduleItemResponse> schedules =
+                rows.stream()
+                        .map(r -> new TruckScheduleItemResponse(
+                                r.scheduleId(),
+                                r.routeName(),
+                                r.driverUsername(),
+                                r.startDate(),
+                                r.endDate(),
+                                r.reward(),
+                                r.totalCost()
+                        ))
+                        .toList();
+
+        return new TruckScheduleGroupResponse(
+                rows.get(0).truckId(),
+                rows.get(0).licensePlate(),
+                schedules
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<TruckScheduleGroupResponse> reportSchedulesForAllTrucks(
+            ReportFromToRequest request,
+            Pageable pageable) {
+
+        List<ScheduleWithCostDto> rows =
+                scheduleRepository.findSchedulesWithCostForAllTrucks(
+                        request.getFrom(),
+                        request.getTo()
+                );
+
+        List<TruckScheduleGroupResponse> all =
+                rows.stream()
+                        .collect(Collectors.groupingBy(ScheduleWithCostDto::truckId))
+                        .values()
+                        .stream()
+                        .map(list -> {
+                            ScheduleWithCostDto first = list.get(0);
+
+                            List<TruckScheduleItemResponse> schedules =
+                                    list.stream()
+                                            .map(r -> new TruckScheduleItemResponse(
+                                                    r.scheduleId(),
+                                                    r.routeName(),
+                                                    r.driverUsername(),
+                                                    r.startDate(),
+                                                    r.endDate(),
+                                                    r.reward(),
+                                                    r.totalCost()
+                                            ))
+                                            .toList();
+
+                            return new TruckScheduleGroupResponse(
+                                    first.truckId(),
+                                    first.licensePlate(),
+                                    schedules
+                            );
+                        })
+                        .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), all.size());
+
+        List<TruckScheduleGroupResponse> pageContent =
+                start >= all.size() ? List.of() : all.subList(start, end);
+
+        return PageResponse.<TruckScheduleGroupResponse>builder()
+                .content(pageContent)
+                .page(pageable.getPageNumber())
+                .size(pageable.getPageSize())
+                .totalElements(all.size())
+                .totalPages((int) Math.ceil((double) all.size() / pageable.getPageSize()))
+                .build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -110,6 +110,8 @@ validation input data: done
 authorize: done
 migration: done
 split repository: done
+query dsl spring boot: done
+
 xử lý logic liên quan đến nhập xuất kho: done
 duyệt hoặc không duyệt
 nếu duyệt mới trừ
@@ -119,5 +121,4 @@ nếu duyệt mới trừ
                                 reject
 
 
-query dsl spring boot
 //--// chưa hoàn thành:
