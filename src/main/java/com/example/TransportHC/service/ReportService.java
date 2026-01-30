@@ -146,8 +146,8 @@ public class ReportService {
                         .toList();
 
         return new TruckScheduleGroupResponse(
-                rows.get(0).truckId(),
-                rows.get(0).licensePlate(),
+                rows.getFirst().truckId(),
+                rows.getFirst().licensePlate(),
                 schedules
         );
     }
@@ -169,7 +169,7 @@ public class ReportService {
                         .values()
                         .stream()
                         .map(list -> {
-                            ScheduleWithCostDto first = list.get(0);
+                            ScheduleWithCostDto first = list.getFirst();
 
                             List<TruckScheduleItemResponse> schedules =
                                     list.stream()
@@ -240,4 +240,20 @@ public class ReportService {
                 .totalCost(costRepository.sumAllCosts(request.getFrom(), request.getTo()))
                 .build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public TruckDailyReportResponse reportScheduleByTruck (UUID truckId, ReportFromToRequest request) {
+
+        List<TruckScheduleReportRow> rows =
+                scheduleRepository.reportByTruckAndRow(truckId, request.getFrom(), request.getTo());
+
+        Long totalExtraTrip =
+                scheduleRepository.sumExtraTripCount(truckId, request.getFrom(), request.getTo());
+
+        return new TruckDailyReportResponse(
+                rows,
+                totalExtraTrip == null ? 0 : totalExtraTrip
+        );
+    }
+
 }

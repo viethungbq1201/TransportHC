@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.TransportHC.dto.response.report.ScheduleWithCostDto;
+import com.example.TransportHC.dto.response.report.TruckScheduleReportRow;
 import com.example.TransportHC.entity.Schedule;
 
 public interface ScheduleRepositoryCustom {
@@ -32,6 +33,18 @@ public interface ScheduleRepositoryCustom {
     );
 
     List<ScheduleWithCostDto> findSchedulesWithCostForAllTrucks(
+            LocalDate from,
+            LocalDate to
+    );
+
+    List<TruckScheduleReportRow> reportByTruckAndRow(
+            UUID truckId,
+            LocalDate from,
+            LocalDate to
+    );
+
+    Long sumExtraTripCount(
+            UUID truckId,
             LocalDate from,
             LocalDate to
     );

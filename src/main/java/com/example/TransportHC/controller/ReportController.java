@@ -94,4 +94,11 @@ public class ReportController {
                 .result(reportService.reportSystemCost(request))
                 .build();
     }
+
+    @PostMapping("/reportScheduleAllTruckRow/{userId}")
+    ApiResponse<TruckDailyReportResponse> reportScheduleAllTruckRow(@PathVariable("userId") UUID id, @RequestBody @Valid ReportFromToRequest request) {
+        return ApiResponse.<TruckDailyReportResponse>builder()
+                .result(reportService.reportScheduleByTruck(id, request))
+                .build();
+    }
 }

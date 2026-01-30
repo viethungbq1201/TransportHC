@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.TransportHC.dto.response.report.ScheduleWithCostDto;
+import com.example.TransportHC.dto.response.report.TruckScheduleReportRow;
 import com.example.TransportHC.entity.*;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -198,4 +201,90 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
                 .groupBy(s.schedulesId)
                 .fetch();
     }
+
+    @Override
+    public List<TruckScheduleReportRow> reportByTruckAndRow(
+            UUID userId,
+            LocalDate from,
+            LocalDate to
+    ) {
+        QSchedule s = QSchedule.schedule;
+        QSchedule s2 = new QSchedule("s2"); // alias subquery
+        QTruck t = QTruck.truck;
+        QRoute r = QRoute.route;
+        QUser u = QUser.user;
+
+        LocalDate toDate = to.plusDays(1);
+
+        // 🔥 Tổng số chuyến của MỖI XE trong khoảng (theo user)
+        JPQLQuery<Long> extraTripCountSubQuery =
+                JPAExpressions
+                        .select(s2.schedulesId.count())
+                        .from(s2)
+                        .where(
+                                s2.truck.eq(s.truck),        // 👈 liên kết theo XE
+                                s2.driver.userId.eq(userId),
+                                s2.startDate.goe(from),
+                                s2.startDate.lt(toDate)
+                        );
+
+        return queryFactory
+                .select(Projections.constructor(
+                        TruckScheduleReportRow.class,
+                        u.username,
+                        u.fullName,
+                        t.licensePlate,
+                        t.capacity,
+                        s.startDate,
+                        r.start_point,
+                        r.end_point,
+                        extraTripCountSubQuery
+                ))
+                .from(s)
+                .join(s.truck, t)
+                .join(s.driver, u)
+                .join(s.route, r)
+                .where(
+                        u.userId.eq(userId),               // ✅ USER UUID
+                        s.startDate.goe(from),
+                        s.startDate.lt(toDate)
+                )
+                .groupBy(                                 // 🔥 GROUP BY ĐỦ CỘT
+                        u.username,
+                        u.fullName,
+                        t.licensePlate,
+                        t.capacity,
+                        s.startDate,
+                        r.start_point,
+                        r.end_point,
+                        s.truck
+                )
+                .orderBy(
+                        t.licensePlate.asc(),
+                        s.startDate.asc()
+                )
+                .fetch();
+    }
+
+    @Override
+    public Long sumExtraTripCount(
+            UUID userId,
+            LocalDate from,
+            LocalDate to
+    ) {
+        QSchedule s = QSchedule.schedule;
+
+        LocalDate toDate = to.plusDays(1);
+
+        return queryFactory
+                .select(s.schedulesId.count())
+                .from(s)
+                .where(
+                        s.driver.userId.eq(userId),   // 🔥 THEO USER
+                        s.startDate.goe(from),
+                        s.startDate.lt(toDate)
+                )
+                .fetchOne();
+    }
+
 }
