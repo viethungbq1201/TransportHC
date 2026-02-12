@@ -1,7 +1,7 @@
 package com.example.TransportHC.service;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class CostTypeService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_COST_TYPE')")
-    public CostType updateCostType(UUID id, CostTypeCreateRequest request) {
+    public CostType updateCostType(Long id, CostTypeCreateRequest request) {
         CostType costType =
                 costTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));
 
@@ -49,7 +49,7 @@ public class CostTypeService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_COST_TYPE')")
-    public void deleteCostType(UUID id) {
+    public void deleteCostType(Long id) {
         CostType costType =
                 costTypeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_TYPE_NOT_FOUND));
         costTypeRepository.delete(costType);

@@ -46,8 +46,7 @@ public class AuthService {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
-        List<String> roles =
-                user.getRoles().stream().map(Role::getCode).distinct().toList();
+        List<String> roles = user.getRoles().stream().map(Role::getCode).distinct().toList();
 
         List<String> permissions = user.getRoles().stream()
                 .flatMap(role -> role.getPermissions().stream())
@@ -80,8 +79,7 @@ public class AuthService {
         String uuid = token.getJWTClaimsSet().getJWTID();
         Date expiredTime = token.getJWTClaimsSet().getExpirationTime();
 
-        InvalidToken invalidToken =
-                InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
+        InvalidToken invalidToken = InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
 
         invalidTokenRepository.save(invalidToken);
     }
@@ -95,7 +93,8 @@ public class AuthService {
 
         var verified = signedJWT.verify(verifier);
 
-        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified && expiryTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         if (invalidTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.TOKEN_INVALID);
@@ -110,8 +109,7 @@ public class AuthService {
         String uuid = signedJWT.getJWTClaimsSet().getJWTID();
         Date expiredTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidToken invalidToken =
-                InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
+        InvalidToken invalidToken = InvalidToken.builder().token(uuid).expiryTime(expiredTime).build();
 
         invalidTokenRepository.save(invalidToken);
 

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -80,7 +80,7 @@ public class CostService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_COST')")
-    public CostResponse updateCost(UUID id, CostCreateRequest request) {
+    public CostResponse updateCost(Long id, CostCreateRequest request) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         CostType costType = costTypeRepository
@@ -102,7 +102,7 @@ public class CostService {
     }
 
     @PreAuthorize("hasAuthority('APPROVE_COST')")
-    public CostResponse approveStatus(UUID id) {
+    public CostResponse approveStatus(Long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         if (cost.getApproveStatus() != ApproveStatus.PENDING) {
@@ -123,7 +123,7 @@ public class CostService {
     }
 
     @PreAuthorize("hasAuthority('REJECT_COST')")
-    public CostResponse rejectStatus(UUID id) {
+    public CostResponse rejectStatus(Long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         if (cost.getApproveStatus() != ApproveStatus.PENDING) {
@@ -136,7 +136,7 @@ public class CostService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_COST')")
-    public void deleteCost(UUID id) {
+    public void deleteCost(Long id) {
         Cost cost = costRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COST_NOT_FOUND));
 
         costRepository.delete(cost);

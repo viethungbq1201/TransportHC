@@ -2,7 +2,6 @@ package com.example.TransportHC.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CostResponse {
-    UUID costId;
+    Long costId;
     UserResponse userCost;
 
     String description;

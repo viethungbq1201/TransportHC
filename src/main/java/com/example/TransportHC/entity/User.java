@@ -3,7 +3,6 @@ package com.example.TransportHC.entity;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -23,10 +22,10 @@ import lombok.experimental.FieldDefaults;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false, updatable = false)
     @EqualsAndHashCode.Include
-    UUID userId;
+    Long userId;
 
     @Column(nullable = false, unique = true)
     String username;
@@ -46,10 +45,7 @@ public class User {
     BigDecimal advanceMoney;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Builder.Default
     Set<Role> roles = new HashSet<>();
 

@@ -2,7 +2,6 @@ package com.example.TransportHC.dto.response;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.UUID;
 
 import com.example.TransportHC.enums.UserStatus;
 
@@ -15,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    UUID id;
+    Long id;
     String username;
     String fullName;
     String address;

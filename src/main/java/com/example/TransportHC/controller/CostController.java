@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -40,28 +40,28 @@ public class CostController {
 
     @PutMapping("/updateCost/{costId}")
     ApiResponse<CostResponse> updateCost(
-            @PathVariable("costId") UUID id, @RequestBody @Valid CostCreateRequest request) {
+            @PathVariable("costId") Long id, @RequestBody @Valid CostCreateRequest request) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.updateCost(id, request))
                 .build();
     }
 
     @GetMapping("/approveCost/{costId}")
-    ApiResponse<CostResponse> approveCost(@PathVariable("costId") UUID id) {
+    ApiResponse<CostResponse> approveCost(@PathVariable("costId") Long id) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.approveStatus(id))
                 .build();
     }
 
     @GetMapping("/rejectCost/{costId}")
-    ApiResponse<CostResponse> rejectCost(@PathVariable("costId") UUID id) {
+    ApiResponse<CostResponse> rejectCost(@PathVariable("costId") Long id) {
         return ApiResponse.<CostResponse>builder()
                 .result(costService.rejectStatus(id))
                 .build();
     }
 
     @DeleteMapping("/delelteCost/{costId}")
-    ApiResponse<String> deleteCost(@PathVariable("costId") UUID id) {
+    ApiResponse<String> deleteCost(@PathVariable("costId") Long id) {
         costService.deleteCost(id);
         return ApiResponse.<String>builder().result("Cost have been deleted").build();
     }

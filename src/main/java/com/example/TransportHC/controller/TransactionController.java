@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -40,14 +40,14 @@ public class TransactionController {
 
     @PutMapping("/updateTransaction/{transactionId}")
     ApiResponse<TransactionResponse> updateTransaction(
-            @PathVariable("transactionId") UUID id, @RequestBody @Valid TransactionCreateRequest request) {
+            @PathVariable("transactionId") Long id, @RequestBody @Valid TransactionCreateRequest request) {
         return ApiResponse.<TransactionResponse>builder()
                 .result(transactionService.updateTransaction(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteTransaction/{transactionId}")
-    ApiResponse<String> deleteTransaction(@PathVariable("transactionId") UUID id) {
+    ApiResponse<String> deleteTransaction(@PathVariable("transactionId") Long id) {
         transactionService.deleteTransaction(id);
         return ApiResponse.<String>builder()
                 .result("Transaction have been deleted")
@@ -55,14 +55,14 @@ public class TransactionController {
     }
 
     @PutMapping("/approveTransaction/{transactionId}")
-    ApiResponse<TransactionResponse> approveTransaction(@PathVariable("transactionId") UUID id) {
+    ApiResponse<TransactionResponse> approveTransaction(@PathVariable("transactionId") Long id) {
         return ApiResponse.<TransactionResponse>builder()
                 .result(transactionService.approveTransaction(id))
                 .build();
     }
 
     @PutMapping("/rejectTransaction/{transactionId}")
-    ApiResponse<TransactionResponse> rejectTransaction(@PathVariable("transactionId") UUID id) {
+    ApiResponse<TransactionResponse> rejectTransaction(@PathVariable("transactionId") Long id) {
         return ApiResponse.<TransactionResponse>builder()
                 .result(transactionService.rejectTransaction(id))
                 .build();

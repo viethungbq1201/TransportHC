@@ -1,7 +1,7 @@
 package com.example.TransportHC.service;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class TruckService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_TRUCK')")
-    public TruckResponse updateTruck(UUID id, TruckCreateRequest request) {
+    public TruckResponse updateTruck(Long id, TruckCreateRequest request) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
         truck.setLicensePlate(request.getLicensePlate());
@@ -60,7 +60,7 @@ public class TruckService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_STATUS_TRUCK')")
-    public TruckResponse updateStatusTruck(UUID id, TruckUpdateStatusRequest request) {
+    public TruckResponse updateStatusTruck(Long id, TruckUpdateStatusRequest request) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
         truck.setStatus(request.getStatus());
@@ -69,7 +69,7 @@ public class TruckService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_TRUCK')")
-    public void deleteTruck(UUID id) {
+    public void deleteTruck(Long id) {
         Truck truck = truckRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
         truckRepository.delete(truck);
     }

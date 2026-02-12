@@ -1,12 +1,11 @@
 package com.example.TransportHC.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.TransportHC.entity.Role;
 
-public interface RoleRepository extends JpaRepository<Role, UUID> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
     Optional<Role> findByCode(String code);
 }

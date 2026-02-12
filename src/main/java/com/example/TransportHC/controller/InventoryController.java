@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -45,7 +45,7 @@ public class InventoryController {
     }
 
     @GetMapping("/findInventory/{inventoryId}")
-    ApiResponse<InventoryResponse> findInventoryById(@PathVariable("inventoryId") UUID id) {
+    ApiResponse<InventoryResponse> findInventoryById(@PathVariable("inventoryId") Long id) {
         return ApiResponse.<InventoryResponse>builder()
                 .result(inventoryService.findInventoryById(id))
                 .build();
@@ -53,14 +53,14 @@ public class InventoryController {
 
     @PutMapping("/updateInventory/{inventoryId}")
     ApiResponse<InventoryResponse> updateInventory(
-            @PathVariable("inventoryId") UUID id, @RequestBody @Valid InventoryUpdateRequest request) {
+            @PathVariable("inventoryId") Long id, @RequestBody @Valid InventoryUpdateRequest request) {
         return ApiResponse.<InventoryResponse>builder()
                 .result(inventoryService.updateInventory(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteInventory/{inventoryId}")
-    ApiResponse<String> deleteInventory(@PathVariable("inventoryId") UUID id) {
+    ApiResponse<String> deleteInventory(@PathVariable("inventoryId") Long id) {
         inventoryService.deleteInventory(id);
         return ApiResponse.<String>builder()
                 .result("Inventory have been deleted")

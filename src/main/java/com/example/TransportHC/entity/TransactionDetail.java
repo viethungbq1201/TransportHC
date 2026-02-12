@@ -1,7 +1,5 @@
 package com.example.TransportHC.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -18,8 +16,8 @@ import lombok.experimental.FieldDefaults;
 public class TransactionDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     Transaction transaction;

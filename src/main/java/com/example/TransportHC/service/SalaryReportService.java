@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +41,7 @@ public class SalaryReportService {
     UserRepository userRepository;
 
     @PreAuthorize("hasAuthority('CREATE_1_SALARY_REPORT')")
-    public SalaryReportResponse create1SalaryReport(UUID userId, SalaryReportRequest request) {
+    public SalaryReportResponse create1SalaryReport(Long userId, SalaryReportRequest request) {
 
         LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
 
@@ -104,7 +104,7 @@ public class SalaryReportService {
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('VIEW_SALARY_REPORT_DETAIL')")
-    public SalaryReportResponse viewSalaryReportDetail(UUID reportId) {
+    public SalaryReportResponse viewSalaryReportDetail(Long reportId) {
 
         SalaryReport report = salaryReportRepository
                 .findById(reportId)
@@ -123,7 +123,7 @@ public class SalaryReportService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_SALARY_REPORT')")
-    public SalaryReportResponse updateSalaryReport(UUID reportId, SalaryReportRequest request) {
+    public SalaryReportResponse updateSalaryReport(Long reportId, SalaryReportRequest request) {
 
         SalaryReport report = salaryReportRepository
                 .findById(reportId)
@@ -150,7 +150,7 @@ public class SalaryReportService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_SALARY_REPORT')")
-    public void deleteSalaryReport(UUID salaryReportId) {
+    public void deleteSalaryReport(Long salaryReportId) {
         SalaryReport salaryReport = salaryReportRepository
                 .findById(salaryReportId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
@@ -159,7 +159,7 @@ public class SalaryReportService {
     }
 
     @PreAuthorize("hasAuthority('APPROVE_SALARY_REPORT')")
-    public SalaryReportResponse checkSalaryReport(UUID salaryReportId) {
+    public SalaryReportResponse checkSalaryReport(Long salaryReportId) {
         SalaryReport salaryReport = salaryReportRepository
                 .findById(salaryReportId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));

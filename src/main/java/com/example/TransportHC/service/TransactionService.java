@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,7 +67,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_TRANSACTION')")
-    public TransactionResponse updateTransaction(UUID id, TransactionCreateRequest request) {
+    public TransactionResponse updateTransaction(Long id, TransactionCreateRequest request) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 
@@ -85,7 +85,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_TRANSACTION')")
-    public void deleteTransaction(UUID id) {
+    public void deleteTransaction(Long id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 
@@ -101,7 +101,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("hasAuthority('APPROVE_TRANSACTION')")
-    public TransactionResponse approveTransaction(UUID id) {
+    public TransactionResponse approveTransaction(Long id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 
@@ -116,7 +116,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("hasAuthority('REJECT_TRANSACTION')")
-    public TransactionResponse rejectTransaction(UUID id) {
+    public TransactionResponse rejectTransaction(Long id) {
         Transaction transaction =
                 transactionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_FOUND));
 

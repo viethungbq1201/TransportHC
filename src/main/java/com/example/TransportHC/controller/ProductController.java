@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -40,14 +40,14 @@ public class ProductController {
 
     @PutMapping("/updateProduct/{productId}")
     ApiResponse<ProductResponse> updateProduct(
-            @PathVariable("productId") UUID id, @RequestBody @Valid ProductCreateRequest request) {
+            @PathVariable("productId") Long id, @RequestBody @Valid ProductCreateRequest request) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.updateProduct(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
-    ApiResponse<String> deleteProduct(@PathVariable("productId") UUID id) {
+    ApiResponse<String> deleteProduct(@PathVariable("productId") Long id) {
         productService.deleteProduct(id);
         return ApiResponse.<String>builder().result("Product have been deleted").build();
     }

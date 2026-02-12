@@ -2,7 +2,6 @@ package com.example.TransportHC.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -22,8 +21,8 @@ import lombok.experimental.FieldDefaults;
 public class Cost {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID costId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long costId;
 
     @ManyToOne
     User userCost;

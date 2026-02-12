@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -40,14 +40,14 @@ public class CostTypeController {
 
     @PutMapping("/updateCostType/{costTypeId}")
     ApiResponse<CostType> updateCostType(
-            @PathVariable("costTypeId") UUID id, @RequestBody @Valid CostTypeCreateRequest request) {
+            @PathVariable("costTypeId") Long id, @RequestBody @Valid CostTypeCreateRequest request) {
         return ApiResponse.<CostType>builder()
                 .result(costTypeService.updateCostType(id, request))
                 .build();
     }
 
     @DeleteMapping("/delelteCostType/{costTypeId}")
-    ApiResponse<String> deleteCostType(@PathVariable("costTypeId") UUID id) {
+    ApiResponse<String> deleteCostType(@PathVariable("costTypeId") Long id) {
         costTypeService.deleteCostType(id);
         return ApiResponse.<String>builder()
                 .result("Cost Type have been delete")

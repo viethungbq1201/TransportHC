@@ -1,6 +1,6 @@
 package com.example.TransportHC.dto.request;
 
-import java.util.UUID;
+
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,10 +15,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class TransactionDetailCreateRequest {
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID transactionId;
+    Long transactionId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID productId;
+    Long productId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
     @Positive(message = "POSITIVE_DATA")

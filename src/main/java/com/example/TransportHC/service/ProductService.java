@@ -2,7 +2,7 @@ package com.example.TransportHC.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -72,7 +72,7 @@ public class ProductService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_PRODUCT')")
-    public ProductResponse updateProduct(UUID id, ProductCreateRequest request) {
+    public ProductResponse updateProduct(Long id, ProductCreateRequest request) {
         Product product =
                 productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         Category category = categoryRepository
@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_PRODUCT')")
-    public void deleteProduct(UUID id) {
+    public void deleteProduct(Long id) {
         Product product =
                 productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -70,7 +70,7 @@ public class InventoryService {
     }
 
     @PreAuthorize("hasAuthority('FIND_INVENTORY')")
-    public InventoryResponse findInventoryById(UUID id) {
+    public InventoryResponse findInventoryById(Long id) {
 
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
@@ -78,7 +78,7 @@ public class InventoryService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_INVENTORY')")
-    public InventoryResponse updateInventory(UUID id, InventoryUpdateRequest request) {
+    public InventoryResponse updateInventory(Long id, InventoryUpdateRequest request) {
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventory.setQuantity(request.getQuantity());
@@ -88,7 +88,7 @@ public class InventoryService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_INVENTORY')")
-    public void deleteInventory(UUID id) {
+    public void deleteInventory(Long id) {
         Inventory inventory =
                 inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventoryRepository.delete(inventory);

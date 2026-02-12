@@ -1,7 +1,5 @@
 package com.example.TransportHC.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
 
 import com.example.TransportHC.enums.TruckStatus;
@@ -20,8 +18,8 @@ import lombok.experimental.FieldDefaults;
 public class Truck {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID truckId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long truckId;
 
     String licensePlate;
     Integer capacity;

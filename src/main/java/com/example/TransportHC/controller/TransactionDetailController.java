@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -41,14 +41,14 @@ public class TransactionDetailController {
 
     @PutMapping("/updateTransactionDetail/{TDid}")
     ApiResponse<TransactionDetailResponse> updateTransactionDetail(
-            @PathVariable("TDid") UUID id, @RequestBody @Valid TransactionDetailCreateRequest request) {
+            @PathVariable("TDid") Long id, @RequestBody @Valid TransactionDetailCreateRequest request) {
         return ApiResponse.<TransactionDetailResponse>builder()
                 .result(transactionDetailService.updateTransactionDetail(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteTransactionDetail/{TDid}")
-    ApiResponse<String> deleteTransactionDetail(@PathVariable("TDid") UUID id) {
+    ApiResponse<String> deleteTransactionDetail(@PathVariable("TDid") Long id) {
         transactionDetailService.deleteTransactionDetail(id);
         return ApiResponse.<String>builder()
                 .result("Transaction Detail have been deleted")

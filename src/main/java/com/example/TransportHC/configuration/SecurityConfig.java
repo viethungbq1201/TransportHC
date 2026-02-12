@@ -32,7 +32,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {"/auth/login", "/auth/logout", "/auth/refresh"};
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
                 .permitAll()

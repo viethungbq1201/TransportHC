@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,7 +71,7 @@ public class TransactionDetailService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_TRANSACTION_DETAIL')")
-    public TransactionDetailResponse updateTransactionDetail(UUID id, TransactionDetailCreateRequest request) {
+    public TransactionDetailResponse updateTransactionDetail(Long id, TransactionDetailCreateRequest request) {
         TransactionDetail transactionDetail = transactionDetailRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_DETAIL_NOT_FOUND));
@@ -100,7 +100,7 @@ public class TransactionDetailService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_TRANSACTION_DETAIL')")
-    public void deleteTransactionDetail(UUID id) {
+    public void deleteTransactionDetail(Long id) {
         TransactionDetail transactionDetail = transactionDetailRepository
                 .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_DETAIL_NOT_FOUND));

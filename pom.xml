@@ -6,8 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.5.9</version>
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>TransportHC</artifactId>
@@ -101,6 +100,9 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
+
+
+
 
 		<!-- QueryDSL -->
 		<dependency>

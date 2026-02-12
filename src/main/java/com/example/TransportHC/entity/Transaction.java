@@ -2,7 +2,6 @@ package com.example.TransportHC.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -23,8 +22,8 @@ import lombok.experimental.FieldDefaults;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID transactionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long transactionId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 255, columnDefinition = "varchar(255)")

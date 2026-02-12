@@ -3,7 +3,7 @@ package com.example.TransportHC.dto.response.report;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TruckCostReportResponse {
-    UUID truckId;
+    Long truckId;
     String licensePlate;
 
     LocalDate fromDate;

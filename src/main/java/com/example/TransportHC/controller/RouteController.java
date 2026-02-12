@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -40,14 +40,14 @@ public class RouteController {
 
     @PutMapping("/updateRoute/{routeId}")
     ApiResponse<RouteResponse> updateRoute(
-            @PathVariable("routeId") UUID id, @RequestBody @Valid RouteCreateRequest request) {
+            @PathVariable("routeId") Long id, @RequestBody @Valid RouteCreateRequest request) {
         return ApiResponse.<RouteResponse>builder()
                 .result(routeService.updateRoute(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteRoute/{routeId}")
-    ApiResponse<String> deleteRoute(@PathVariable("routeId") UUID id) {
+    ApiResponse<String> deleteRoute(@PathVariable("routeId") Long id) {
         routeService.deleteRoute(id);
         return ApiResponse.<String>builder().result("Route have been deleted").build();
     }

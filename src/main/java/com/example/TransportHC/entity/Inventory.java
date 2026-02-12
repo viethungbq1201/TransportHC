@@ -1,7 +1,6 @@
 package com.example.TransportHC.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -19,8 +18,8 @@ import lombok.experimental.FieldDefaults;
 public class Inventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID inventoryId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long inventoryId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", unique = true, nullable = false)

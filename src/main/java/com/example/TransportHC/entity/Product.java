@@ -2,7 +2,6 @@ package com.example.TransportHC.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -20,8 +19,8 @@ import lombok.experimental.FieldDefaults;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID productId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long productId;
 
     String name;
     BigDecimal price;

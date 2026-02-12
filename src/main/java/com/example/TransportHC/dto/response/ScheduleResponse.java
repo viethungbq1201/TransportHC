@@ -2,7 +2,6 @@ package com.example.TransportHC.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleResponse {
-    UUID scheduleId;
+    Long scheduleId;
     LocalDate startDate;
     LocalDate endDate;
 

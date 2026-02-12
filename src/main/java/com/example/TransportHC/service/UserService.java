@@ -87,7 +87,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_USER')")
-    public UserResponse updateUser(UUID id, UserUpdateRequest request) {
+    public UserResponse updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setUsername(request.getUsername());
@@ -122,7 +122,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_STATUS_USER')")
-    public UserResponse updateStatusUser(UUID id, UserUpdateStatusRequest request) {
+    public UserResponse updateStatusUser(Long id, UserUpdateStatusRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setStatus(request.getStatus());
@@ -133,7 +133,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_USER')")
-    public void deleteUser(UUID id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }

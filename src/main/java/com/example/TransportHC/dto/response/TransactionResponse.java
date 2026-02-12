@@ -1,7 +1,6 @@
 package com.example.TransportHC.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.example.TransportHC.enums.ApproveStatus;
 import com.example.TransportHC.enums.TransactionType;
@@ -16,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TransactionResponse {
 
-    UUID transactionId;
+    Long transactionId;
     TransactionType transactionType;
     LocalDateTime date;
     String location;

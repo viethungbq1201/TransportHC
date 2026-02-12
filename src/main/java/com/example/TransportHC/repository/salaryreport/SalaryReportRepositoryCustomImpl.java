@@ -5,7 +5,6 @@ import static com.example.TransportHC.entity.QSchedule.schedule;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -34,7 +33,7 @@ public class SalaryReportRepositoryCustomImpl implements SalaryReportRepositoryC
     }
 
     @Override
-    public BigDecimal sumReward(UUID userId, LocalDate startDate, LocalDate endDate) {
+    public BigDecimal sumReward(Long userId, LocalDate startDate, LocalDate endDate) {
         return queryFactory
                 .select(schedule.reward.sum().coalesce(BigDecimal.ZERO))
                 .from(schedule)
@@ -46,7 +45,7 @@ public class SalaryReportRepositoryCustomImpl implements SalaryReportRepositoryC
     }
 
     @Override
-    public BigDecimal sumCost(UUID userId, LocalDate startDate, LocalDate endDate) {
+    public BigDecimal sumCost(Long userId, LocalDate startDate, LocalDate endDate) {
         return queryFactory
                 .select(cost.price.sum().coalesce(BigDecimal.ZERO))
                 .from(cost)

@@ -2,7 +2,6 @@ package com.example.TransportHC.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -22,8 +21,8 @@ import lombok.experimental.FieldDefaults;
 public class Schedule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID schedulesId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long schedulesId;
 
     LocalDate startDate;
     LocalDate endDate;

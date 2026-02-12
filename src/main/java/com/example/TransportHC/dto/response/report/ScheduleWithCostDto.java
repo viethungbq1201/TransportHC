@@ -2,11 +2,11 @@ package com.example.TransportHC.dto.response.report;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 public record ScheduleWithCostDto(
-        UUID scheduleId,
-        UUID truckId,
+        Long scheduleId,
+        Long truckId,
         String licensePlate,
         String routeName,
         String driverUsername,

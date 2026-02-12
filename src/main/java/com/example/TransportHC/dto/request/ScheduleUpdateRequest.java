@@ -2,7 +2,7 @@ package com.example.TransportHC.dto.request;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -24,14 +24,14 @@ public class ScheduleUpdateRequest {
     BigDecimal reward;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID driverId;
+    Long driverId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID truckId;
+    Long truckId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID routeId;
+    Long routeId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID transactionId;
+    Long transactionId;
 }

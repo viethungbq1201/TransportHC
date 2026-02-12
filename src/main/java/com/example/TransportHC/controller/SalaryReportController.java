@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -28,7 +28,7 @@ public class SalaryReportController {
 
     @PostMapping("/create1/{salaryReportId}")
     ApiResponse<SalaryReportResponse> create1SalaryReport(
-            @PathVariable("salaryReportId") UUID id, @RequestBody @Valid SalaryReportRequest request) {
+            @PathVariable("salaryReportId") Long id, @RequestBody @Valid SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.create1SalaryReport(id, request))
                 .build();
@@ -50,7 +50,7 @@ public class SalaryReportController {
     }
 
     @GetMapping("/viewSalaryReportDetail/{salaryReportId}")
-    ApiResponse<SalaryReportResponse> viewSalaryReportDetail(@PathVariable("salaryReportId") UUID id) {
+    ApiResponse<SalaryReportResponse> viewSalaryReportDetail(@PathVariable("salaryReportId") Long id) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.viewSalaryReportDetail(id))
                 .build();
@@ -58,20 +58,20 @@ public class SalaryReportController {
 
     @PutMapping("/updateSalaryReport/{salaryReportId}")
     ApiResponse<SalaryReportResponse> updateSalaryReport(
-            @PathVariable("salaryReportId") UUID id, @RequestBody @Valid SalaryReportRequest request) {
+            @PathVariable("salaryReportId") Long id, @RequestBody @Valid SalaryReportRequest request) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.updateSalaryReport(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteSalaryReport/{salaryReportId}")
-    ApiResponse<String> deleteSalaryReport(@PathVariable("salaryReportId") UUID id) {
+    ApiResponse<String> deleteSalaryReport(@PathVariable("salaryReportId") Long id) {
         salaryReportService.deleteSalaryReport(id);
         return ApiResponse.<String>builder().result("Salary Report deleted").build();
     }
 
     @GetMapping("/doneSalaryReport/{salaryReportId}")
-    ApiResponse<SalaryReportResponse> doneSalaryReport(@PathVariable("salaryReportId") UUID id) {
+    ApiResponse<SalaryReportResponse> doneSalaryReport(@PathVariable("salaryReportId") Long id) {
         return ApiResponse.<SalaryReportResponse>builder()
                 .result(salaryReportService.checkSalaryReport(id))
                 .build();

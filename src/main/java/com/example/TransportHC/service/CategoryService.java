@@ -1,7 +1,7 @@
 package com.example.TransportHC.service;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class CategoryService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_CATEGORY')")
-    public CategoryResponse updateCategory(UUID id, CategoryCreateRequest request) {
+    public CategoryResponse updateCategory(Long id, CategoryCreateRequest request) {
         Category category =
                 categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
@@ -51,7 +51,7 @@ public class CategoryService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_CATEGORY')")
-    public void deleteCategory(UUID id) {
+    public void deleteCategory(Long id) {
         Category category =
                 categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 

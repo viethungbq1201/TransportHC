@@ -1,7 +1,7 @@
 package com.example.TransportHC.service;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class RouteService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_ROUTE')")
-    public RouteResponse updateRoute(UUID id, RouteCreateRequest request) {
+    public RouteResponse updateRoute(Long id, RouteCreateRequest request) {
         Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
 
         route.setName(request.getName());
@@ -60,7 +60,7 @@ public class RouteService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_ROUTE')")
-    public void deleteRoute(UUID id) {
+    public void deleteRoute(Long id) {
         Route route = routeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROUTE_NOT_FOUND));
         routeRepository.delete(route);
     }

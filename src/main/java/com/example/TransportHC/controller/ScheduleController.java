@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -42,21 +42,21 @@ public class ScheduleController {
 
     @PutMapping("/updateSchedule/{ScheduleId}")
     ApiResponse<ScheduleResponse> updateSchedule(
-            @PathVariable("ScheduleId") UUID id, @RequestBody @Valid ScheduleUpdateRequest request) {
+            @PathVariable("ScheduleId") Long id, @RequestBody @Valid ScheduleUpdateRequest request) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.updateSchedule(id, request))
                 .build();
     }
 
     @GetMapping("/approveSchedule/{ScheduleId}")
-    ApiResponse<ScheduleResponse> approveSchedule(@PathVariable("ScheduleId") UUID id) {
+    ApiResponse<ScheduleResponse> approveSchedule(@PathVariable("ScheduleId") Long id) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.approveSchedule(id))
                 .build();
     }
 
     @GetMapping("/rejectSchedule/{ScheduleId}")
-    ApiResponse<ScheduleResponse> rejectSchedule(@PathVariable("ScheduleId") UUID id) {
+    ApiResponse<ScheduleResponse> rejectSchedule(@PathVariable("ScheduleId") Long id) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.rejectSchedule(id))
                 .build();
@@ -64,21 +64,21 @@ public class ScheduleController {
 
     @PutMapping("/endSchedule/{ScheduleId}")
     ApiResponse<ScheduleResponse> endSchedule(
-            @PathVariable("ScheduleId") UUID id, @RequestBody @Valid ScheduleEndRequest request) {
+            @PathVariable("ScheduleId") Long id, @RequestBody @Valid ScheduleEndRequest request) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.endSchedule(id, request))
                 .build();
     }
 
     @GetMapping("/cancelSchedule/{ScheduleId}")
-    ApiResponse<ScheduleResponse> cancelSchedule(@PathVariable("ScheduleId") UUID id) {
+    ApiResponse<ScheduleResponse> cancelSchedule(@PathVariable("ScheduleId") Long id) {
         return ApiResponse.<ScheduleResponse>builder()
                 .result(scheduleService.cancelSchedule(id))
                 .build();
     }
 
     @DeleteMapping("/deleteSchedule/{ScheduleId}")
-    ApiResponse<String> deleteSchedule(@PathVariable("ScheduleId") UUID id) {
+    ApiResponse<String> deleteSchedule(@PathVariable("ScheduleId") Long id) {
         scheduleService.deleteSchedule(id);
         return ApiResponse.<String>builder()
                 .result("Schedule have been deleted")

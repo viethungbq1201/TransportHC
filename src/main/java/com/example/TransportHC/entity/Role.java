@@ -2,7 +2,6 @@ package com.example.TransportHC.entity;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -22,8 +21,8 @@ import lombok.experimental.FieldDefaults;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     @Column(unique = true)
     String code;
@@ -32,10 +31,7 @@ public class Role {
     String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     @Builder.Default
     private Set<Permission> permissions = new HashSet<>();
 

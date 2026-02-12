@@ -3,7 +3,7 @@ package com.example.TransportHC.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import com.example.TransportHC.dto.response.PageResponse;
@@ -38,7 +38,7 @@ public class ReportService {
     UserRepository userRepository;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public TruckCostReportResponse reportCostForTruck(UUID truckId, ReportFromToRequest request) {
+    public TruckCostReportResponse reportCostForTruck(Long truckId, ReportFromToRequest request) {
         Truck truck = truckRepository.findById(truckId).orElseThrow(() -> new AppException(ErrorCode.TRUCK_NOT_FOUND));
 
         BigDecimal totalCost = costRepository.sumCostByTruck(truckId, request.getFrom(), request.getTo());
@@ -69,7 +69,7 @@ public class ReportService {
         return costRepository.sumCostAllTrucks(request.getFrom(), request.getTo())
                 .stream()
                 .map(r -> new TruckCostSummaryResponse(
-                        (UUID) r[0],
+                        (Long) r[0],
                         (String) r[1],
                         (BigDecimal) r[2]
                 ))
@@ -78,10 +78,10 @@ public class ReportService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<TruckScheduleDetailResponse> reportRewardForTruck(UUID truckId, ReportFromToRequest request) {
+    public List<TruckScheduleDetailResponse> reportRewardForTruck(Long truckId, ReportFromToRequest request) {
         List<Schedule> schedules = scheduleRepository.findSchedulesByTruckAndDate(truckId, request.getFrom(), request.getTo());
 
-        Map<UUID, BigDecimal> costMap =
+        Map<Long, BigDecimal> costMap =
                 costRepository.sumCostBySchedule(
                         schedules.stream().map(Schedule::getSchedulesId).toList()
                 );
@@ -107,7 +107,7 @@ public class ReportService {
     public List<TruckScheduleSummaryResponse> reportRewardAllTrucks(ReportFromToRequest request) {
         return scheduleRepository.summarySchedulesAllTrucks(request.getFrom(), request.getTo()).stream()
                 .map(r -> new TruckScheduleSummaryResponse(
-                        (UUID) r[0],
+                        (Long) r[0],
                         (String) r[1],
                         (Long) r[2],
                         (BigDecimal) r[3],
@@ -118,7 +118,7 @@ public class ReportService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public TruckScheduleGroupResponse reportSchedulesForOneTruck(
-            UUID truckId,
+            Long truckId,
             ReportFromToRequest request) {
 
         List<ScheduleWithCostDto> rows =
@@ -211,14 +211,14 @@ public class ReportService {
     public List<TruckTripCountResponse> reportTripCountByTruck(ReportFromToRequest request) {
         return scheduleRepository.countTripsByTruck(request.getFrom(), request.getTo()).stream()
                 .map(r -> new TruckTripCountResponse(
-                        (UUID) r[0],
-                        truckRepository.getReferenceById((UUID) r[0]).getLicensePlate(),
+                        (Long) r[0],
+                        truckRepository.getReferenceById((Long) r[0]).getLicensePlate(),
                         (Long) r[1]))
                 .toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public DriverCostReportResponse reportCostForDriver(UUID driverId, ReportFromToRequest request) {
+    public DriverCostReportResponse reportCostForDriver(Long driverId, ReportFromToRequest request) {
         User driver = userRepository.findById(driverId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         BigDecimal total = costRepository.sumCostByDriver(driverId, request.getFrom(), request.getTo());
@@ -242,7 +242,7 @@ public class ReportService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public TruckDailyReportResponse reportScheduleByTruck (UUID truckId, ReportFromToRequest request) {
+    public TruckDailyReportResponse reportScheduleByTruck (Long truckId, ReportFromToRequest request) {
 
         List<TruckScheduleReportRow> rows =
                 scheduleRepository.reportByTruckAndRow(truckId, request.getFrom(), request.getTo());

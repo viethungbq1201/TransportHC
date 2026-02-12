@@ -1,7 +1,5 @@
 package com.example.TransportHC.dto.response;
 
-import java.util.UUID;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TransactionDetailResponse {
 
-    UUID transactionDetailId;
+    Long transactionDetailId;
     TransactionResponse transaction;
     ProductResponse product;
 

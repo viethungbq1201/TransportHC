@@ -1,7 +1,6 @@
 package com.example.TransportHC.entity;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -19,8 +18,8 @@ import lombok.experimental.FieldDefaults;
 public class Route {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID routeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long routeId;
 
     String name;
     String start_point;

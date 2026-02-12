@@ -3,7 +3,6 @@ package com.example.TransportHC.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -23,8 +22,8 @@ import lombok.experimental.FieldDefaults;
 public class SalaryReport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID reportId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long reportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     User user;

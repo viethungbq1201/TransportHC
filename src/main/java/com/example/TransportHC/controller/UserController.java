@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -41,7 +41,7 @@ public class UserController {
 
     @PutMapping("updateUser/{userId}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable("userId") UUID id, @RequestBody @Valid UserUpdateRequest request) {
+            @PathVariable("userId") Long id, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(id, request))
                 .build();
@@ -49,14 +49,14 @@ public class UserController {
 
     @PutMapping("updateStatusUser/{userId}")
     ApiResponse<UserResponse> updateStatusUser(
-            @PathVariable("userId") UUID id, @RequestBody @Valid UserUpdateStatusRequest request) {
+            @PathVariable("userId") Long id, @RequestBody @Valid UserUpdateStatusRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateStatusUser(id, request))
                 .build();
     }
 
     @DeleteMapping("deleteUser/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable("userId") UUID id) {
+    ApiResponse<String> deleteUser(@PathVariable("userId") Long id) {
         userService.deleteUser(id);
         return ApiResponse.<String>builder().result("User have been deleted").build();
     }

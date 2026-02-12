@@ -1,7 +1,7 @@
 package com.example.TransportHC.controller;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import jakarta.validation.Valid;
 
@@ -41,7 +41,7 @@ public class TruckController {
 
     @PutMapping("/updateTruck/{truckId}")
     ApiResponse<TruckResponse> updateTruck(
-            @PathVariable("truckId") UUID id, @RequestBody @Valid TruckCreateRequest request) {
+            @PathVariable("truckId") Long id, @RequestBody @Valid TruckCreateRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.updateTruck(id, request))
                 .build();
@@ -49,14 +49,14 @@ public class TruckController {
 
     @PutMapping("/updateStatusTruck/{truckId}")
     ApiResponse<TruckResponse> updateStatusTruck(
-            @PathVariable("truckId") UUID id, @RequestBody @Valid TruckUpdateStatusRequest request) {
+            @PathVariable("truckId") Long id, @RequestBody @Valid TruckUpdateStatusRequest request) {
         return ApiResponse.<TruckResponse>builder()
                 .result(truckService.updateStatusTruck(id, request))
                 .build();
     }
 
     @DeleteMapping("/deleteTruck/{truckId}")
-    ApiResponse<String> deleteTruck(@PathVariable("truckId") UUID id) {
+    ApiResponse<String> deleteTruck(@PathVariable("truckId") Long id) {
         truckService.deleteTruck(id);
         return ApiResponse.<String>builder().result("Truck have been deleted").build();
     }

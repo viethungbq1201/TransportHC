@@ -1,7 +1,5 @@
 package com.example.TransportHC.dto.response;
 
-import java.util.UUID;
-
 import com.example.TransportHC.enums.TruckStatus;
 
 import lombok.*;
@@ -13,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TruckResponse {
-    UUID id;
+    Long id;
     String licensePlate;
     Integer capacity;
     TruckStatus status;

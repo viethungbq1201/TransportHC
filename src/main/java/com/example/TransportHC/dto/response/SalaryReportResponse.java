@@ -3,7 +3,6 @@ package com.example.TransportHC.dto.response;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.example.TransportHC.enums.SalaryReportStatus;
 
@@ -16,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SalaryReportResponse {
-    UUID salaryReportId;
+    Long salaryReportId;
     UserResponse user;
     BigDecimal basic_salary;
     BigDecimal advance_salary;

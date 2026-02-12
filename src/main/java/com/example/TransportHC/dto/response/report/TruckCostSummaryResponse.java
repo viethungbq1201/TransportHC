@@ -1,7 +1,7 @@
 package com.example.TransportHC.dto.response.report;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TruckCostSummaryResponse {
 
-    UUID truckId;
+    Long truckId;
     String licensePlate;
     BigDecimal totalCost;
 }

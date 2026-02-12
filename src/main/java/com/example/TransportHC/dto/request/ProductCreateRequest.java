@@ -1,7 +1,7 @@
 package com.example.TransportHC.dto.request;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ public class ProductCreateRequest {
     String name;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    UUID categoryId;
+    Long categoryId;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
     @Positive(message = "POSITIVE_DATA")

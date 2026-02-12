@@ -2,7 +2,7 @@ package com.example.TransportHC.dto.response.report;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TruckScheduleDetailResponse {
 
-    UUID scheduleId;
+    Long scheduleId;
     String route;
     String driverName;
 

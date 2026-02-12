@@ -1,7 +1,6 @@
 package com.example.TransportHC.dto.response;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteResponse {
-    UUID id;
+    Long id;
     String name;
     String start_point;
     String end_point;

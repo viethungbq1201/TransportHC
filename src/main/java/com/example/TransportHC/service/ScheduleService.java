@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -96,7 +96,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_SCHEDULE')")
-    public ScheduleResponse updateSchedule(UUID id, ScheduleUpdateRequest request) {
+    public ScheduleResponse updateSchedule(Long id, ScheduleUpdateRequest request) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -154,7 +154,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('APPROVE_SCHEDULE')")
-    public ScheduleResponse approveSchedule(UUID id) {
+    public ScheduleResponse approveSchedule(Long id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -179,7 +179,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('REJECT_SCHEDULE')")
-    public ScheduleResponse rejectSchedule(UUID id) {
+    public ScheduleResponse rejectSchedule(Long id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -193,7 +193,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('END_SCHEDULE')")
-    public ScheduleResponse endSchedule(UUID id, ScheduleEndRequest request) {
+    public ScheduleResponse endSchedule(Long id, ScheduleEndRequest request) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -218,7 +218,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('CANCEL_SCHEDULE')")
-    public ScheduleResponse cancelSchedule(UUID id) {
+    public ScheduleResponse cancelSchedule(Long id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
@@ -235,7 +235,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("hasAuthority('DELETE_SCHEDULE')")
-    public void deleteSchedule(UUID id) {
+    public void deleteSchedule(Long id) {
         Schedule schedule =
                 scheduleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
 
