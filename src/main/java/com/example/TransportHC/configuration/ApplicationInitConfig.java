@@ -2,6 +2,7 @@ package com.example.TransportHC.configuration;
 
 import java.util.*;
 
+import com.example.TransportHC.enums.UserStatus;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,7 @@ public class ApplicationInitConfig {
                         .address("Thái Bình")
                         .phoneNumber("0978791201")
                         .isDriver(false)
+                        .status(UserStatus.AVAILABLE)
                         .roles(Set.of(adminRole))
                         .build();
 
