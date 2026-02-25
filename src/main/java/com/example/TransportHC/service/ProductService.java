@@ -3,6 +3,8 @@ package com.example.TransportHC.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.TransportHC.dto.request.ProductCreateRequest;
 import com.example.TransportHC.dto.response.CategoryResponse;
+import com.example.TransportHC.dto.response.PageResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
 import com.example.TransportHC.entity.Category;
 import com.example.TransportHC.entity.Inventory;
@@ -30,81 +33,97 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductService {
 
-    ProductRepository productRepository;
-    InventoryRepository inventoryRepository;
-    CategoryRepository categoryRepository;
+        ProductRepository productRepository;
+        InventoryRepository inventoryRepository;
+        CategoryRepository categoryRepository;
 
-    @PreAuthorize("hasAuthority('CREATE_PRODUCT')")
-    public ProductResponse createProduct(ProductCreateRequest request) {
+        @PreAuthorize("hasAuthority('CREATE_PRODUCT')")
+        public ProductResponse createProduct(ProductCreateRequest request) {
 
-        if (productRepository.existsProductByName(request.getName())) {
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+                if (productRepository.existsProductByName(request.getName())) {
+                        throw new AppException(ErrorCode.PRODUCT_EXISTED);
+                }
+
+                Category category = categoryRepository
+                                .findById(request.getCategoryId())
+                                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+                Product product = Product.builder()
+                                .name(request.getName())
+                                .category(category)
+                                .price(request.getPrice())
+                                .build();
+                productRepository.save(product);
+
+                Inventory inventory = Inventory.builder()
+                                .product(product)
+                                .quantity(0)
+                                .inTransit(0)
+                                .upToDate(LocalDateTime.now())
+                                .build();
+                inventoryRepository.save(inventory);
+
+                product.setInventory(inventory);
+
+                return entityToResponse(product);
         }
 
-        Category category = categoryRepository
-                .findById(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        @Transactional(readOnly = true)
+        @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
+        public List<ProductResponse> viewProduct() {
+                return productRepository.findAll().stream().map(this::entityToResponse).toList();
+        }
 
-        Product product = Product.builder()
-                .name(request.getName())
-                .category(category)
-                .price(request.getPrice())
-                .build();
-        productRepository.save(product);
+        @Transactional(readOnly = true)
+        @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
+        public PageResponse<ProductResponse> viewProductPaged(int page, int size) {
+                Page<Product> productPage = productRepository.findAll(PageRequest.of(page, size));
+                List<ProductResponse> content = productPage.getContent().stream()
+                                .map(this::entityToResponse)
+                                .toList();
+                return PageResponse.<ProductResponse>builder()
+                                .content(content)
+                                .page(productPage.getNumber())
+                                .size(productPage.getSize())
+                                .totalElements(productPage.getTotalElements())
+                                .totalPages(productPage.getTotalPages())
+                                .build();
+        }
 
-        Inventory inventory = Inventory.builder()
-                .product(product)
-                .quantity(0)
-                .inTransit(0)
-                .upToDate(LocalDateTime.now())
-                .build();
-        inventoryRepository.save(inventory);
+        @PreAuthorize("hasAuthority('UPDATE_PRODUCT')")
+        public ProductResponse updateProduct(Long id, ProductCreateRequest request) {
+                Product product = productRepository.findById(id)
+                                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+                Category category = categoryRepository
+                                .findById(request.getCategoryId())
+                                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        product.setInventory(inventory);
+                product.setName(request.getName());
+                product.setCategory(category);
+                product.setPrice(request.getPrice());
+                productRepository.save(product);
+                return entityToResponse(product);
+        }
 
-        return entityToResponse(product);
-    }
+        @PreAuthorize("hasAuthority('DELETE_PRODUCT')")
+        public void deleteProduct(Long id) {
+                Product product = productRepository.findById(id)
+                                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
-    public List<ProductResponse> viewProduct() {
-        return productRepository.findAll().stream().map(this::entityToResponse).toList();
-    }
+                productRepository.delete(product);
+        }
 
-    @PreAuthorize("hasAuthority('UPDATE_PRODUCT')")
-    public ProductResponse updateProduct(Long id, ProductCreateRequest request) {
-        Product product =
-                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-        Category category = categoryRepository
-                .findById(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        ProductResponse entityToResponse(Product product) {
+                CategoryResponse category = CategoryResponse.builder()
+                                .categoryId(product.getCategory().getCategoryId())
+                                .name(product.getCategory().getName())
+                                .build();
 
-        product.setName(request.getName());
-        product.setCategory(category);
-        product.setPrice(request.getPrice());
-        productRepository.save(product);
-        return entityToResponse(product);
-    }
-
-    @PreAuthorize("hasAuthority('DELETE_PRODUCT')")
-    public void deleteProduct(Long id) {
-        Product product =
-                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-
-        productRepository.delete(product);
-    }
-
-    ProductResponse entityToResponse(Product product) {
-        CategoryResponse category = CategoryResponse.builder()
-                .categoryId(product.getCategory().getCategoryId())
-                .name(product.getCategory().getName())
-                .build();
-
-        return ProductResponse.builder()
-                .id(product.getProductId())
-                .name(product.getName())
-                .category(category)
-                .price(product.getPrice())
-                .build();
-    }
+                return ProductResponse.builder()
+                                .id(product.getProductId())
+                                .name(product.getName())
+                                .category(category)
+                                .price(product.getPrice())
+                                .build();
+        }
 }

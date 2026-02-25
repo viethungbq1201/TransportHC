@@ -2,7 +2,6 @@ package com.example.TransportHC.controller;
 
 import java.util.List;
 
-
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
@@ -16,6 +15,7 @@ import com.example.TransportHC.dto.request.InventoryFilterRequest;
 import com.example.TransportHC.dto.request.InventoryUpdateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
 import com.example.TransportHC.dto.response.InventoryResponse;
+import com.example.TransportHC.dto.response.PageResponse;
 import com.example.TransportHC.service.InventoryService;
 
 import lombok.AccessLevel;
@@ -28,69 +28,79 @@ import lombok.experimental.FieldDefaults;
 @RestController
 public class InventoryController {
 
-    InventoryService inventoryService;
+        InventoryService inventoryService;
 
-    @PostMapping("/createInventory")
-    ApiResponse<InventoryResponse> createInventory(@RequestBody @Valid InventoryCreateRequest request) {
-        return ApiResponse.<InventoryResponse>builder()
-                .result(inventoryService.createInventory(request))
-                .build();
-    }
+        @PostMapping("/createInventory")
+        ApiResponse<InventoryResponse> createInventory(@RequestBody @Valid InventoryCreateRequest request) {
+                return ApiResponse.<InventoryResponse>builder()
+                                .result(inventoryService.createInventory(request))
+                                .build();
+        }
 
-    @GetMapping("/viewInventory")
-    ApiResponse<List<InventoryResponse>> viewInventory() {
-        return ApiResponse.<List<InventoryResponse>>builder()
-                .result(inventoryService.viewInventory())
-                .build();
-    }
+        @GetMapping("/viewInventory")
+        ApiResponse<List<InventoryResponse>> viewInventory() {
+                return ApiResponse.<List<InventoryResponse>>builder()
+                                .result(inventoryService.viewInventory())
+                                .build();
+        }
 
-    @GetMapping("/findInventory/{inventoryId}")
-    ApiResponse<InventoryResponse> findInventoryById(@PathVariable("inventoryId") Long id) {
-        return ApiResponse.<InventoryResponse>builder()
-                .result(inventoryService.findInventoryById(id))
-                .build();
-    }
+        @GetMapping("/viewInventoryPaged")
+        ApiResponse<PageResponse<InventoryResponse>> viewInventoryPaged(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                return ApiResponse.<PageResponse<InventoryResponse>>builder()
+                                .result(inventoryService.viewInventoryPaged(page, size))
+                                .build();
+        }
 
-    @PutMapping("/updateInventory/{inventoryId}")
-    ApiResponse<InventoryResponse> updateInventory(
-            @PathVariable("inventoryId") Long id, @RequestBody @Valid InventoryUpdateRequest request) {
-        return ApiResponse.<InventoryResponse>builder()
-                .result(inventoryService.updateInventory(id, request))
-                .build();
-    }
+        @GetMapping("/findInventory/{inventoryId}")
+        ApiResponse<InventoryResponse> findInventoryById(@PathVariable("inventoryId") Long id) {
+                return ApiResponse.<InventoryResponse>builder()
+                                .result(inventoryService.findInventoryById(id))
+                                .build();
+        }
 
-    @DeleteMapping("/deleteInventory/{inventoryId}")
-    ApiResponse<String> deleteInventory(@PathVariable("inventoryId") Long id) {
-        inventoryService.deleteInventory(id);
-        return ApiResponse.<String>builder()
-                .result("Inventory have been deleted")
-                .build();
-    }
+        @PutMapping("/updateInventory/{inventoryId}")
+        ApiResponse<InventoryResponse> updateInventory(
+                        @PathVariable("inventoryId") Long id, @RequestBody @Valid InventoryUpdateRequest request) {
+                return ApiResponse.<InventoryResponse>builder()
+                                .result(inventoryService.updateInventory(id, request))
+                                .build();
+        }
 
-    @PostMapping("/filterInventory")
-    ApiResponse<List<InventoryResponse>> filterInventory(@RequestBody @Valid InventoryFilterRequest request) {
-        return ApiResponse.<List<InventoryResponse>>builder()
-                .result(inventoryService.filterInventory(request))
-                .build();
-    }
+        @DeleteMapping("/deleteInventory/{inventoryId}")
+        ApiResponse<String> deleteInventory(@PathVariable("inventoryId") Long id) {
+                inventoryService.deleteInventory(id);
+                return ApiResponse.<String>builder()
+                                .result("Inventory have been deleted")
+                                .build();
+        }
 
-    @GetMapping("/exportInventory")
-    public ResponseEntity<byte[]> exportExcel() {
+        @PostMapping("/filterInventory")
+        ApiResponse<List<InventoryResponse>> filterInventory(@RequestBody @Valid InventoryFilterRequest request) {
+                return ApiResponse.<List<InventoryResponse>>builder()
+                                .result(inventoryService.filterInventory(request))
+                                .build();
+        }
 
-        byte[] data = inventoryService.exportInventoryToExcel();
+        @GetMapping("/exportInventory")
+        public ResponseEntity<byte[]> exportExcel() {
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=inventory.xlsx")
-                .contentType(
-                        MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(data);
-    }
+                byte[] data = inventoryService.exportInventoryToExcel();
 
-    @PostMapping(value = "/importInventory", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<String> importInventory(@RequestParam("file") MultipartFile file) {
-        inventoryService.importInventoryFromExcel(file);
-        return ApiResponse.<String>builder()
-                .result("Import inventory successfully")
-                .build();
-    }
+                return ResponseEntity.ok()
+                                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=inventory.xlsx")
+                                .contentType(
+                                                MediaType.parseMediaType(
+                                                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                                .body(data);
+        }
+
+        @PostMapping(value = "/importInventory", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ApiResponse<String> importInventory(@RequestParam("file") MultipartFile file) {
+                inventoryService.importInventoryFromExcel(file);
+                return ApiResponse.<String>builder()
+                                .result("Import inventory successfully")
+                                .build();
+        }
 }

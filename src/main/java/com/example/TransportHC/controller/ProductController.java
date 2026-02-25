@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.TransportHC.dto.request.ProductCreateRequest;
 import com.example.TransportHC.dto.response.ApiResponse;
+import com.example.TransportHC.dto.response.PageResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
 import com.example.TransportHC.service.ProductService;
 
@@ -35,6 +36,15 @@ public class ProductController {
     ApiResponse<List<ProductResponse>> viewProduct() {
         return ApiResponse.<List<ProductResponse>>builder()
                 .result(productService.viewProduct())
+                .build();
+    }
+
+    @GetMapping("/viewProductPaged")
+    ApiResponse<PageResponse<ProductResponse>> viewProductPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<PageResponse<ProductResponse>>builder()
+                .result(productService.viewProductPaged(page, size))
                 .build();
     }
 

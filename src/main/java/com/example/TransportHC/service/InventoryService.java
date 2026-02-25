@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,6 +23,7 @@ import com.example.TransportHC.dto.request.InventoryFilterRequest;
 import com.example.TransportHC.dto.request.InventoryUpdateRequest;
 import com.example.TransportHC.dto.response.CategoryResponse;
 import com.example.TransportHC.dto.response.InventoryResponse;
+import com.example.TransportHC.dto.response.PageResponse;
 import com.example.TransportHC.dto.response.ProductResponse;
 import com.example.TransportHC.entity.Category;
 import com.example.TransportHC.entity.Inventory;
@@ -69,18 +72,34 @@ public class InventoryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('VIEW_INVENTORY')")
+    public PageResponse<InventoryResponse> viewInventoryPaged(int page, int size) {
+        Page<Inventory> inventoryPage = inventoryRepository.findAll(PageRequest.of(page, size));
+        List<InventoryResponse> content = inventoryPage.getContent().stream()
+                .map(this::entityToResponse)
+                .toList();
+        return PageResponse.<InventoryResponse>builder()
+                .content(content)
+                .page(inventoryPage.getNumber())
+                .size(inventoryPage.getSize())
+                .totalElements(inventoryPage.getTotalElements())
+                .totalPages(inventoryPage.getTotalPages())
+                .build();
+    }
+
     @PreAuthorize("hasAuthority('FIND_INVENTORY')")
     public InventoryResponse findInventoryById(Long id) {
 
-        Inventory inventory =
-                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         return entityToResponse(inventory);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_INVENTORY')")
     public InventoryResponse updateInventory(Long id, InventoryUpdateRequest request) {
-        Inventory inventory =
-                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventory.setQuantity(request.getQuantity());
         inventory.setUpToDate(LocalDateTime.now());
         inventoryRepository.save(inventory);
@@ -89,8 +108,8 @@ public class InventoryService {
 
     @PreAuthorize("hasAuthority('DELETE_INVENTORY')")
     public void deleteInventory(Long id) {
-        Inventory inventory =
-                inventoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVENTORY_NOT_FOUND));
         inventoryRepository.delete(inventory);
     }
 
@@ -144,7 +163,8 @@ public class InventoryService {
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // skip header
                 Row row = sheet.getRow(i);
-                if (row == null) continue;
+                if (row == null)
+                    continue;
 
                 String productName = row.getCell(0).getStringCellValue();
                 String categoryName = row.getCell(1).getStringCellValue();
@@ -154,7 +174,12 @@ public class InventoryService {
                 // 1️⃣ Find Category
                 Category category = categoryRepository
                         .findByNameIgnoreCase(categoryName)
-                        .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+                        .orElseGet(() -> {
+                            Category c = Category.builder()
+                                    .name(categoryName)
+                                    .build();
+                            return categoryRepository.save(c);
+                        });
 
                 // 2️⃣ Find or create Product
                 Product product = productRepository
