@@ -25,7 +25,5 @@ public class TransactionCreateRequest {
     @Size(min = 4, max = 255, message = "INVALID_LENGTH_DATA")
     String location;
 
-    @NotNull(message = "NULL_DATA_EXCEPTION")
-    @Size(min = 4, max = 255, message = "INVALID_LENGTH_DATA")
     String note;
 }

@@ -196,10 +196,10 @@ public class InventoryService {
                 // 3️⃣ Save Inventory
                 Inventory inventory = Inventory.builder()
                         .product(product)
+                        .inTransit(0)
                         .quantity(quantity)
                         .upToDate(LocalDateTime.now())
                         .build();
-
                 inventoryRepository.save(inventory);
             }
 
