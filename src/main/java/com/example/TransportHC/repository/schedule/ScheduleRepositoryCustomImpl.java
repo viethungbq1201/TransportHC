@@ -51,7 +51,9 @@ public class ScheduleRepositoryCustomImpl implements ScheduleRepositoryCustom {
                                 .select(
                                                 schedule.truck.truckId,
                                                 schedule.truck.licensePlate,
-                                                schedule.schedulesId.count(),
+                                                schedule.schedulesId.countDistinct(), // Fix: Use distinct count to
+                                                                                      // avoid duplicating schedules
+                                                                                      // with multiple costs
                                                 schedule.reward.sum(),
                                                 cost.price.sum().coalesce(BigDecimal.ZERO) // 4
                                 )
