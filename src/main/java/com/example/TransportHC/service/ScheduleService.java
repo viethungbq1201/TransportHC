@@ -228,6 +228,7 @@ public class ScheduleService {
 
         schedule.setApproveStatus(ScheduleStatus.CANCELLED);
         releaseInventory(schedule.getTransaction());
+        schedule.getTransaction().setApproveStatus(ApproveStatus.DONE);
         schedule.getDriver().setStatus(UserStatus.AVAILABLE);
         schedule.getTruck().setStatus(TruckStatus.AVAILABLE);
         scheduleRepository.save(schedule);
