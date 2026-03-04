@@ -16,6 +16,8 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:5173"); // đúng origin FE
         config.addAllowedOrigin("https://transporthc-frontend.onrender.com");
+        config.addAllowedOrigin("http://transport-vh1201.work.gd/");
+        config.addAllowedOrigin("https://transport-vh1201.work.gd/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
