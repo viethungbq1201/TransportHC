@@ -1,4 +1,4 @@
-INSERT INTO role (code, name, description) VALUES
+INSERT INTO "role" (code, name, description) VALUES
 ('ADMIN', 'Admin', 'Administrator'),
 ('MANAGER', 'Manager', 'Manager'),
 ('ACCOUNTANT', 'Accountant', 'Accountant'),
@@ -70,14 +70,14 @@ INSERT INTO permission (code, name, description) VALUES
 -- ADMIN
 INSERT INTO role_permission (role_id, permission_id)
 SELECT r.id, p.id
-FROM role r
+FROM "role" r
 JOIN permission p ON 1=1
 WHERE r.code = 'ADMIN';
 
 -- MANAGER
 INSERT INTO role_permission (role_id, permission_id)
 SELECT r.id, p.id
-FROM role r
+FROM "role" r
 JOIN permission p ON p.code IN (
     'CREATE_PRODUCT','VIEW_PRODUCT','UPDATE_PRODUCT',
     'CREATE_INVENTORY','VIEW_INVENTORY','FIND_INVENTORY','UPDATE_INVENTORY',
@@ -91,7 +91,7 @@ WHERE r.code = 'MANAGER';
 -- ACCOUNTANT
 INSERT INTO role_permission (role_id, permission_id)
 SELECT r.id, p.id
-FROM role r
+FROM "role" r
 JOIN permission p ON p.code IN (
     'CREATE_1_SALARY_REPORT','CREATE_ALL_SALARY_REPORT',
     'VIEW_SALARY_REPORT_DETAIL','VIEW_SALARY_REPORT',
@@ -102,7 +102,7 @@ WHERE r.code = 'ACCOUNTANT';
 -- DRIVER
 INSERT INTO role_permission (role_id, permission_id)
 SELECT r.id, p.id
-FROM role r
+FROM "role" r
 JOIN permission p ON p.code IN (
     'VIEW_PRODUCT','VIEW_SCHEDULE','END_SCHEDULE',
     'VIEW_COST_TYPE','CREATE_COST','VIEW_COST','UPDATE_COST'
