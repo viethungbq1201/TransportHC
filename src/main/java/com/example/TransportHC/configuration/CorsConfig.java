@@ -18,6 +18,7 @@ public class CorsConfig {
         config.addAllowedOrigin("https://transporthc-frontend.onrender.com");
         config.addAllowedOrigin("http://transport-vh1201.work.gd/");
         config.addAllowedOrigin("https://transport-vh1201.work.gd/");
+        config.addAllowedOrigin("https://transporthc.viethung1201.work.gd/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
