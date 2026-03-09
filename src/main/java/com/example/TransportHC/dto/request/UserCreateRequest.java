@@ -44,7 +44,6 @@ public class UserCreateRequest {
     BigDecimal basicSalary;
 
     @NotNull(message = "NULL_DATA_EXCEPTION")
-    @Positive(message = "POSITIVE_DATA")
     BigDecimal advanceMoney;
 
     Set<String> roles;
