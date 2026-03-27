@@ -29,15 +29,18 @@ public class SecurityConfig {
         this.customJwtDecoder = customJwtDecoder;
     }
 
-    private static final String[] PUBLIC_ENDPOINTS = {"/auth/login", "/auth/logout", "/auth/refresh"};
+    private static final String[] PUBLIC_ENDPOINTS_POST = {"/auth/login", "/auth/logout", "/auth/refresh"};
+    private static final String[] PUBLIC_ENDPOINTS_GET = {"/ping"};
+
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+                .anyRequest().authenticated());
 
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(
                         jwt -> jwt.decoder(customJwtDecoder).jwtAuthenticationConverter(jwtAuthenticationConverter()))
